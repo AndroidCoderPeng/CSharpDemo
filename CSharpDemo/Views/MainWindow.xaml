@@ -52,6 +52,12 @@
                 Height="35"
                 Click="OpenScottplot"
                 Content="波形图" />
+
+            <Button
+                Width="90"
+                Height="35"
+                Click="OpenFrequency"
+                Content="频率筛选" />
         </StackPanel>
     </Grid>
 </Window>

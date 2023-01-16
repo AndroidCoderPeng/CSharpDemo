@@ -116,21 +116,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Utils\MessengerToken.cs" />
-    <Compile Include="ViewModel\LiveChartsViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\TcpServerViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Converters\FilterConverter.cs"/>
+    <Compile Include="Utils\MessengerToken.cs"/>
+    <Compile Include="ViewModel\FrequencyViewModel.cs"/>
+    <Compile Include="ViewModel\LiveChartsViewModel.cs"/>
+    <Compile Include="ViewModel\MainViewModel.cs"/>
+    <Compile Include="ViewModel\TcpServerViewModel.cs"/>
+    <Compile Include="ViewModel\ViewModelLocator.cs"/>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\LiveChartsWindow.xaml.cs" />
+    <Compile Include="Views\FrequencyWindow.xaml.cs">
+      <DependentUpon>FrequencyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LiveChartsWindow.xaml.cs"/>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\ScottplotWindow.xaml.cs" />
+    <Compile Include="Views\ScottplotWindow.xaml.cs"/>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -151,15 +156,20 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\LiveChartsWindow.xaml" />
+    <Page Include="Views\FrequencyWindow.xaml"/>
+    <Page Include="Views\LiveChartsWindow.xaml"/>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ScottplotWindow.xaml" />
+    <Page Include="Views\ScottplotWindow.xaml"/>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Image\background_08.png" />
+    <Resource Include="Image\background_08.png"/>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Content Include="Image\slider_left.png"/>
+    <Content Include="Image\slider_right.png"/>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>

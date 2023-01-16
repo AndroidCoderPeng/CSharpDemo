@@ -13,5 +13,11 @@
         public const string RemoveLiveCharts = "2022122402";
 
         #endregion
+
+        #region CloseWindow
+
+        public const string CloseFrequencyWindow = "2023011601";
+
+        #endregion
     }
 }

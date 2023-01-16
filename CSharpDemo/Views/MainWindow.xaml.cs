@@ -17,7 +17,7 @@ namespace CSharpDemo.Views
         {
             InitializeComponent();
         }
-        
+
         private FilterInfo _currentDevice;
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -61,7 +61,7 @@ namespace CSharpDemo.Views
         {
             new LiveChartsWindow { Owner = this }.ShowDialog();
         }
-        
+
         private void OpenTcpServer(object sender, RoutedEventArgs re)
         {
             //启动TCP Server
@@ -97,10 +97,15 @@ namespace CSharpDemo.Views
             var socketConfig = new TouchSocketConfig().SetListenIPHosts(new[] { new IPHost(7777) });
             service.Setup(socketConfig).Start(); //启动
         }
-        
+
         private void OpenScottplot(object sender, RoutedEventArgs e)
         {
             new ScottplotWindow { Owner = this }.ShowDialog();
+        }
+
+        private void OpenFrequency(object sender, RoutedEventArgs e)
+        {
+            new FrequencyWindow() { Owner = this }.ShowDialog();
         }
     }
 }

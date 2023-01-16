@@ -44,12 +44,14 @@ namespace CSharpDemo.ViewModel
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<LiveChartsViewModel>();
             SimpleIoc.Default.Register<TcpServerViewModel>();
+            SimpleIoc.Default.Register<FrequencyViewModel>();
         }
 
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
         public LiveChartsViewModel LiveCharts => ServiceLocator.Current.GetInstance<LiveChartsViewModel>();
         public TcpServerViewModel TcpServer => ServiceLocator.Current.GetInstance<TcpServerViewModel>();
-        
+        public FrequencyViewModel Frequency => ServiceLocator.Current.GetInstance<FrequencyViewModel>();
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels
