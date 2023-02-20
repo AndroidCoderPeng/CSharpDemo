@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Drawing;
-using System.Windows;
-using CSharpDemo.Utils;
-using GalaSoft.MvvmLight.Messaging;
+using System.Windows.Controls;
 
-namespace CSharpDemo.Views
+namespace CSharpDemo.Pages
 {
-    public partial class FrequencyWindow : Window
+    public partial class FrequencyPage : Page
     {
-        public FrequencyWindow()
+        public FrequencyPage()
         {
             InitializeComponent();
 
@@ -28,8 +26,6 @@ namespace CSharpDemo.Views
 
             BlueScottplotView.Plot.AddSignal(blueDataY, color: Color.FromArgb(255, 49, 151, 36));
             BlueScottplotView.Refresh();
-
-            Messenger.Default.Register<string>(this, MessengerToken.CloseFrequencyWindow, s => { Close(); });
         }
     }
 }

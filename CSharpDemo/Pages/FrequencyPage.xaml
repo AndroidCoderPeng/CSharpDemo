@@ -1,11 +1,11 @@
-﻿<Window
-    x:Class="CSharpDemo.Views.FrequencyWindow"
+﻿<Page
+    x:Class="CSharpDemo.Pages.FrequencyPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="FrequencyWindow"
+    Title="FrequencyPage"
     Width="1366"
     Height="768"
     DataContext="{Binding Frequency, Source={StaticResource Locator}}"
@@ -27,7 +27,6 @@
                 Width="80"
                 Height="40"
                 Margin="10,0"
-                Command="{Binding GoBackCommand}"
                 Content="返回"
                 FontSize="14"
                 Foreground="#949494" />
@@ -301,4 +300,4 @@
             </Grid>
         </Grid>
     </Grid>
-</Window>
+</Page>

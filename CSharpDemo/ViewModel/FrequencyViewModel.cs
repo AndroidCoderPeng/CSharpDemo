@@ -1,7 +1,5 @@
-﻿using CSharpDemo.Utils;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace CSharpDemo.ViewModel
 {
@@ -31,15 +29,10 @@ namespace CSharpDemo.ViewModel
             }
         }
 
-        public RelayCommand GoBackCommand { get; set; }
         public RelayCommand StartCollectDataCommand { get; set; }
 
         public FrequencyViewModel()
         {
-            GoBackCommand = new RelayCommand(() =>
-            {
-                Messenger.Default.Send("", MessengerToken.CloseFrequencyWindow);
-            });
             StartCollectDataCommand = new RelayCommand(StartCollectData);
         }
 

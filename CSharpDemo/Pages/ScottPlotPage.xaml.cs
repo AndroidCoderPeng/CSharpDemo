@@ -1,5 +1,5 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using ScottPlot;
@@ -7,11 +7,11 @@ using ScottPlot.Plottable;
 using Color = System.Drawing.Color;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 
-namespace CSharpDemo.Views
+namespace CSharpDemo.Pages
 {
-    public partial class ScottplotWindow : Window
+    public partial class ScottPlotPage : Page
     {
-        public ScottplotWindow()
+        public ScottPlotPage()
         {
             InitializeComponent();
 
@@ -126,7 +126,7 @@ namespace CSharpDemo.Views
             ScottplotView.Refresh();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void ScottPlotPage_OnLoaded(object sender, RoutedEventArgs e)
         {
             var colorBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 84, 84, 84));
             const int strokeThickness = 1;

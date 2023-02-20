@@ -1,0 +1,13 @@
+﻿<Page
+    x:Class="CSharpDemo.Pages.TcpServerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="TcpServerPage"
+    Width="1366"
+    Height="768"
+    DataContext="{Binding TcpServer, Source={StaticResource Locator}}"
+    mc:Ignorable="d">
+    <Grid />
+</Page>

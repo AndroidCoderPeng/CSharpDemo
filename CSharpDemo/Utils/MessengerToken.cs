@@ -1,23 +1,6 @@
 ﻿namespace CSharpDemo.Utils
 {
-    public class MessengerToken
+    public struct MessengerToken
     {
-        #region AddUserControl
-
-        public const string AddLiveCharts = "2022122401";
-
-        #endregion
-
-        #region RemoveUserControl
-
-        public const string RemoveLiveCharts = "2022122402";
-
-        #endregion
-
-        #region CloseWindow
-
-        public const string CloseFrequencyWindow = "2023011601";
-
-        #endregion
     }
 }

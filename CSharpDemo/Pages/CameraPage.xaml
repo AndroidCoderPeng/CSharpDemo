@@ -1,0 +1,21 @@
+﻿<Page
+    x:Class="CSharpDemo.Pages.CameraPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mk="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit"
+    Title="CameraPage"
+    Width="1366"
+    Height="768"
+    mc:Ignorable="d">
+    <Grid>
+        <Border
+            Grid.Column="0"
+            Width="450"
+            Height="600">
+
+            <mk:VideoCaptureElement x:Name="VideoPlayer" />
+        </Border>
+    </Grid>
+</Page>
