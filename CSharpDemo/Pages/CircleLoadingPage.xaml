@@ -11,6 +11,7 @@
     Background="White"
     DataContext="{Binding CircleLoading, Source={StaticResource Locator}}"
     mc:Ignorable="d">
+
     <Grid>
         <hc:CircleProgressBar
             x:Name="ProgressBar"
@@ -20,7 +21,9 @@
             FontSize="50"
             Maximum="15"
             ShowText="True"
-            Text="货物盘点中" />
+            Text="货物盘点中"
+            Value="{Binding ProcessValue}" />
+        
         <UniformGrid
             x:Name="GoodsGrid"
             Columns="3"
