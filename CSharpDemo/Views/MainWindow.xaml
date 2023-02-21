@@ -95,13 +95,5 @@
             BorderBrush="LightGray"
             BorderThickness="0,1,1,1"
             NavigationUIVisibility="Hidden" />
-
-        <!--  <Ellipse  -->
-        <!--  Width="90"  -->
-        <!--  Height="90"  -->
-        <!--  Margin="20"  -->
-        <!--  Fill="Transparent"  -->
-        <!--  Stroke="AliceBlue"  -->
-        <!--  StrokeThickness="5" />  -->
     </Grid>
 </Window>

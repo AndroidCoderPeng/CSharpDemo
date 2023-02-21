@@ -1,4 +1,4 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using CSharpDemo.Pages;
@@ -10,11 +10,19 @@ namespace CSharpDemo.Views
     /// </summary>
     public partial class MainWindow
     {
+        private readonly List<Page> _pages = new List<Page>();
         private readonly NavigationService _service;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            _pages.Add(new CameraPage());
+            _pages.Add(new LiveChartsPage());
+            _pages.Add(new ScottPlotPage());
+            _pages.Add(new TcpServerPage());
+            _pages.Add(new FrequencyPage());
+            _pages.Add(new CircleLoadingPage());
 
             _service = ContentFrame.NavigationService;
         }
@@ -27,43 +35,24 @@ namespace CSharpDemo.Views
             switch (listBox.SelectedIndex)
             {
                 case 0:
-                    _service.Navigate(new CameraPage());
+                    _service.Navigate(_pages[0]);
                     break;
                 case 1:
-                    _service.Navigate(new LiveChartsPage());
+                    _service.Navigate(_pages[1]);
                     break;
                 case 2:
-                    _service.Navigate(new ScottPlotPage());
+                    _service.Navigate(_pages[2]);
                     break;
                 case 3:
-                    _service.Navigate(new TcpServerPage());
+                    _service.Navigate(_pages[3]);
                     break;
                 case 4:
-                    _service.Navigate(new FrequencyPage());
+                    _service.Navigate(_pages[4]);
                     break;
                 case 5:
-                    _service.Navigate(new CircleLoadingPage());
+                    _service.Navigate(_pages[5]);
                     break;
             }
-        }
-
-        private void OpenCamera(object sender, RoutedEventArgs e)
-        {
-            // if (_currentDevice != null)
-            // {
-            //     if (CameraPreviewPlayer.IsRunning)
-            //     {
-            //         CameraPreviewPlayer.SignalToStop();
-            //         OperateCameraButton.Content = "打开相机";
-            //     }
-            //     else
-            //     {
-            //         var videoSource = new VideoCaptureDevice(_currentDevice.MonikerString);
-            //         CameraPreviewPlayer.VideoSource = videoSource;
-            //         CameraPreviewPlayer.Start();
-            //         OperateCameraButton.Content = "关闭相机";
-            //     }
-            // }
         }
     }
 }

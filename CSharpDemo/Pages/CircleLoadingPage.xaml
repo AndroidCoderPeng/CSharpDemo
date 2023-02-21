@@ -23,20 +23,50 @@
             ShowText="True"
             Text="货物盘点中"
             Value="{Binding ProcessValue}" />
-        
-        <UniformGrid
+
+        <DataGrid
             x:Name="GoodsGrid"
-            Columns="3"
-            Rows="3"
-            Visibility="Collapsed">
-            <ListBox />
-            <ListBox />
-            <ListBox />
-            <ListBox />
-            <ListBox />
-            <ListBox />
-            <ListBox />
-            <ListBox />
-        </UniformGrid>
+            AutoGenerateColumns="False"
+            Background="White"
+            RowHeight="50">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding}"
+                    CanUserResize="False"
+                    FontSize="16"
+                    Header="编码" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding}"
+                    CanUserResize="False"
+                    FontSize="16"
+                    Header="名称" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding}"
+                    CanUserResize="False"
+                    FontSize="16"
+                    Header="规格" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding}"
+                    CanUserResize="False"
+                    FontSize="16"
+                    Header="数量" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding}"
+                    CanUserResize="False"
+                    FontSize="16"
+                    Header="状态" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding}"
+                    CanUserResize="False"
+                    FontSize="16"
+                    Header="明细" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>
