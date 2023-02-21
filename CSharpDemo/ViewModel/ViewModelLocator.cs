@@ -45,12 +45,14 @@ namespace CSharpDemo.ViewModel
             SimpleIoc.Default.Register<LiveChartsViewModel>();
             SimpleIoc.Default.Register<TcpServerViewModel>();
             SimpleIoc.Default.Register<FrequencyViewModel>();
+            SimpleIoc.Default.Register<CircleLoadingViewModel>();
         }
 
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
         public LiveChartsViewModel LiveCharts => ServiceLocator.Current.GetInstance<LiveChartsViewModel>();
         public TcpServerViewModel TcpServer => ServiceLocator.Current.GetInstance<TcpServerViewModel>();
         public FrequencyViewModel Frequency => ServiceLocator.Current.GetInstance<FrequencyViewModel>();
+        public CircleLoadingViewModel CircleLoading => ServiceLocator.Current.GetInstance<CircleLoadingViewModel>();
 
         public static void Cleanup()
         {
