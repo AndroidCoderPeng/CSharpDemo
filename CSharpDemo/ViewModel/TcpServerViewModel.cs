@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
@@ -7,18 +9,43 @@ namespace CSharpDemo.ViewModel
 {
     public class TcpServerViewModel : ViewModelBase
     {
+        private ObservableCollection<string> _messages = new ObservableCollection<string>();
+
+        public ObservableCollection<string> Messages
+        {
+            get => _messages;
+            set
+            {
+                _messages = value;
+                RaisePropertyChanged(() => Messages);
+            }
+        }
+
         public TcpServerViewModel()
         {
             //启动TCP Server
             var service = new TcpService
             {
-                Connecting = (client, e) => { Debug.WriteLine($"客户端{client.ID}正在连接"); },
-                Connected = (client, e) => { Debug.WriteLine($"客户端{client.ID}已连接"); },
-                Disconnected = (client, e) => { Debug.WriteLine($"客户端{client.ID}已断开连接"); },
+                Connecting = (client, e) =>
+                {
+                    Debug.WriteLine($"客户端{client.ID}正在连接");
+                    Application.Current.Dispatcher.Invoke(() => { Messages.Add($"客户端{client.ID}正在连接"); });
+                },
+                Connected = (client, e) =>
+                {
+                    Debug.WriteLine($"客户端{client.ID}已连接");
+                    Application.Current.Dispatcher.Invoke(() => { Messages.Add($"客户端{client.ID}已连接"); });
+                },
+                Disconnected = (client, e) =>
+                {
+                    Debug.WriteLine($"客户端{client.ID}已断开连接");
+                    Application.Current.Dispatcher.Invoke(() => { Messages.Add($"客户端{client.ID}已断开连接"); });
+                },
                 Received = (client, byteBlock, requestInfo) =>
                 {
                     //从客户端收到信息
                     var mes = byteBlock.ToString();
+                    Application.Current.Dispatcher.Invoke(() => { Messages.Add($"已从{client.ID}接收到信息：{mes}"); });
                     Debug.WriteLine($"已从{client.ID}接收到信息：{mes}");
 
                     //将收到的信息直接返回给发送方

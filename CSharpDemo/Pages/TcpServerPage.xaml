@@ -9,5 +9,17 @@
     Height="768"
     DataContext="{Binding TcpServer, Source={StaticResource Locator}}"
     mc:Ignorable="d">
-    <Grid />
+
+    <ListBox ItemsSource="{Binding Messages}">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="微软雅黑"
+                    FontSize="18"
+                    Text="{Binding}" />
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
 </Page>
