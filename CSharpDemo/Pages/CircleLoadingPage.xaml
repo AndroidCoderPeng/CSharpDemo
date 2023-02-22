@@ -13,60 +13,36 @@
     mc:Ignorable="d">
 
     <Grid>
-        <hc:CircleProgressBar
-            x:Name="ProgressBar"
-            Width="500"
-            Height="500"
-            ArcThickness="30"
-            FontSize="50"
-            Maximum="15"
-            ShowText="True"
-            Text="货物盘点中"
-            Value="{Binding ProcessValue}" />
+        <Grid
+            x:Name="GridView"
+            Background="AntiqueWhite"
+            Visibility="Collapsed" />
 
-        <DataGrid
-            x:Name="GoodsGrid"
-            AutoGenerateColumns="False"
-            Background="White"
-            RowHeight="50">
-            <DataGrid.Columns>
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding}"
-                    CanUserResize="False"
-                    FontSize="16"
-                    Header="编码" />
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding}"
-                    CanUserResize="False"
-                    FontSize="16"
-                    Header="名称" />
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding}"
-                    CanUserResize="False"
-                    FontSize="16"
-                    Header="规格" />
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding}"
-                    CanUserResize="False"
-                    FontSize="16"
-                    Header="数量" />
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding}"
-                    CanUserResize="False"
-                    FontSize="16"
-                    Header="状态" />
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding}"
-                    CanUserResize="False"
-                    FontSize="16"
-                    Header="明细" />
-            </DataGrid.Columns>
-        </DataGrid>
+        <StackPanel
+            x:Name="ProgressBarPanel"
+            VerticalAlignment="Center"
+            Orientation="Vertical">
+
+            <hc:CircleProgressBar
+                Width="500"
+                Height="500"
+                ArcThickness="30"
+                FontSize="50"
+                Maximum="15"
+                ShowText="True"
+                Text="货物盘点"
+                Value="{Binding ProcessValue, Mode=OneWay}" />
+
+            <Button
+                Width="100"
+                Height="35"
+                Margin="0,50"
+                BorderThickness="0"
+                Command="{Binding InventoryCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                Content="开始盘点"
+                FontSize="18"
+                Style="{StaticResource ButtonPrimary}" />
+        </StackPanel>
     </Grid>
 </Page>

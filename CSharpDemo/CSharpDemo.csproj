@@ -121,7 +121,8 @@
       <DependentUpon>TcpServerPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\MessengerToken.cs" />
-    <Compile Include="ViewModel\CircleLoadingViewModel.cs"/>
+    <Compile Include="Utils\MethodExtensions.cs" />
+    <Compile Include="ViewModel\CircleLoadingViewModel.cs" />
     <Compile Include="ViewModel\FrequencyViewModel.cs" />
     <Compile Include="ViewModel\LiveChartsViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
