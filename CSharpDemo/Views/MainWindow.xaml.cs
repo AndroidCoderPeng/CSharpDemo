@@ -32,27 +32,8 @@ namespace CSharpDemo.Views
             var listBox = (ListBox)sender;
             if (listBox.SelectedIndex == -1) return;
 
-            switch (listBox.SelectedIndex)
-            {
-                case 0:
-                    _service.Navigate(_pages[0]);
-                    break;
-                case 1:
-                    _service.Navigate(_pages[1]);
-                    break;
-                case 2:
-                    _service.Navigate(_pages[2]);
-                    break;
-                case 3:
-                    _service.Navigate(_pages[3]);
-                    break;
-                case 4:
-                    _service.Navigate(_pages[4]);
-                    break;
-                case 5:
-                    _service.Navigate(_pages[5]);
-                    break;
-            }
+            //根据选的Index导航到相应的Page
+            _service.Navigate(_pages[listBox.SelectedIndex]);
         }
     }
 }
