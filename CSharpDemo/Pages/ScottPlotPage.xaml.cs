@@ -1,11 +1,7 @@
-﻿using System.Windows;
+﻿using System.Drawing;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
 using ScottPlot;
 using ScottPlot.Plottable;
-using Color = System.Drawing.Color;
-using HorizontalAlignment = System.Windows.HorizontalAlignment;
 
 namespace CSharpDemo.Pages
 {
@@ -117,62 +113,18 @@ namespace CSharpDemo.Pages
                 0.0508, 0.0429, 0.0321, 0.0189, 0.0038, 0.0125, 0.0291, 0.0452, 0.0599, 0.0725, 0.0824, 0.0892, 0.0926
             };
 
+            var scottPlot = ScottPlotView.Plot;
+            scottPlot.XLabel("频率(Hz)");
+            scottPlot.YLabel("相关系数");
+            ScottPlotView.Refresh();
+            
             //点如果较少，可以直接AddBar，但是超过一千个点，不能直接AddBar，否则Bar颜色会被边框覆盖从而呈现黑色
-            ScottplotView.Plot.Add(new BarPlot(DataGen.Consecutive(redDataY.Length), redDataY, null, null)
+            ScottPlotView.Plot.Add(new BarPlot(DataGen.Consecutive(redDataY.Length), redDataY, null, null)
             {
                 FillColor = Color.Transparent,
                 BorderColor = Color.FromArgb(255, 49, 151, 36)
             });
-            ScottplotView.Refresh();
-        }
-
-        private void ScottPlotPage_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            var colorBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 84, 84, 84));
-            const int strokeThickness = 1;
-            //水平线
-            var horizontalLine = new Line
-            {
-                X1 = 0,
-                Y1 = 0,
-                X2 = 1100,
-                Y2 = 0,
-                Stroke = colorBrush,
-                StrokeThickness = strokeThickness,
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
-            HorizontalLineGrid.Children.Add(horizontalLine);
-
-            //较高的刻度线
-            for (var i = 0; i <= 1100; i += 100)
-            {
-                var higherScale = new Line
-                {
-                    X1 = i,
-                    Y1 = 0,
-                    X2 = i,
-                    Y2 = 15,
-                    Stroke = colorBrush,
-                    StrokeThickness = strokeThickness
-                };
-
-                HorizontalLineGrid.Children.Add(higherScale);
-            }
-
-            //较低的刻度线
-            for (var i = 50; i <= 1050; i += 100)
-            {
-                var shorterScale = new Line
-                {
-                    X1 = i,
-                    Y1 = 0,
-                    X2 = i,
-                    Y2 = 5,
-                    Stroke = colorBrush,
-                    StrokeThickness = strokeThickness
-                };
-                HorizontalLineGrid.Children.Add(shorterScale);
-            }
+            ScottPlotView.Refresh();
         }
     }
 }

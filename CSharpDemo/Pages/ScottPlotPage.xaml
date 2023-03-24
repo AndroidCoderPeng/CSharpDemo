@@ -7,51 +7,55 @@
     Title="ScottPlotPage"
     Width="1366"
     Height="768"
-    Loaded="ScottPlotPage_OnLoaded"
     mc:Ignorable="d">
 
-    <Grid>
-        <Grid Width="1100" Height="400">
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
 
-            <!--  剪切波形图为圆角显示  -->
-            <Grid.Clip>
-                <PathGeometry>
-                    <PathFigure IsClosed="False">
-                        <LineSegment Point="1070,0" />
-                        <ArcSegment
-                            Point="1085,15"
-                            Size="15,15"
-                            SweepDirection="Clockwise" />
-                        <LineSegment Point="1085,355" />
-                        <ArcSegment
-                            Point="1070,370"
-                            Size="15,15"
-                            SweepDirection="Clockwise" />
-                        <LineSegment Point="30,370" />
-                        <ArcSegment
-                            Point="15,355"
-                            Size="15,15"
-                            SweepDirection="Clockwise" />
-                        <LineSegment Point="15,15" />
-                        <ArcSegment
-                            Point="30,0"
-                            Size="15,15"
-                            SweepDirection="Clockwise" />
-                    </PathFigure>
-                </PathGeometry>
-            </Grid.Clip>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Margin="30,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Button
+                    x:Name="LeftSensorButton"
+                    Grid.Row="3"
+                    Margin="0,15,0,45"
+                    Content="测试信号" />
+            </Grid>
 
             <WpfPlot
-                x:Name="ScottplotView"
-                Margin="-62,-24,-34,-32"
+                x:Name="ScottPlotView"
+                Grid.Column="1"
                 IsEnabled="False" />
-        </Grid>
 
-        <!--  水平刻度线，多1像素是为了把左右边的一个刻度完整画出来  -->
-        <Grid
-            x:Name="HorizontalLineGrid"
-            Width="1101"
-            Height="30"
-            VerticalAlignment="Bottom" />
+            <Grid Grid.Column="2" Margin="0,0,30,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Button
+                    x:Name="RightSensorButton"
+                    Grid.Row="3"
+                    Margin="0,15,0,45"
+                    Content="测试信号" />
+            </Grid>
+        </Grid>
     </Grid>
 </Page>
