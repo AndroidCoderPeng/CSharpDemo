@@ -21,11 +21,11 @@ namespace CSharpDemo.Pages
                 blueDataY[i] = random.NextDouble();
             }
 
-            RedScottplotView.Plot.AddSignal(redDataY, color: Color.FromArgb(255, 49, 151, 36));
-            RedScottplotView.Refresh();
+            RedScottPlotView.Plot.AddSignal(redDataY, color: Color.FromArgb(255, 49, 151, 36));
+            RedScottPlotView.Refresh();
 
-            BlueScottplotView.Plot.AddSignal(blueDataY, color: Color.FromArgb(255, 49, 151, 36));
-            BlueScottplotView.Refresh();
+            BlueScottPlotView.Plot.AddSignal(blueDataY, color: Color.FromArgb(255, 49, 151, 36));
+            BlueScottPlotView.Refresh();
         }
     }
 }

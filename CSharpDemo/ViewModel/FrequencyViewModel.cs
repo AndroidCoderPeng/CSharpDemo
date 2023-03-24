@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CSharpDemo.Service;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
 namespace CSharpDemo.ViewModel
@@ -29,15 +30,31 @@ namespace CSharpDemo.ViewModel
             }
         }
 
+        private string _highFrequencyValue;
+
+        public string HighFrequencyValue
+        {
+            get => _highFrequencyValue;
+            set
+            {
+                _highFrequencyValue = value;
+                RaisePropertyChanged(() => HighFrequencyValue);
+            }
+        }
+
         public RelayCommand StartCollectDataCommand { get; set; }
 
-        public FrequencyViewModel()
+        private readonly IFrequencyDataService _dataService;
+
+        public FrequencyViewModel(IFrequencyDataService dataService)
         {
+            _dataService = dataService;
             StartCollectDataCommand = new RelayCommand(StartCollectData);
         }
 
         private void StartCollectData()
         {
+            HighFrequencyValue = _dataService.GetFrequency();
         }
     }
 }

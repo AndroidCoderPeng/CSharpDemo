@@ -13,6 +13,7 @@
 */
 
 using CommonServiceLocator;
+using CSharpDemo.Service;
 using GalaSoft.MvvmLight.Ioc;
 
 namespace CSharpDemo.ViewModel
@@ -30,22 +31,21 @@ namespace CSharpDemo.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            ////if (ViewModelBase.IsInDesignModeStatic)
-            ////{
-            ////    // Create design time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DesignDataService>();
-            ////}
-            ////else
-            ////{
-            ////    // Create run time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DataService>();
-            ////}
+            #region Service
+
+            SimpleIoc.Default.Register<IFrequencyDataService, FrequencyDataService>();
+
+            #endregion
+
+            #region VM
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<LiveChartsViewModel>();
             SimpleIoc.Default.Register<TcpServerViewModel>();
             SimpleIoc.Default.Register<FrequencyViewModel>();
             SimpleIoc.Default.Register<CircleLoadingViewModel>();
+
+            #endregion
         }
 
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();

@@ -120,6 +120,8 @@
     <Compile Include="Pages\TcpServerPage.xaml.cs">
       <DependentUpon>TcpServerPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Service\FrequencyDataService.cs" />
+    <Compile Include="Service\IFrequencyDataService.cs" />
     <Compile Include="Utils\MessengerToken.cs" />
     <Compile Include="Utils\MethodExtensions.cs" />
     <Compile Include="ViewModel\CircleLoadingViewModel.cs" />

@@ -105,7 +105,7 @@
                         FontSize="22"
                         Foreground="#545454"
                         IsEnabled="False"
-                        Text="{Binding Path=Value, ElementName=HighPreviewSlider, StringFormat=0}" />
+                        Text="{Binding HighFrequencyValue}" />
                 </Border>
                 <TextBlock
                     FontSize="30"
@@ -163,7 +163,7 @@
                 </Grid.Clip>
 
                 <WpfPlot
-                    x:Name="RedScottplotView"
+                    x:Name="RedScottPlotView"
                     Margin="-75,-30,-45,-50"
                     IsEnabled="False" />
 
@@ -185,7 +185,6 @@
                 </hc:PreviewSlider>
 
                 <Canvas
-                    x:Name="mouseMoveRed"
                     Width="{Binding ElementName=GridContainer, Path=ActualWidth}"
                     Height="{Binding ElementName=GridContainer, Path=ActualHeight}"
                     Background="Transparent">
@@ -250,7 +249,7 @@
                 </Grid.Clip>
 
                 <WpfPlot
-                    x:Name="BlueScottplotView"
+                    x:Name="BlueScottPlotView"
                     Margin="-75,-30,-45,-50"
                     IsEnabled="False" />
 
@@ -271,7 +270,6 @@
                 </hc:PreviewSlider>
 
                 <Canvas
-                    x:Name="mouseMoveBlue"
                     Width="{Binding ElementName=GridContainer, Path=ActualWidth}"
                     Height="{Binding ElementName=GridContainer, Path=ActualHeight}"
                     Background="Transparent">
