@@ -1,8 +1,9 @@
 ﻿using System;
+using CSharpDemo.Service;
 
-namespace CSharpDemo.Service
+namespace CSharpDemo.ServiceImpl
 {
-    public class FrequencyDataService : IFrequencyDataService
+    public class FrequencyDataServiceImpl : IFrequencyDataService
     {
         private readonly Random _random = new Random();
 

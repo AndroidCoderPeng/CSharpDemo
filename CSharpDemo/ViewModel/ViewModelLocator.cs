@@ -14,6 +14,7 @@
 
 using CommonServiceLocator;
 using CSharpDemo.Service;
+using CSharpDemo.ServiceImpl;
 using GalaSoft.MvvmLight.Ioc;
 
 namespace CSharpDemo.ViewModel
@@ -33,7 +34,8 @@ namespace CSharpDemo.ViewModel
 
             #region Service
 
-            SimpleIoc.Default.Register<IFrequencyDataService, FrequencyDataService>();
+            SimpleIoc.Default.Register<IMainDataService, MainDataServiceImpl>();
+            SimpleIoc.Default.Register<IFrequencyDataService, FrequencyDataServiceImpl>();
 
             #endregion
 

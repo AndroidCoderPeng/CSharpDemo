@@ -120,16 +120,18 @@
     <Compile Include="Pages\TcpServerPage.xaml.cs">
       <DependentUpon>TcpServerPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Service\FrequencyDataService.cs" />
-    <Compile Include="Service\IFrequencyDataService.cs" />
-    <Compile Include="Utils\MessengerToken.cs" />
-    <Compile Include="Utils\MethodExtensions.cs" />
-    <Compile Include="ViewModel\CircleLoadingViewModel.cs" />
-    <Compile Include="ViewModel\FrequencyViewModel.cs" />
-    <Compile Include="ViewModel\LiveChartsViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\TcpServerViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="ServiceImpl\FrequencyDataServiceImpl.cs"/>
+    <Compile Include="ServiceImpl\MainDataServiceImpl.cs"/>
+    <Compile Include="Service\IFrequencyDataService.cs"/>
+    <Compile Include="Service\IMainDataService.cs"/>
+    <Compile Include="Utils\MessengerToken.cs"/>
+    <Compile Include="Utils\MethodExtensions.cs"/>
+    <Compile Include="ViewModel\CircleLoadingViewModel.cs"/>
+    <Compile Include="ViewModel\FrequencyViewModel.cs"/>
+    <Compile Include="ViewModel\LiveChartsViewModel.cs"/>
+    <Compile Include="ViewModel\MainViewModel.cs"/>
+    <Compile Include="ViewModel\TcpServerViewModel.cs"/>
+    <Compile Include="ViewModel\ViewModelLocator.cs"/>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -176,6 +178,7 @@
     <Content Include="Image\slider_left.png" />
     <Content Include="Image\slider_right.png" />
   </ItemGroup>
+  <ItemGroup/>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets" Condition="Exists('..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
