@@ -10,15 +10,15 @@ namespace CSharpDemo.Dialogs
         /// <summary>
         /// 窗口传值委托
         /// </summary>
-        public delegate void TransferValueEventHandler(string value);
+        public delegate void TransferValueDelegateHandler(string value);
 
-        public DelegateValueDialog(TransferValueEventHandler eventHandler)
+        public DelegateValueDialog(TransferValueDelegateHandler delegateHandler)
         {
             InitializeComponent();
 
             DelegateButton.Click += delegate
             {
-                eventHandler(DelegateTextBox.Text);
+                delegateHandler(DelegateTextBox.Text);
                 Close();
             };
         }
