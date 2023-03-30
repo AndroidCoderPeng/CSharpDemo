@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Net;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using TouchSocket.Core;
@@ -68,6 +69,17 @@ namespace CSharpDemo.ViewModel
             //同时监听两个地址
             var socketConfig = new TouchSocketConfig().SetListenIPHosts(new[] { new IPHost(7777) });
             service.Setup(socketConfig).Start(); //启动
+
+            //获取本地IP
+            var hostName = Dns.GetHostName();
+            var addresses = Dns.GetHostAddresses(hostName);
+            foreach (var ip in addresses)
+            {
+                if (ip.AddressFamily.ToString() != "InterNetwork") continue;
+                Messages.Add($"服务端{ip}:7777已启动");
+                //只找一个IPV4地址
+                return;
+            }
         }
     }
 }

@@ -1,0 +1,25 @@
+﻿<Window
+    x:Class="CSharpDemo.Dialogs.DelegateDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="DelegateDialog"
+    Width="400"
+    Height="300"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+    <DockPanel VerticalAlignment="Center">
+        <Button
+            x:Name="DelegateButton"
+            Margin="5,0,0,0"
+            Content="传值" />
+
+        <TextBox
+            x:Name="DelegateTextBox"
+            Height="30"
+            Margin="5,0" />
+    </DockPanel>
+</Window>

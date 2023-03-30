@@ -6,8 +6,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mk="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit"
     Title="CameraPage"
-    Width="1366"
-    Height="768"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
+    Background="White"
     mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -18,12 +19,11 @@
 
         <Border
             Grid.Column="0"
-            Width="300"
-            Height="400"
+            Width="400"
+            Height="300"
             BorderBrush="LightGray"
-            BorderThickness="1"
-            CornerRadius="5">
-            <Image x:Name="CaptureImageView" />
+            BorderThickness="1">
+            <Image x:Name="CaptureImageView" Margin="1" />
         </Border>
 
         <Grid Grid.Column="1">
@@ -57,12 +57,11 @@
 
         <Border
             Grid.Column="2"
-            Width="300"
-            Height="400"
+            Width="400"
+            Height="300"
             BorderBrush="LightGray"
-            BorderThickness="1"
-            CornerRadius="5">
-            <mk:VideoCaptureElement x:Name="DeviceCamera" />
+            BorderThickness="1">
+            <mk:VideoCaptureElement x:Name="DeviceCamera" Margin="1" />
         </Border>
     </Grid>
 </Page>

@@ -33,19 +33,16 @@ namespace CSharpDemo.Views
                     _service.Navigate("CameraPage".CreateUri());
                     break;
                 case 1:
-                    _service.Navigate("LiveChartsPage".CreateUri());
-                    break;
-                case 2:
                     _service.Navigate("ScottPlotPage".CreateUri());
                     break;
-                case 3:
+                case 2:
                     _service.Navigate("TcpServerPage".CreateUri());
                     break;
-                case 4:
-                    _service.Navigate("FrequencyPage".CreateUri());
-                    break;
-                case 5:
+                case 3:
                     _service.Navigate("CircleLoadingPage".CreateUri());
+                    break;
+                case 4:
+                    _service.Navigate("DelegateValuePage".CreateUri());
                     break;
             }
         }

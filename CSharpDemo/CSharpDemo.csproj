@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Image\favicon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommonServiceLocator, Version=2.0.6.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.6\lib\net48\CommonServiceLocator.dll</HintPath>
@@ -101,18 +104,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters\FilterConverter.cs" />
+    <Compile Include="Dialogs\DelegateDialog.xaml.cs">
+      <DependentUpon>DelegateDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\CameraPage.xaml.cs">
       <DependentUpon>CameraPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\CircleLoadingPage.xaml.cs">
       <DependentUpon>CircleLoadingPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\FrequencyPage.xaml.cs">
-      <DependentUpon>FrequencyPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\LiveChartsPage.xaml.cs">
-      <DependentUpon>LiveChartsPage.xaml</DependentUpon>
+    <Compile Include="Pages\DelegateValuePage.xaml.cs">
+      <DependentUpon>DelegateValuePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ScottPlotPage.xaml.cs">
       <DependentUpon>ScottPlotPage.xaml</DependentUpon>
@@ -120,15 +122,12 @@
     <Compile Include="Pages\TcpServerPage.xaml.cs">
       <DependentUpon>TcpServerPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ServiceImpl\FrequencyDataServiceImpl.cs"/>
     <Compile Include="ServiceImpl\MainDataServiceImpl.cs"/>
-    <Compile Include="Service\IFrequencyDataService.cs"/>
     <Compile Include="Service\IMainDataService.cs"/>
     <Compile Include="Utils\MessengerToken.cs"/>
     <Compile Include="Utils\MethodExtensions.cs"/>
     <Compile Include="ViewModel\CircleLoadingViewModel.cs"/>
-    <Compile Include="ViewModel\FrequencyViewModel.cs"/>
-    <Compile Include="ViewModel\LiveChartsViewModel.cs"/>
+    <Compile Include="ViewModel\DelegateValueViewModel.cs"/>
     <Compile Include="ViewModel\MainViewModel.cs"/>
     <Compile Include="ViewModel\TcpServerViewModel.cs"/>
     <Compile Include="ViewModel\ViewModelLocator.cs"/>
@@ -160,25 +159,24 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Pages\CameraPage.xaml" />
-    <Page Include="Pages\CircleLoadingPage.xaml" />
-    <Page Include="Pages\FrequencyPage.xaml" />
-    <Page Include="Pages\LiveChartsPage.xaml" />
-    <Page Include="Pages\ScottPlotPage.xaml" />
-    <Page Include="Pages\TcpServerPage.xaml" />
+    <Page Include="Dialogs\DelegateDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\CameraPage.xaml"/>
+    <Page Include="Pages\CircleLoadingPage.xaml"/>
+    <Page Include="Pages\DelegateValuePage.xaml"/>
+    <Page Include="Pages\ScottPlotPage.xaml"/>
+    <Page Include="Pages\TcpServerPage.xaml"/>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Image\background_08.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Image\slider_left.png" />
-    <Content Include="Image\slider_right.png" />
-  </ItemGroup>
   <ItemGroup/>
+  <ItemGroup>
+    <Resource Include="Image\favicon.ico"/>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets" Condition="Exists('..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

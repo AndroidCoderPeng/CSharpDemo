@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="MainWindow"
-    Width="1501"
+    Width="1366"
     Height="768"
     DataContext="{Binding Main, Source={StaticResource Locator}}"
     ResizeMode="CanMinimize"
@@ -22,7 +22,7 @@
             Grid.Column="0"
             HorizontalAlignment="Center"
             BorderBrush="LightGray"
-            BorderThickness="0,1,1,1"
+            BorderThickness="0,1,1,0"
             ItemsSource="{Binding FunctionModels}"
             SelectionChanged="Selector_OnSelectionChanged">
 
@@ -94,7 +94,7 @@
             x:Name="ContentFrame"
             Grid.Column="1"
             BorderBrush="LightGray"
-            BorderThickness="0,1,1,1"
+            BorderThickness="0,1,0,0"
             NavigationUIVisibility="Hidden" />
     </Grid>
 </Window>

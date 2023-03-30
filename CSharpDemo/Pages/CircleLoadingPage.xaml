@@ -6,8 +6,8 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="CircleLoadingPage"
-    Width="1366"
-    Height="768"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
     Background="White"
     DataContext="{Binding CircleLoading, Source={StaticResource Locator}}"
     mc:Ignorable="d">
@@ -18,12 +18,14 @@
             Background="AntiqueWhite"
             Visibility="Collapsed" />
 
-        <StackPanel
-            x:Name="ProgressBarPanel"
-            VerticalAlignment="Center"
-            Orientation="Vertical">
+        <Grid x:Name="ProgressBarGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="4*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
             <hc:CircleProgressBar
+                Grid.Row="0"
                 Width="500"
                 Height="500"
                 ArcThickness="30"
@@ -34,15 +36,15 @@
                 Value="{Binding ProcessValue, Mode=OneWay}" />
 
             <Button
+                Grid.Row="1"
                 Width="100"
                 Height="35"
-                Margin="0,50"
                 BorderThickness="0"
                 Command="{Binding InventoryCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                 Content="开始盘点"
                 FontSize="18"
                 Style="{StaticResource ButtonPrimary}" />
-        </StackPanel>
+        </Grid>
     </Grid>
 </Page>

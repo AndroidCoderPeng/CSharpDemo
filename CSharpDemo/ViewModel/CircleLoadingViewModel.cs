@@ -38,7 +38,7 @@ namespace CSharpDemo.ViewModel
 
         private int _countDownTime = 1500;
         private CircleLoadingPage _page;
-        
+
         public CircleLoadingViewModel()
         {
             InventoryCommand = new RelayCommand<CircleLoadingPage>(it =>
@@ -46,7 +46,7 @@ namespace CSharpDemo.ViewModel
                 _page = it;
 
                 _inventoryTimer.Start();
-                _page.ProgressBarPanel.Show();
+                _page.ProgressBarGrid.Show();
                 _page.GridView.Hide();
             });
 
@@ -61,7 +61,7 @@ namespace CSharpDemo.ViewModel
                 else
                 {
                     _inventoryTimer.Stop();
-                    _page.ProgressBarPanel.Hide();
+                    _page.ProgressBarGrid.Hide();
                     _page.GridView.Show();
                     _countDownTime = 1500;
                     ProcessValue = 0;

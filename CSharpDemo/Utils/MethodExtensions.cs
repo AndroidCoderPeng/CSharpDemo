@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Windows.Media.Imaging;
 using PixelFormat = System.Windows.Media.PixelFormat;
 
@@ -85,9 +87,25 @@ namespace CSharpDemo.Utils
             return Convert.ToInt32(hex, 16);
         }
 
+        private static readonly Dictionary<string, Uri> UriDictionary = new Dictionary<string, Uri>();
+
         public static Uri CreateUri(this string xamlName)
         {
-            return new Uri("/Pages/" + xamlName + ".xaml", UriKind.Relative);
+            if (xamlName.IsUriExist())
+            {
+                return UriDictionary[xamlName];
+            }
+
+            var uri = new Uri("/Pages/" + xamlName + ".xaml", UriKind.Relative);
+            UriDictionary[xamlName] = uri;
+            return uri;
+        }
+
+        private static bool IsUriExist(this string xamlName)
+        {
+            return UriDictionary.Any(
+                keyValuePair => keyValuePair.Key.Equals(xamlName)
+            );
         }
     }
 }

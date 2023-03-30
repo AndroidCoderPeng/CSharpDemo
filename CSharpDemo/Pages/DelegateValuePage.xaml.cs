@@ -2,9 +2,9 @@
 
 namespace CSharpDemo.Pages
 {
-    public partial class LiveChartsPage : Page
+    public partial class DelegateValuePage : Page
     {
-        public LiveChartsPage()
+        public DelegateValuePage()
         {
             InitializeComponent();
         }

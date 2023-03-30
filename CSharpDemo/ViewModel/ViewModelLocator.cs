@@ -35,26 +35,23 @@ namespace CSharpDemo.ViewModel
             #region Service
 
             SimpleIoc.Default.Register<IMainDataService, MainDataServiceImpl>();
-            SimpleIoc.Default.Register<IFrequencyDataService, FrequencyDataServiceImpl>();
 
             #endregion
 
             #region VM
 
             SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<LiveChartsViewModel>();
             SimpleIoc.Default.Register<TcpServerViewModel>();
-            SimpleIoc.Default.Register<FrequencyViewModel>();
             SimpleIoc.Default.Register<CircleLoadingViewModel>();
+            SimpleIoc.Default.Register<DelegateValueViewModel>();
 
             #endregion
         }
 
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
-        public LiveChartsViewModel LiveCharts => ServiceLocator.Current.GetInstance<LiveChartsViewModel>();
         public TcpServerViewModel TcpServer => ServiceLocator.Current.GetInstance<TcpServerViewModel>();
-        public FrequencyViewModel Frequency => ServiceLocator.Current.GetInstance<FrequencyViewModel>();
         public CircleLoadingViewModel CircleLoading => ServiceLocator.Current.GetInstance<CircleLoadingViewModel>();
+        public DelegateValueViewModel DelegateValue => ServiceLocator.Current.GetInstance<DelegateValueViewModel>();
 
         public static void Cleanup()
         {
