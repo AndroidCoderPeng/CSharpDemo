@@ -2,9 +2,9 @@
 
 namespace CSharpDemo.Pages
 {
-    public partial class DelegateValuePage : Page
+    public partial class TransmitValuePage : Page
     {
-        public DelegateValuePage()
+        public TransmitValuePage()
         {
             InitializeComponent();
         }

@@ -104,8 +104,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Dialogs\DelegateDialog.xaml.cs">
-      <DependentUpon>DelegateDialog.xaml</DependentUpon>
+    <Compile Include="Dialogs\DelegateValueDialog.xaml.cs">
+      <DependentUpon>DelegateValueDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\EventValueDialog.xaml.cs">
+      <DependentUpon>EventValueDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\CameraPage.xaml.cs">
       <DependentUpon>CameraPage.xaml</DependentUpon>
@@ -113,8 +116,8 @@
     <Compile Include="Pages\CircleLoadingPage.xaml.cs">
       <DependentUpon>CircleLoadingPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\DelegateValuePage.xaml.cs">
-      <DependentUpon>DelegateValuePage.xaml</DependentUpon>
+    <Compile Include="Pages\TransmitValuePage.xaml.cs">
+      <DependentUpon>TransmitValuePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ScottPlotPage.xaml.cs">
       <DependentUpon>ScottPlotPage.xaml</DependentUpon>
@@ -127,7 +130,7 @@
     <Compile Include="Utils\MessengerToken.cs"/>
     <Compile Include="Utils\MethodExtensions.cs"/>
     <Compile Include="ViewModel\CircleLoadingViewModel.cs"/>
-    <Compile Include="ViewModel\DelegateValueViewModel.cs"/>
+    <Compile Include="ViewModel\TransmitValueViewModel.cs"/>
     <Compile Include="ViewModel\MainViewModel.cs"/>
     <Compile Include="ViewModel\TcpServerViewModel.cs"/>
     <Compile Include="ViewModel\ViewModelLocator.cs"/>
@@ -159,13 +162,19 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Dialogs\DelegateDialog.xaml">
+    <Page Include="Dialogs\DelegateValueDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\EventValueDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\CameraPage.xaml"/>
     <Page Include="Pages\CircleLoadingPage.xaml"/>
-    <Page Include="Pages\DelegateValuePage.xaml"/>
+    <Page Include="Pages\TransmitValuePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\ScottPlotPage.xaml"/>
     <Page Include="Pages\TcpServerPage.xaml"/>
     <Page Include="Views\MainWindow.xaml">

@@ -17,46 +17,10 @@
         </Grid.RowDefinitions>
 
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <Grid Grid.Column="0" Margin="30,0,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Button
-                    x:Name="LeftSensorButton"
-                    Grid.Row="3"
-                    Margin="0,15,0,45"
-                    Content="测试信号" />
-            </Grid>
-
             <WpfPlot
                 x:Name="ScottPlotView"
                 Grid.Column="1"
                 IsEnabled="False" />
-
-            <Grid Grid.Column="2" Margin="0,0,30,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Button
-                    x:Name="RightSensorButton"
-                    Grid.Row="3"
-                    Margin="0,15,0,45"
-                    Content="测试信号" />
-            </Grid>
         </Grid>
     </Grid>
 </Page>

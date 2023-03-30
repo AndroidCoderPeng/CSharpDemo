@@ -42,7 +42,7 @@ namespace CSharpDemo.Views
                     _service.Navigate("CircleLoadingPage".CreateUri());
                     break;
                 case 4:
-                    _service.Navigate("DelegateValuePage".CreateUri());
+                    _service.Navigate("TransmitValuePage".CreateUri());
                     break;
             }
         }

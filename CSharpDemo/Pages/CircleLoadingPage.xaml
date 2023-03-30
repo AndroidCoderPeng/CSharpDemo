@@ -26,10 +26,10 @@
 
             <hc:CircleProgressBar
                 Grid.Row="0"
-                Width="500"
-                Height="500"
-                ArcThickness="30"
-                FontSize="50"
+                Width="400"
+                Height="400"
+                ArcThickness="25"
+                FontSize="35"
                 Maximum="15"
                 ShowText="True"
                 Text="货物盘点"
