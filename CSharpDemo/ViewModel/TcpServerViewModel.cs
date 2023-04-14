@@ -1,8 +1,11 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Net;
+using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using CSharpDemo.Utils;
+using CSharpDemo.Views;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
@@ -22,64 +25,50 @@ namespace CSharpDemo.ViewModel
             }
         }
 
+        public RelayCommand<ListBox> ItemSelectedCommand { get; }
+
+        private readonly TcpService _tcpService = new TcpService();
+
         public TcpServerViewModel()
         {
             //启动TCP Server
-            var service = new TcpService
+            _tcpService.Connected = (client, e) =>
             {
-                Connecting = (client, e) =>
-                {
-                    Debug.WriteLine($"客户端{client.ID}正在连接");
-                    Application.Current.Dispatcher.Invoke(() => { Messages.Add($"客户端{client.ID}正在连接"); });
-                },
-                Connected = (client, e) =>
-                {
-                    Debug.WriteLine($"客户端{client.ID}已连接");
-                    Application.Current.Dispatcher.Invoke(() => { Messages.Add($"客户端{client.ID}已连接"); });
-                },
-                Disconnected = (client, e) =>
-                {
-                    Debug.WriteLine($"客户端{client.ID}已断开连接");
-                    Application.Current.Dispatcher.Invoke(() => { Messages.Add($"客户端{client.ID}已断开连接"); });
-                },
-                Received = (client, byteBlock, requestInfo) =>
-                {
-                    //从客户端收到信息
-                    var mes = byteBlock.ToString();
-                    Application.Current.Dispatcher.Invoke(() => { Messages.Add($"已从{client.ID}接收到信息：{mes}"); });
-                    Debug.WriteLine($"已从{client.ID}接收到信息：{mes}");
-
-                    //将收到的信息直接返回给发送方
-                    client.Send(mes);
-
-                    //将收到的信息返回给特定ID的客户端
-                    //client.Send("id",mes);
-
-                    //将收到的信息返回给在线的所有客户端。
-                    // var clients = service.GetClients();
-                    // foreach (var targetClient in clients)
-                    // {
-                    //     if (targetClient.ID != client.ID)
-                    //     {
-                    //         targetClient.Send(mes);
-                    //     }
-                    // }
-                }
+                Application.Current.Dispatcher.Invoke(() => { Messages.Add($"客户端{client.ID}已连接"); });
             };
-            //同时监听两个地址
-            var socketConfig = new TouchSocketConfig().SetListenIPHosts(new[] { new IPHost(7777) });
-            service.Setup(socketConfig).Start(); //启动
+            _tcpService.Disconnected = (client, e) =>
+            {
+                Application.Current.Dispatcher.Invoke(() => { Messages.Add($"客户端{client.ID}已断开连接"); });
+            };
+            _tcpService.Received = (client, byteBlock, requestInfo) =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var message = Encoding.UTF8.GetString(byteBlock.Buffer, 0, byteBlock.Len);
+
+                    Application.Current.Dispatcher.Invoke(() => { Messages.Add($"已从{client.ID}接收到信息：{message}"); });
+                });
+            };
 
             //获取本地IP
-            var hostName = Dns.GetHostName();
-            var addresses = Dns.GetHostAddresses(hostName);
-            foreach (var ip in addresses)
+            var hostAddress = SystemHelper.GetHostAddress();
+            Messages.Add($"服务端{hostAddress}:7777已启动");
+
+            var config = new TouchSocketConfig();
+            config.SetListenIPHosts(new[] { new IPHost(hostAddress + ":" + 7777) });
+            _tcpService.Setup(config).Start(); //启动
+
+            ItemSelectedCommand = new RelayCommand<ListBox>(it =>
             {
-                if (ip.AddressFamily.ToString() != "InterNetwork") continue;
-                Messages.Add($"服务端{ip}:7777已启动");
-                //只找一个IPV4地址
-                return;
-            }
+                var item = it.SelectedItem.ToString();
+                //已从1接收到信息：{"position":"[0.20137861,0.12853289],[0.8101852,0.12853289],[0.20137861,0.44571573],[0.8101852,0.44571573]","color":"#FF0000","code":"11,12"}
+
+                if (item.Contains("position"))
+                {
+                    var first = item.SplitFirst('：')[1];
+                    new VideoReginWindow(first).ShowDialog();
+                }
+            });
         }
     }
 }

@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="TcpServerPage"
     d:DesignHeight="600"
@@ -12,6 +13,13 @@
     mc:Ignorable="d">
 
     <ListBox ItemsSource="{Binding Messages}">
+
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="SelectionChanged">
+                <i:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <TextBlock
@@ -19,7 +27,8 @@
                     VerticalAlignment="Center"
                     FontFamily="微软雅黑"
                     FontSize="18"
-                    Text="{Binding}" />
+                    Text="{Binding}"
+                    TextWrapping="Wrap" />
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>

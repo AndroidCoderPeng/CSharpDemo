@@ -82,6 +82,7 @@
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -110,6 +111,7 @@
     <Compile Include="Dialogs\EventValueDialog.xaml.cs">
       <DependentUpon>EventValueDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\ReginModel.cs" />
     <Compile Include="Pages\CameraPage.xaml.cs">
       <DependentUpon>CameraPage.xaml</DependentUpon>
     </Compile>
@@ -125,15 +127,16 @@
     <Compile Include="Pages\TcpServerPage.xaml.cs">
       <DependentUpon>TcpServerPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ServiceImpl\MainDataServiceImpl.cs"/>
-    <Compile Include="Service\IMainDataService.cs"/>
-    <Compile Include="Utils\MessengerToken.cs"/>
-    <Compile Include="Utils\MethodExtensions.cs"/>
-    <Compile Include="ViewModel\CircleLoadingViewModel.cs"/>
-    <Compile Include="ViewModel\TransmitValueViewModel.cs"/>
-    <Compile Include="ViewModel\MainViewModel.cs"/>
-    <Compile Include="ViewModel\TcpServerViewModel.cs"/>
-    <Compile Include="ViewModel\ViewModelLocator.cs"/>
+    <Compile Include="ServiceImpl\MainDataServiceImpl.cs" />
+    <Compile Include="Service\IMainDataService.cs" />
+    <Compile Include="Utils\MessengerToken.cs" />
+    <Compile Include="Utils\MethodExtensions.cs" />
+    <Compile Include="Utils\SystemHelper.cs" />
+    <Compile Include="ViewModel\CircleLoadingViewModel.cs" />
+    <Compile Include="ViewModel\TransmitValueViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\TcpServerViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -141,6 +144,9 @@
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\VideoReginWindow.xaml.cs">
+      <DependentUpon>VideoReginWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -170,21 +176,21 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\CameraPage.xaml"/>
-    <Page Include="Pages\CircleLoadingPage.xaml"/>
+    <Page Include="Pages\CameraPage.xaml" />
+    <Page Include="Pages\CircleLoadingPage.xaml" />
     <Page Include="Pages\TransmitValuePage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\ScottPlotPage.xaml"/>
-    <Page Include="Pages\TcpServerPage.xaml"/>
+    <Page Include="Pages\ScottPlotPage.xaml" />
+    <Page Include="Pages\TcpServerPage.xaml" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\VideoReginWindow.xaml" />
   </ItemGroup>
-  <ItemGroup/>
   <ItemGroup>
-    <Resource Include="Image\favicon.ico"/>
+    <Resource Include="Image\favicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets" Condition="Exists('..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets')" />
