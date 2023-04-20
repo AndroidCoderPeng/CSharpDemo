@@ -36,7 +36,7 @@ namespace CSharpDemo.Views
                     _service.Navigate("ScottPlotPage".CreateUri());
                     break;
                 case 2:
-                    _service.Navigate("TcpServerPage".CreateUri());
+                    _service.Navigate("UdpServerPage".CreateUri());
                     break;
                 case 3:
                     _service.Navigate("CircleLoadingPage".CreateUri());

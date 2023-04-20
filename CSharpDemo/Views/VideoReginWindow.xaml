@@ -3,16 +3,22 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="VideoReginWindow"
     Width="1366"
     Height="768"
+    Loaded="Window_Loaded"
     ResizeMode="NoResize"
+    ShowInTaskbar="False"
     WindowState="Maximized"
     WindowStyle="None"
     mc:Ignorable="d">
-    <Grid ShowGridLines="True">
-        <DockPanel Height="50" VerticalAlignment="Top">
+    <Grid>
+        <DockPanel
+            Height="50"
+            VerticalAlignment="Top"
+            LastChildFill="False">
             <TextBlock
                 x:Name="SizeTextBlock"
                 Margin="10,0"
@@ -21,14 +27,27 @@
                 FontSize="30"
                 Text="屏幕尺寸：" />
 
-            <TextBlock
-                x:Name="ModeTextBlock"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontFamily="宋体"
-                FontSize="30"
-                Text="算法模式：" />
+            <Button
+                Width="50"
+                Height="50"
+                hc:BackgroundSwitchElement.MouseDownBackground="PaleVioletRed"
+                hc:BackgroundSwitchElement.MouseHoverBackground="Red"
+                Background="Transparent"
+                BorderThickness="0"
+                Click="CloseButton_Click"
+                Content="X"
+                DockPanel.Dock="Right"
+                FontSize="24"
+                Style="{StaticResource ButtonCustom}" />
         </DockPanel>
+
+        <TextBlock
+            x:Name="ModeTextBlock"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontFamily="宋体"
+            FontSize="30"
+            Text="算法模式：" />
 
         <Canvas x:Name="RectangleCanvas" />
     </Grid>

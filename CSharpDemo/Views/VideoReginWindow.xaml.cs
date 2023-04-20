@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using CSharpDemo.Dialogs;
 using CSharpDemo.Model;
 using Newtonsoft.Json;
 
@@ -8,6 +9,15 @@ namespace CSharpDemo.Views
 {
     public partial class VideoReginWindow : Window
     {
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            new HikVisionLoginDialog(GetLoginParam) { Owner = this }.ShowDialog();
+        }
+
+        private void GetLoginParam(string host, string name, string port, string password)
+        {
+        }
+
         public VideoReginWindow(string data)
         {
             InitializeComponent();
@@ -33,6 +43,12 @@ namespace CSharpDemo.Views
             rectangle.Stroke = colorBrush;
             rectangle.StrokeThickness = 3;
             RectangleCanvas.Children.Add(rectangle);
+        }
+
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
