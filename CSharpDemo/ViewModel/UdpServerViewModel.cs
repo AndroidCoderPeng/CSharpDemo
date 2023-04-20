@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Net;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,7 +12,7 @@ using TouchSocket.Sockets;
 
 namespace CSharpDemo.ViewModel
 {
-    public class TcpServerViewModel : ViewModelBase
+    public class UdpServerViewModel : ViewModelBase
     {
         private ObservableCollection<string> _messages = new ObservableCollection<string>();
 
@@ -27,41 +28,34 @@ namespace CSharpDemo.ViewModel
 
         public RelayCommand<ListBox> ItemSelectedCommand { get; }
 
-        private readonly TcpService _tcpService = new TcpService();
+        private readonly UdpSession _udpSession = new UdpSession();
 
-        public TcpServerViewModel()
+        public UdpServerViewModel()
         {
-            //启动TCP Server
-            _tcpService.Connected = (client, e) =>
-            {
-                Application.Current.Dispatcher.Invoke(() => { Messages.Add($"客户端{client.ID}已连接"); });
-            };
-            _tcpService.Disconnected = (client, e) =>
-            {
-                Application.Current.Dispatcher.Invoke(() => { Messages.Add($"客户端{client.ID}已断开连接"); });
-            };
-            _tcpService.Received = (client, byteBlock, requestInfo) =>
+            _udpSession.Received += delegate(EndPoint endpoint, ByteBlock byteBlock, IRequestInfo info)
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     var message = Encoding.UTF8.GetString(byteBlock.Buffer, 0, byteBlock.Len);
 
-                    Application.Current.Dispatcher.Invoke(() => { Messages.Add($"已从{client.ID}接收到信息：{message}"); });
+                    Application.Current.Dispatcher.Invoke(() => { Messages.Add($"接收到信息：{message}"); });
                 });
             };
 
             //获取本地IP
             var hostAddress = SystemHelper.GetHostAddress();
-            Messages.Add($"服务端{hostAddress}:7777已启动");
 
             var config = new TouchSocketConfig();
-            config.SetListenIPHosts(new[] { new IPHost(hostAddress + ":" + 7777) });
-            _tcpService.Setup(config).Start(); //启动
+            config.SetBindIPHost(new IPHost(hostAddress + ":" + 7777));
+
+            //载入配置
+            _udpSession.Setup(config).Start();
+            Messages.Add($"服务端{hostAddress}:7777已启动");
 
             ItemSelectedCommand = new RelayCommand<ListBox>(it =>
             {
                 var item = it.SelectedItem.ToString();
-                //已从1接收到信息：{"position":"[0.20137861,0.12853289],[0.8101852,0.12853289],[0.20137861,0.44571573],[0.8101852,0.44571573]","color":"#FF0000","code":"11,12"}
+                //接收到信息：{"position":[{"x":0.19834815,"y":0.43050563},{"x":0.19834815,"y":0.15416667},{"x":0.77895296,"y":0.43050563},{"x":0.77895296,"y":0.15416667}],"color":"#FF0000","code":"11,12"}
 
                 if (item.Contains("position"))
                 {

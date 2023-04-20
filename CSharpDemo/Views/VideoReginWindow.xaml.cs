@@ -3,7 +3,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using CSharpDemo.Model;
 using Newtonsoft.Json;
-using WPFMediaKit.DirectShow.Controls;
 
 namespace CSharpDemo.Views
 {
@@ -13,27 +12,12 @@ namespace CSharpDemo.Views
         {
             InitializeComponent();
 
-            var width = 1920;
-            var height = 1080;
-
-            var videoInputNames = MultimediaUtil.VideoInputNames;
-            if (videoInputNames.Length > 0)
-            {
-                //默认选择第一个
-                var currentDevice = videoInputNames[0];
-                DeviceCamera.VideoCaptureSource = currentDevice;
-                DeviceCamera.DesiredPixelWidth = width;
-                DeviceCamera.DesiredPixelHeight = height;
-            }
-            else
-            {
-                MessageBox.Show("No video sources found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            var width = SystemParameters.PrimaryScreenWidth;
+            var height = SystemParameters.PrimaryScreenHeight;
+            SizeTextBlock.Text = $"屏幕尺寸：[{width},{height}]";
 
             var regin = JsonConvert.DeserializeObject<ReginModel>(data);
-
             Brush colorBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(regin.color));
-
             ModeTextBlock.Foreground = colorBrush;
             ModeTextBlock.Text = $"算法模板：{regin.code}";
 

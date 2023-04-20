@@ -111,7 +111,10 @@
     <Compile Include="Dialogs\EventValueDialog.xaml.cs">
       <DependentUpon>EventValueDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\ReginModel.cs" />
+    <Compile Include="Dialogs\HikVisionLoginDialog.xaml.cs">
+      <DependentUpon>HikVisionLoginDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\ReginModel.cs"/>
     <Compile Include="Pages\CameraPage.xaml.cs">
       <DependentUpon>CameraPage.xaml</DependentUpon>
     </Compile>
@@ -124,18 +127,18 @@
     <Compile Include="Pages\ScottPlotPage.xaml.cs">
       <DependentUpon>ScottPlotPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\TcpServerPage.xaml.cs">
-      <DependentUpon>TcpServerPage.xaml</DependentUpon>
+    <Compile Include="Pages\UdpServerPage.xaml.cs">
+      <DependentUpon>UdpServerPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ServiceImpl\MainDataServiceImpl.cs" />
-    <Compile Include="Service\IMainDataService.cs" />
-    <Compile Include="Utils\MessengerToken.cs" />
-    <Compile Include="Utils\MethodExtensions.cs" />
-    <Compile Include="Utils\SystemHelper.cs" />
-    <Compile Include="ViewModel\CircleLoadingViewModel.cs" />
-    <Compile Include="ViewModel\TransmitValueViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\TcpServerViewModel.cs" />
+    <Compile Include="ServiceImpl\MainDataServiceImpl.cs"/>
+    <Compile Include="Service\IMainDataService.cs"/>
+    <Compile Include="Utils\MessengerToken.cs"/>
+    <Compile Include="Utils\MethodExtensions.cs"/>
+    <Compile Include="Utils\SystemHelper.cs"/>
+    <Compile Include="ViewModel\CircleLoadingViewModel.cs"/>
+    <Compile Include="ViewModel\TransmitValueViewModel.cs"/>
+    <Compile Include="ViewModel\MainViewModel.cs"/>
+    <Compile Include="ViewModel\UdpServerViewModel.cs"/>
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -176,18 +179,24 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\CameraPage.xaml" />
-    <Page Include="Pages\CircleLoadingPage.xaml" />
+    <Page Include="Dialogs\HikVisionLoginDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\CameraPage.xaml"/>
+    <Page Include="Pages\CircleLoadingPage.xaml"/>
     <Page Include="Pages\TransmitValuePage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\ScottPlotPage.xaml" />
-    <Page Include="Pages\TcpServerPage.xaml" />
+    <Page Include="Pages\ScottPlotPage.xaml"/>
+    <Page Include="Pages\UdpServerPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\VideoReginWindow.xaml" />
+    <Page Include="Views\VideoReginWindow.xaml"/>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\favicon.ico" />

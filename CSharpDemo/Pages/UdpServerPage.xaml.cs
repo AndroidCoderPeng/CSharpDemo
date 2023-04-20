@@ -2,9 +2,9 @@
 
 namespace CSharpDemo.Pages
 {
-    public partial class TcpServerPage : Page
+    public partial class UdpServerPage : Page
     {
-        public TcpServerPage()
+        public UdpServerPage()
         {
             InitializeComponent();
         }

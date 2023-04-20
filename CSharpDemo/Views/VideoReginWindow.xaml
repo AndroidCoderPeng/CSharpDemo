@@ -4,22 +4,31 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:mk="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit"
     Title="VideoReginWindow"
-    Width="1920"
-    Height="1080"
+    Width="1366"
+    Height="768"
     ResizeMode="NoResize"
+    WindowState="Maximized"
+    WindowStyle="None"
     mc:Ignorable="d">
-    <Grid>
-        <mk:VideoCaptureElement x:Name="DeviceCamera" />
+    <Grid ShowGridLines="True">
+        <DockPanel Height="50" VerticalAlignment="Top">
+            <TextBlock
+                x:Name="SizeTextBlock"
+                Margin="10,0"
+                VerticalAlignment="Center"
+                FontFamily="宋体"
+                FontSize="30"
+                Text="屏幕尺寸：" />
 
-        <TextBlock
-            x:Name="ModeTextBlock"
-            Margin="0,300,0,0"
-            HorizontalAlignment="Center"
-            FontFamily="宋体"
-            FontSize="30"
-            Text="算法模式：" />
+            <TextBlock
+                x:Name="ModeTextBlock"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="宋体"
+                FontSize="30"
+                Text="算法模式：" />
+        </DockPanel>
 
         <Canvas x:Name="RectangleCanvas" />
     </Grid>
