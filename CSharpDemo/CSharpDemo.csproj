@@ -17,11 +17,11 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -86,6 +86,7 @@
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Presentation"/>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -96,6 +97,7 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration"/>
     <Reference Include="WPFMediaKit, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WPFMediaKit.2.2.0\lib\WPFMediaKit.dll</HintPath>
     </Reference>
@@ -132,17 +134,20 @@
     </Compile>
     <Compile Include="ServiceImpl\MainDataServiceImpl.cs"/>
     <Compile Include="Service\IMainDataService.cs"/>
-    <Compile Include="Utils\MessengerToken.cs"/>
+    <Compile Include="Utils\CHCNetSDK.cs"/>
     <Compile Include="Utils\MethodExtensions.cs"/>
     <Compile Include="Utils\SystemHelper.cs"/>
     <Compile Include="ViewModel\CircleLoadingViewModel.cs"/>
     <Compile Include="ViewModel\TransmitValueViewModel.cs"/>
     <Compile Include="ViewModel\MainViewModel.cs"/>
     <Compile Include="ViewModel\UdpServerViewModel.cs"/>
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs"/>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\HikVisionWindow.xaml.cs">
+      <DependentUpon>HikVisionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -192,6 +197,7 @@
     <Page Include="Pages\UdpServerPage.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\HikVisionWindow.xaml"/>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

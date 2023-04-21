@@ -44,6 +44,9 @@ namespace CSharpDemo.Views
                 case 4:
                     _service.Navigate("TransmitValuePage".CreateUri());
                     break;
+                case 5:
+                    new HikVisionWindow().Show();
+                    break;
             }
         }
     }

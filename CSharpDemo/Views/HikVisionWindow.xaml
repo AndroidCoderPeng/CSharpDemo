@@ -1,20 +1,20 @@
 ﻿<Window
-    x:Class="CSharpDemo.Views.VideoReginWindow"
+    x:Class="CSharpDemo.Views.HikVisionWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="VideoReginWindow"
+    Title="HikVisionWindow"
     Width="800"
     Height="600"
-    AllowsTransparency="True"
-    Background="Transparent"
+    Loaded="Window_Loaded"
     ResizeMode="NoResize"
-    Topmost="True"
     WindowState="Maximized"
-    WindowStyle="None"
     mc:Ignorable="d">
     <Grid>
-        <Canvas x:Name="RectangleCanvas" />
+        <WindowsFormsHost Name="RealPlayPictureBoxHost">
+            <forms:PictureBox />
+        </WindowsFormsHost>
     </Grid>
 </Window>
