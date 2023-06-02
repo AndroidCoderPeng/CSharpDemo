@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Navigation;
+using CSharpDemo.Dialogs;
 using CSharpDemo.Utils;
 
 namespace CSharpDemo.Views
@@ -46,6 +47,9 @@ namespace CSharpDemo.Views
                     break;
                 case 5:
                     new HikVisionWindow().Show();
+                    break;
+                case 6:
+                    new CheckResponseDialog { Owner = this }.ShowDialog();
                     break;
             }
         }

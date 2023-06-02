@@ -107,6 +107,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Dialogs\CheckResponseDialog.xaml.cs">
+      <DependentUpon>CheckResponseDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\DelegateValueDialog.xaml.cs">
       <DependentUpon>DelegateValueDialog.xaml</DependentUpon>
     </Compile>
@@ -173,6 +176,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Dialogs\CheckResponseDialog.xaml" />
     <Page Include="Dialogs\DelegateValueDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -202,6 +206,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\gl_icon11.png" />
+    <Resource Include="Image\gl_icon6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\return_g.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets" Condition="Exists('..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets')" />
