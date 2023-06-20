@@ -2,9 +2,9 @@
 
 namespace CSharpDemo.Pages
 {
-    public partial class CircleLoadingPage : Page
+    public partial class SerialPortPage : Page
     {
-        public CircleLoadingPage()
+        public SerialPortPage()
         {
             InitializeComponent();
         }

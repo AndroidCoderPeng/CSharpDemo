@@ -42,7 +42,6 @@ namespace CSharpDemo.ViewModel
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<UdpServerViewModel>();
-            SimpleIoc.Default.Register<CircleLoadingViewModel>();
             SimpleIoc.Default.Register<TransmitValueViewModel>();
 
             #endregion
@@ -50,7 +49,6 @@ namespace CSharpDemo.ViewModel
 
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
         public UdpServerViewModel UdpServer => ServiceLocator.Current.GetInstance<UdpServerViewModel>();
-        public CircleLoadingViewModel CircleLoading => ServiceLocator.Current.GetInstance<CircleLoadingViewModel>();
         public TransmitValueViewModel TransmitValue => ServiceLocator.Current.GetInstance<TransmitValueViewModel>();
 
         public static void Cleanup()

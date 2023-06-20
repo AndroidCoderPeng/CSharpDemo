@@ -113,34 +113,33 @@
     <Compile Include="Dialogs\DelegateValueDialog.xaml.cs">
       <DependentUpon>DelegateValueDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\EventValueDialog.xaml.cs">
-      <DependentUpon>EventValueDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\HikVisionLoginDialog.xaml.cs">
-      <DependentUpon>HikVisionLoginDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\ReginModel.cs" />
-    <Compile Include="Pages\CameraPage.xaml.cs">
-      <DependentUpon>CameraPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\CircleLoadingPage.xaml.cs">
-      <DependentUpon>CircleLoadingPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\TransmitValuePage.xaml.cs">
-      <DependentUpon>TransmitValuePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ScottPlotPage.xaml.cs">
-      <DependentUpon>ScottPlotPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\UdpServerPage.xaml.cs">
-      <DependentUpon>UdpServerPage.xaml</DependentUpon>
-    </Compile>
+      <Compile Include="Dialogs\EventValueDialog.xaml.cs">
+          <DependentUpon>EventValueDialog.xaml</DependentUpon>
+      </Compile>
+      <Compile Include="Dialogs\HikVisionLoginDialog.xaml.cs">
+          <DependentUpon>HikVisionLoginDialog.xaml</DependentUpon>
+      </Compile>
+      <Compile Include="Model\ReginModel.cs"/>
+      <Compile Include="Pages\CameraPage.xaml.cs">
+          <DependentUpon>CameraPage.xaml</DependentUpon>
+      </Compile>
+      <Compile Include="Pages\SerialPortPage.xaml.cs">
+          <DependentUpon>SerialPortPage.xaml</DependentUpon>
+      </Compile>
+      <Compile Include="Pages\TransmitValuePage.xaml.cs">
+          <DependentUpon>TransmitValuePage.xaml</DependentUpon>
+      </Compile>
+      <Compile Include="Pages\ScottPlotPage.xaml.cs">
+          <DependentUpon>ScottPlotPage.xaml</DependentUpon>
+      </Compile>
+      <Compile Include="Pages\UdpServerPage.xaml.cs">
+          <DependentUpon>UdpServerPage.xaml</DependentUpon>
+      </Compile>
     <Compile Include="ServiceImpl\MainDataServiceImpl.cs" />
     <Compile Include="Service\IMainDataService.cs" />
     <Compile Include="Utils\CHCNetSDK.cs" />
     <Compile Include="Utils\MethodExtensions.cs" />
     <Compile Include="Utils\SystemHelper.cs" />
-    <Compile Include="ViewModel\CircleLoadingViewModel.cs" />
     <Compile Include="ViewModel\TransmitValueViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\UdpServerViewModel.cs" />
@@ -190,7 +189,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\CameraPage.xaml" />
-    <Page Include="Pages\CircleLoadingPage.xaml" />
+      <Page Include="Pages\SerialPortPage.xaml"/>
     <Page Include="Pages\TransmitValuePage.xaml">
       <SubType>Designer</SubType>
     </Page>

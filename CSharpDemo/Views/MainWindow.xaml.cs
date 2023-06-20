@@ -40,10 +40,10 @@ namespace CSharpDemo.Views
                     _service.Navigate("UdpServerPage".CreateUri());
                     break;
                 case 3:
-                    _service.Navigate("CircleLoadingPage".CreateUri());
+                    _service.Navigate("TransmitValuePage".CreateUri());
                     break;
                 case 4:
-                    _service.Navigate("TransmitValuePage".CreateUri());
+                    _service.Navigate("SerialPortPage".CreateUri());
                     break;
                 case 5:
                     new HikVisionWindow().Show();
