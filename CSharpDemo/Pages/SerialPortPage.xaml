@@ -34,7 +34,7 @@
                     Text="端口：" />
 
                 <hc:ComboBox
-                    Width="180"
+                    Width="100"
                     Height="30"
                     Margin="0,0,15,0"
                     ItemsSource="{Binding PortArray}"
@@ -56,7 +56,7 @@
                     Text="波特率：" />
 
                 <hc:ComboBox
-                    Width="180"
+                    Width="100"
                     Height="30"
                     Margin="0,0,15,0"
                     ItemsSource="{Binding BaudRateList}"
@@ -78,7 +78,7 @@
                     Text="数据位：" />
 
                 <hc:ComboBox
-                    Width="180"
+                    Width="100"
                     Height="30"
                     Margin="0,0,15,0"
                     ItemsSource="{Binding DataBitList}"
@@ -100,7 +100,7 @@
                     Text="校验位：" />
 
                 <hc:ComboBox
-                    Width="180"
+                    Width="100"
                     Height="30"
                     Margin="0,0,15,0"
                     ItemsSource="{Binding ParityList}"
@@ -122,7 +122,7 @@
                     Text="停止位：" />
 
                 <hc:ComboBox
-                    Width="180"
+                    Width="100"
                     Height="30"
                     Margin="0,0,15,0"
                     ItemsSource="{Binding StopBitList}"
@@ -151,21 +151,21 @@
             </StackPanel>
 
             <Button
-                Width="275"
+                Width="195"
                 Margin="15,0,15,15"
                 Command="{Binding OpenSerialPortCommand}"
                 Content="打开串口"
                 Style="{StaticResource ButtonPrimary}" />
 
             <Button
-                Width="275"
+                Width="195"
                 Margin="15,0"
                 Command="{Binding CloseSerialPortCommand}"
                 Content="关闭串口"
                 Style="{StaticResource ButtonPrimary}" />
 
             <Button
-                Width="275"
+                Width="195"
                 Margin="15"
                 Command="{Binding ClearMessageCommand}"
                 Content="清空数据"
@@ -194,7 +194,16 @@
             <ListView
                 Grid.Row="1"
                 Margin="15,0"
-                ItemsSource="{Binding ResponseCollection}" />
+                ItemsSource="{Binding ResponseCollection}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>

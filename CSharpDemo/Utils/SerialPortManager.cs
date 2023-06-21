@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO.Ports;
+using System.Linq;
 using System.Windows;
 using MessageBox = HandyControl.Controls.MessageBox;
 
@@ -46,10 +46,9 @@ namespace CSharpDemo.Utils
             set => _stopBits = value;
         }
 
-        public event Action<List<byte>> DataReceivedAction;
+        public event Action<byte[]> DataReceivedAction;
         public event SerialErrorReceivedEventHandler ErrorReceivedEventHandler;
         private readonly SerialPort _serialPort = new SerialPort();
-        private readonly List<byte> _dataPool = new List<byte>(); //存放接收的所有字节
 
         #endregion
 
@@ -141,13 +140,13 @@ namespace CSharpDemo.Utils
 
         #endregion
 
-        void BoundSerialPortEvents()
+        private void BoundSerialPortEvents()
         {
             _serialPort.DataReceived += SerialPort_DataReceived;
             _serialPort.ErrorReceived += SerialPort_ErrorReceived;
         }
 
-        void UnBoundSerialPortEvents()
+        public void UnBoundSerialPortEvents()
         {
             _serialPort.DataReceived -= SerialPort_DataReceived;
             _serialPort.ErrorReceived -= SerialPort_ErrorReceived;
@@ -164,10 +163,9 @@ namespace CSharpDemo.Utils
             {
                 var receivedData = new byte[_serialPort.BytesToRead];
                 _serialPort.Read(receivedData, 0, receivedData.Length);
-                if (DataReceivedAction != null)
+                if (receivedData.Any() && DataReceivedAction != null)
                 {
-                    _dataPool.AddRange(receivedData);
-                    DataReceivedAction(_dataPool);
+                    DataReceivedAction(receivedData);
                 }
             }
             else

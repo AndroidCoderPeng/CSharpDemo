@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO.Ports;
 using System.Windows;
 using CSharpDemo.Utils;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using HandyControl.Controls;
-using Newtonsoft.Json;
 using MessageBox = HandyControl.Controls.MessageBox;
 
 namespace CSharpDemo.ViewModel
@@ -277,12 +275,12 @@ namespace CSharpDemo.ViewModel
                 });
             });
 
-            _serialPortManager.DataReceivedAction += delegate(List<byte> list)
+            _serialPortManager.DataReceivedAction += delegate(byte[] bytes)
             {
-                //A3 20 00 1A 21 17 00 08 22 01 01 22 01 0B 82 01 60 00 00 20 00 01 2D 60 00 00 09 00 01 01 EF 6E
-                //163,32,0,26,33,23,0,8,34,1,1,34,1,11,130,1,96,0,0,32,0,1,45,96,0,0,9,0,1,1,239,110
-                Debug.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
-                                " SerialPortViewModel => " + JsonConvert.SerializeObject(list));
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    ResponseCollection.Add(BitConverter.ToString(bytes));
+                });
             };
 
             _serialPortManager.ErrorReceivedEventHandler += delegate(object sender, SerialErrorReceivedEventArgs args)
