@@ -28,6 +28,11 @@ namespace CSharpDemo.ViewModel
         private int _stopBit = 1;
         private string _stateColorBrush = "DarkGray";
         private string _userInputHex = "A3 20 00 13 21 17 00 08 22 01 01 22 01 0A 82 01 60 00 02 00 00 01 00 57 11";
+        private bool _portNameComboBoxIsEnabled = true;
+        private bool _baudRateComboBoxIsEnabled = true;
+        private bool _dataBitComboBoxIsEnabled = true;
+        private bool _parityComboBoxIsEnabled = true;
+        private bool _stopBitComboBoxIsEnabled = true;
 
         /// <summary>
         /// 端口
@@ -178,6 +183,56 @@ namespace CSharpDemo.ViewModel
             }
         }
 
+        public bool PortNameComboBoxIsEnabled
+        {
+            get => _portNameComboBoxIsEnabled;
+            set
+            {
+                _portNameComboBoxIsEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool BaudRateComboBoxIsEnabled
+        {
+            get => _baudRateComboBoxIsEnabled;
+            set
+            {
+                _baudRateComboBoxIsEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool DataBitComboBoxIsEnabled
+        {
+            get => _dataBitComboBoxIsEnabled;
+            set
+            {
+                _dataBitComboBoxIsEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ParityComboBoxIsEnabled
+        {
+            get => _parityComboBoxIsEnabled;
+            set
+            {
+                _parityComboBoxIsEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool StopBitComboBoxIsEnabled
+        {
+            get => _stopBitComboBoxIsEnabled;
+            set
+            {
+                _stopBitComboBoxIsEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
         #endregion
 
         #region RelayCommand
@@ -242,13 +297,29 @@ namespace CSharpDemo.ViewModel
                 _serialPortManager.StopBits = (StopBits)_stopBit;
 
                 _serialPortManager.Open();
-                StateColorBrush = _serialPortManager.IsOpen ? "LimeGreen" : "LightGray";
+                if (_serialPortManager.IsOpen)
+                {
+                    StateColorBrush = "LimeGreen";
+                    PortNameComboBoxIsEnabled = false;
+                    BaudRateComboBoxIsEnabled = false;
+                    DataBitComboBoxIsEnabled = false;
+                    ParityComboBoxIsEnabled = false;
+                    StopBitComboBoxIsEnabled = false;
+                }
             });
 
             CloseSerialPortCommand = new RelayCommand(delegate
             {
                 _serialPortManager.Close();
-                StateColorBrush = "LightGray";
+                if (!_serialPortManager.IsOpen)
+                {
+                    StateColorBrush = "LightGray";
+                    PortNameComboBoxIsEnabled = true;
+                    BaudRateComboBoxIsEnabled = true;
+                    DataBitComboBoxIsEnabled = true;
+                    ParityComboBoxIsEnabled = true;
+                    StopBitComboBoxIsEnabled = true;
+                }
             });
 
             ClearMessageCommand = new RelayCommand(delegate { ResponseCollection.Clear(); });

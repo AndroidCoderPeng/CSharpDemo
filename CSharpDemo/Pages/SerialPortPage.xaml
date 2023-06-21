@@ -37,6 +37,7 @@
                     Width="100"
                     Height="30"
                     Margin="0,0,15,0"
+                    IsEnabled="{Binding PortNameComboBoxIsEnabled}"
                     ItemsSource="{Binding PortArray}"
                     SelectedItem="{Binding PortName}">
                     <act:Interaction.Triggers>
@@ -59,6 +60,7 @@
                     Width="100"
                     Height="30"
                     Margin="0,0,15,0"
+                    IsEnabled="{Binding BaudRateComboBoxIsEnabled}"
                     ItemsSource="{Binding BaudRateList}"
                     SelectedItem="{Binding BaudRate}">
                     <act:Interaction.Triggers>
@@ -81,6 +83,7 @@
                     Width="100"
                     Height="30"
                     Margin="0,0,15,0"
+                    IsEnabled="{Binding DataBitComboBoxIsEnabled}"
                     ItemsSource="{Binding DataBitList}"
                     SelectedItem="{Binding DataBit}">
                     <act:Interaction.Triggers>
@@ -103,6 +106,7 @@
                     Width="100"
                     Height="30"
                     Margin="0,0,15,0"
+                    IsEnabled="{Binding ParityComboBoxIsEnabled}"
                     ItemsSource="{Binding ParityList}"
                     SelectedItem="{Binding Parity}">
                     <act:Interaction.Triggers>
@@ -125,6 +129,7 @@
                     Width="100"
                     Height="30"
                     Margin="0,0,15,0"
+                    IsEnabled="{Binding StopBitComboBoxIsEnabled}"
                     ItemsSource="{Binding StopBitList}"
                     SelectedItem="{Binding StopBit}">
                     <act:Interaction.Triggers>
