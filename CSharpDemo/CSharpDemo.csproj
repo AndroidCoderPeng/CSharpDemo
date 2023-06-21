@@ -139,7 +139,9 @@
     <Compile Include="Service\IMainDataService.cs" />
     <Compile Include="Utils\CHCNetSDK.cs" />
     <Compile Include="Utils\MethodExtensions.cs" />
+      <Compile Include="Utils\SerialPortManager.cs"/>
     <Compile Include="Utils\SystemHelper.cs" />
+      <Compile Include="ViewModel\SerialPortViewModel.cs"/>
     <Compile Include="ViewModel\TransmitValueViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\UdpServerViewModel.cs" />

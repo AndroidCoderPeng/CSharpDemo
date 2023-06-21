@@ -43,6 +43,7 @@ namespace CSharpDemo.ViewModel
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<UdpServerViewModel>();
             SimpleIoc.Default.Register<TransmitValueViewModel>();
+            SimpleIoc.Default.Register<SerialPortViewModel>();
 
             #endregion
         }
@@ -50,6 +51,7 @@ namespace CSharpDemo.ViewModel
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
         public UdpServerViewModel UdpServer => ServiceLocator.Current.GetInstance<UdpServerViewModel>();
         public TransmitValueViewModel TransmitValue => ServiceLocator.Current.GetInstance<TransmitValueViewModel>();
+        public SerialPortViewModel SerialPort => ServiceLocator.Current.GetInstance<SerialPortViewModel>();
 
         public static void Cleanup()
         {
