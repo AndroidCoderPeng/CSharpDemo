@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO.Ports;
+using System.Linq;
+using System.Text;
 using System.Windows;
 using CSharpDemo.Utils;
 using GalaSoft.MvvmLight;
@@ -27,7 +29,7 @@ namespace CSharpDemo.ViewModel
         private Parity _parity = Parity.None;
         private int _stopBit = 1;
         private string _stateColorBrush = "DarkGray";
-        private string _userInputHex = "A3 20 00 13 21 17 00 08 22 01 01 22 01 0A 82 01 60 00 02 00 00 01 00 57 11";
+        private string _userInputHex = string.Empty;
         private bool _portNameComboBoxIsEnabled = true;
         private bool _baudRateComboBoxIsEnabled = true;
         private bool _dataBitComboBoxIsEnabled = true;
@@ -338,12 +340,37 @@ namespace CSharpDemo.ViewModel
                     return;
                 }
 
-                //A3 20 00 13 21 17 00 08 22 01 01 22 01 0A 82 01 60 00 02 00 00 01 00 57 11
-                _serialPortManager.Write(new byte[]
+                string[] bytes;
+                if (_userInputHex.Contains(" "))
                 {
-                    0xA3, 0x20, 0x00, 0x13, 0x21, 0x17, 0x00, 0x08, 0x22, 0x01, 0x01, 0x22, 0x01, 0x0A, 0x82, 0x01,
-                    0x60, 0x00, 0x02, 0x00, 0x00, 0x01, 0x00, 0x57, 0x11
-                });
+                    bytes = _userInputHex.Split(' ');
+                }
+                else if (_userInputHex.Contains("-"))
+                {
+                    bytes = _userInputHex.Split('-');
+                }
+                else
+                {
+                    //每两个字符作为一个Hex
+                    var dataValue = _userInputHex.ToList();
+                    var temp = new List<string>();
+                    for (var i = 0; i < dataValue.Count; i += 2)
+                    {
+                        var builder = new StringBuilder();
+                        var hex = builder.Append(dataValue[i]).Append(dataValue[i + 1]);
+                        temp.Add(hex.ToString());
+                    }
+
+                    bytes = temp.ToArray();
+                }
+
+                var cmd = new byte[bytes.Length];
+                for (var i = 0; i < bytes.Length; i++)
+                {
+                    cmd[i] = Convert.ToByte(bytes[i], 16);
+                }
+
+                _serialPortManager.Write(cmd);
             });
 
             _serialPortManager.DataReceivedAction += delegate(byte[] bytes)
