@@ -1,8 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Text;
-using System.Windows;
-using CSharpDemo.Dialogs;
 using HandyControl.Controls;
 using HikVisionPreview;
 using Window = System.Windows.Window;
@@ -11,53 +8,16 @@ namespace CSharpDemo.Views
 {
     public partial class HikVisionWindow : Window
     {
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private readonly int _userId = -1;
+        private readonly int _realHandle = -1;
+
+        public HikVisionWindow(int userId)
         {
-            new HikVisionLoginDialog(GetLoginParam) { Owner = this }.ShowDialog();
-        }
-
-        private int _userId = -1;
-        private int _realHandle = -1;
-        private CHCNetSDK.NET_DVR_USER_LOGIN_INFO _structLogInfo;
-        private CHCNetSDK.NET_DVR_DEVICEINFO_V40 _deviceInfo;
-
-        private void GetLoginParam(string host, string name, string port, string password)
-        {
-            _structLogInfo = new CHCNetSDK.NET_DVR_USER_LOGIN_INFO();
-
-            //设备IP地址或者域名
-            var byIp = Encoding.Default.GetBytes(host);
-            _structLogInfo.sDeviceAddress = new byte[129];
-            byIp.CopyTo(_structLogInfo.sDeviceAddress, 0);
-
-            //设备用户名
-            var byUserName = Encoding.Default.GetBytes(name);
-            _structLogInfo.sUserName = new byte[64];
-            byUserName.CopyTo(_structLogInfo.sUserName, 0);
-
-            //设备密码
-            var byPassword = Encoding.Default.GetBytes(password);
-            _structLogInfo.sPassword = new byte[64];
-            byPassword.CopyTo(_structLogInfo.sPassword, 0);
-
-            _structLogInfo.wPort = ushort.Parse(port); //设备服务端口号
-            _structLogInfo.bUseAsynLogin = false;
-
-            _deviceInfo = new CHCNetSDK.NET_DVR_DEVICEINFO_V40();
-
-            //登录设备 Login the device
-            _userId = CHCNetSDK.NET_DVR_Login_V40(ref _structLogInfo, ref _deviceInfo);
-            if (_userId < 0)
-            {
-                Growl.ErrorGlobal($"NET_DVR_Login_V40 failed, error code= {CHCNetSDK.NET_DVR_GetLastError()}");
-                return;
-            }
-
-            //登录成功
-            Growl.SuccessGlobal("Login Success!");
+            InitializeComponent();
 
             if (_realHandle < 0)
             {
+                _userId = userId;
                 var lpPreviewInfo = new CHCNetSDK.NET_DVR_PREVIEWINFO
                 {
                     //TODO RealPlayPictureBoxHost.Child才是PictureBox，巨坑！！！
@@ -72,7 +32,7 @@ namespace CSharpDemo.Views
                 };
 
                 //打开预览 Start live view 
-                _realHandle = CHCNetSDK.NET_DVR_RealPlay_V40(_userId, ref lpPreviewInfo, null, new IntPtr());
+                _realHandle = CHCNetSDK.NET_DVR_RealPlay_V40(userId, ref lpPreviewInfo, null, new IntPtr());
 
                 if (_realHandle < 0)
                 {
@@ -83,11 +43,6 @@ namespace CSharpDemo.Views
                 //预览成功
                 Growl.SuccessGlobal("Preview Success!");
             }
-        }
-
-        public HikVisionWindow()
-        {
-            InitializeComponent();
         }
 
         protected override void OnClosing(CancelEventArgs e)

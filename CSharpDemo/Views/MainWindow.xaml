@@ -39,7 +39,7 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontFamily="微软雅黑"
-                            FontSize="18"
+                            FontSize="16"
                             Text="{Binding}" />
                     </Border>
 

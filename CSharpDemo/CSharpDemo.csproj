@@ -107,9 +107,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Dialogs\CheckResponseDialog.xaml.cs">
-      <DependentUpon>CheckResponseDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Dialogs\DelegateValueDialog.xaml.cs">
       <DependentUpon>DelegateValueDialog.xaml</DependentUpon>
     </Compile>
@@ -119,9 +116,12 @@
       <Compile Include="Dialogs\HikVisionLoginDialog.xaml.cs">
           <DependentUpon>HikVisionLoginDialog.xaml</DependentUpon>
       </Compile>
-      <Compile Include="Model\ReginModel.cs"/>
+      <Compile Include="Model\ReginModel.cs" />
       <Compile Include="Pages\CameraPage.xaml.cs">
           <DependentUpon>CameraPage.xaml</DependentUpon>
+      </Compile>
+      <Compile Include="Pages\DataAnalysisPage.xaml.cs">
+        <DependentUpon>DataAnalysisPage.xaml</DependentUpon>
       </Compile>
       <Compile Include="Pages\SerialPortPage.xaml.cs">
           <DependentUpon>SerialPortPage.xaml</DependentUpon>
@@ -139,9 +139,9 @@
     <Compile Include="Service\IMainDataService.cs" />
     <Compile Include="Utils\CHCNetSDK.cs" />
     <Compile Include="Utils\MethodExtensions.cs" />
-      <Compile Include="Utils\SerialPortManager.cs"/>
+      <Compile Include="Utils\SerialPortManager.cs" />
     <Compile Include="Utils\SystemHelper.cs" />
-      <Compile Include="ViewModel\SerialPortViewModel.cs"/>
+      <Compile Include="ViewModel\SerialPortViewModel.cs" />
     <Compile Include="ViewModel\TransmitValueViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\UdpServerViewModel.cs" />
@@ -177,7 +177,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Dialogs\CheckResponseDialog.xaml" />
     <Page Include="Dialogs\DelegateValueDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -191,7 +190,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\CameraPage.xaml" />
-      <Page Include="Pages\SerialPortPage.xaml"/>
+    <Page Include="Pages\DataAnalysisPage.xaml" />
+      <Page Include="Pages\SerialPortPage.xaml" />
     <Page Include="Pages\TransmitValuePage.xaml">
       <SubType>Designer</SubType>
     </Page>

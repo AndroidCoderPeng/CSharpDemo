@@ -95,7 +95,8 @@
         <Button
             x:Name="LoginButton"
             Grid.Row="4"
-            Width="360"
-            Content="登录" />
+            Width="365"
+            Content="Login"
+            Style="{StaticResource ButtonPrimary}" />
     </Grid>
 </Window>
