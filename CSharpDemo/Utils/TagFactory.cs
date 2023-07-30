@@ -9,7 +9,7 @@ namespace CSharpDemo.Utils
             Tag tag;
             if (UploadTag.IsUploadTag(oid))
             {
-                //数据存在此Tag中
+                //关键数据存在此Tag中
                 tag = new UploadTag(oid, len, value);
             }
             else

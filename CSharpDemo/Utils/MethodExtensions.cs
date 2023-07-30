@@ -219,5 +219,24 @@ namespace CSharpDemo.Utils
                     return "未知类型数据";
             }
         }
+        
+        public static double HexToDouble(this IReadOnlyList<byte> src)
+        {
+            if (src.Count != 3)
+                return 0;
+
+            short result1 = src[0];
+            short result2 = src[1];
+            short result3 = src[2];
+
+            if ((result1 & 0x80) == 0x80)
+            {
+                result1 = Convert.ToInt16(result1 - 255);
+                result2 = Convert.ToInt16(result2 - 255);
+                result3 = Convert.ToInt16(result3 - 255);
+            }
+
+            return (result1 * 65536 + result2 * 256 + result3) * 5 / 83.88607 / 100000;
+        }
     }
 }

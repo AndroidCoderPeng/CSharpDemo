@@ -1,4 +1,6 @@
-﻿namespace CSharpDemo.Tags
+﻿using System.Diagnostics;
+
+namespace CSharpDemo.Tags
 {
     public abstract class Tag
     {
@@ -8,6 +10,7 @@
 
         protected Tag(string oid, int len, byte[] dataValue)
         {
+            Debug.WriteLine($"Tag => {oid}");
             Oid = oid;
             Len = len;
             DataValue = dataValue;

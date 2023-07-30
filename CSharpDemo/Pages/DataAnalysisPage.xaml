@@ -85,6 +85,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
             <TextBlock
@@ -96,6 +97,12 @@
             <TextBlock
                 x:Name="PduTypeTextBlock"
                 Grid.Column="1"
+                VerticalAlignment="Center"
+                FontSize="16" />
+
+            <TextBlock
+                x:Name="TagTypeTextBlock"
+                Grid.Column="2"
                 VerticalAlignment="Center"
                 FontSize="16" />
         </Grid>
