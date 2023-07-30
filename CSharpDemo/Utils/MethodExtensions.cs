@@ -238,5 +238,19 @@ namespace CSharpDemo.Utils
 
             return (result1 * 65536 + result2 * 256 + result3) * 5 / 83.88607 / 100000;
         }
+        
+        public static List<string> ReadFromFile(this string filePath)
+        {
+            var list = new List<string>();
+            var streamReader = new StreamReader(filePath);
+            string line;
+            while ((line = streamReader.ReadLine()) != null)
+            {
+                list.Add(line);
+            }
+
+            streamReader.Close();
+            return list;
+        }
     }
 }

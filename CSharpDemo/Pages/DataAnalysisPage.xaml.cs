@@ -43,33 +43,34 @@ namespace CSharpDemo.Pages
                     OriginalDataTextBox.Text = data;
                     OriginalDataTextBlock.Text = $"原始数据长度：{data.Length / 2} 字节";
 
-                    //将string转为byte[]
-                    var temp = new List<string>();
-                    for (var i = 0; i < data.Length; i += 2)
-                    {
-                        temp.Add(data.Substring(i, 2));
-                    }
-
-                    var bytes = new byte[temp.Count];
-                    for (var i = 0; i < temp.Count; i++)
-                    {
-                        bytes[i] = Convert.ToByte(temp[i], 16);
-                    }
-
-                    //测试是否转化成功
-                    if (!data.Equals(BitConverter.ToString(bytes).Replace("-", "")))
-                    {
-                        MessageBox.Show("数据转化失败!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
-                    HandleSerialPortData(bytes);
+                    //处理单条数据
+                    HandleSerialPortData(data);
                 }
             };
         }
 
-        private void HandleSerialPortData(byte[] bytes)
+        private void HandleSerialPortData(string data)
         {
+            //将string转为byte[]
+            var temp = new List<string>();
+            for (var i = 0; i < data.Length; i += 2)
+            {
+                temp.Add(data.Substring(i, 2));
+            }
+
+            var bytes = new byte[temp.Count];
+            for (var i = 0; i < temp.Count; i++)
+            {
+                bytes[i] = Convert.ToByte(temp[i], 16);
+            }
+
+            //测试是否转化成功
+            if (!data.Equals(BitConverter.ToString(bytes).Replace("-", "")))
+            {
+                MessageBox.Show("数据转化失败!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            
             var deviceIdBytes = new byte[6];
             Array.Copy(bytes, 4, deviceIdBytes, 0, 6);
             var deviceId = deviceIdBytes.ConvertBytes2String();
