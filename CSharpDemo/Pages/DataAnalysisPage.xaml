@@ -1,12 +1,103 @@
-﻿<Page x:Class="CSharpDemo.Pages.DataAnalysisPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:CSharpDemo.Pages"
-      mc:Ignorable="d"
-      Title="DataAnalysisPage" Height="450" Width="800">
-    <Grid>
-        
+﻿<Page
+    x:Class="CSharpDemo.Pages.DataAnalysisPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="DataAnalysisPage"
+    d:DesignHeight="720"
+    d:DesignWidth="1280"
+    mc:Ignorable="d">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <hc:TextBox
+                x:Name="DataFilePathTextBox"
+                Grid.Column="0"
+                hc:InfoElement.Placeholder="请选择水听器数据文件"
+                hc:InfoElement.ShowClearButton="True"
+                FontSize="16" />
+
+            <Button
+                x:Name="ImportDataButton"
+                Grid.Column="1"
+                Height="35"
+                Margin="10,0,0,0"
+                Content="导入数据"
+                FontSize="16"
+                Style="{StaticResource ButtonPrimary}" />
+        </Grid>
+
+        <hc:TextBox
+            x:Name="OriginalDataTextBox"
+            Grid.Row="1"
+            Margin="0,10"
+            VerticalContentAlignment="Top"
+            FontSize="16"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto" />
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                x:Name="OriginalDataTextBlock"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                FontSize="16" />
+
+            <Button
+                x:Name="AnalysisDataButton"
+                Grid.Column="1"
+                Height="35"
+                Margin="10,0,0,0"
+                Content="解析数据"
+                FontSize="16"
+                Style="{StaticResource ButtonPrimary}" />
+        </Grid>
+
+        <hc:TextBox
+            x:Name="HandledDataTextBox"
+            Grid.Row="3"
+            Margin="0,10"
+            VerticalContentAlignment="Top"
+            FontSize="16"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto" />
+
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                x:Name="DeviceIdTextBlock"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                FontSize="16" />
+
+            <TextBlock
+                x:Name="PduTypeTextBlock"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                FontSize="16" />
+        </Grid>
     </Grid>
 </Page>

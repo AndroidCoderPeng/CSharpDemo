@@ -137,10 +137,18 @@
       </Compile>
     <Compile Include="ServiceImpl\MainDataServiceImpl.cs" />
     <Compile Include="Service\IMainDataService.cs" />
+    <Compile Include="Tags\CellTag.cs" />
+    <Compile Include="Tags\NormalTag.cs" />
+    <Compile Include="Tags\SensorExceptionTag.cs" />
+    <Compile Include="Tags\Tag.cs" />
+    <Compile Include="Tags\TagOid.cs" />
+    <Compile Include="Tags\TimeTag.cs" />
+    <Compile Include="Tags\UploadTag.cs" />
     <Compile Include="Utils\CHCNetSDK.cs" />
     <Compile Include="Utils\MethodExtensions.cs" />
       <Compile Include="Utils\SerialPortManager.cs" />
     <Compile Include="Utils\SystemHelper.cs" />
+    <Compile Include="Utils\TagFactory.cs" />
       <Compile Include="ViewModel\SerialPortViewModel.cs" />
     <Compile Include="ViewModel\TransmitValueViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

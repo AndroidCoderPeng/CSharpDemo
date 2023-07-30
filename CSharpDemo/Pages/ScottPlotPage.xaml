@@ -16,11 +16,8 @@
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
 
-        <Grid>
-            <WpfPlot
-                x:Name="ScottPlotView"
-                Grid.Column="1"
-                IsEnabled="False" />
+        <Grid Grid.Row="0">
+            <WpfPlot x:Name="ScottPlotView" IsEnabled="False" />
         </Grid>
     </Grid>
 </Page>

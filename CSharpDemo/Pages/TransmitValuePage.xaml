@@ -19,7 +19,8 @@
                 Command="{Binding DelegateCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                 Content="打开Delegate传值窗口"
-                FontSize="16" />
+                FontSize="16"
+                Style="{StaticResource ButtonPrimary}" />
 
             <hc:TextBox
                 Height="35"
@@ -36,7 +37,8 @@
                 Command="{Binding EventCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                 Content="打开Event传值窗口"
-                FontSize="16" />
+                FontSize="16"
+                Style="{StaticResource ButtonPrimary}" />
 
             <hc:TextBox
                 Height="35"

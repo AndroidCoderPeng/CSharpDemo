@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
+using CSharpDemo.Tags;
 using PixelFormat = System.Windows.Media.PixelFormat;
 
 namespace CSharpDemo.Utils
@@ -106,6 +107,117 @@ namespace CSharpDemo.Utils
             return UriDictionary.Any(
                 keyValuePair => keyValuePair.Key.Equals(xamlName)
             );
+        }
+
+        public static string ConvertBytes2String(this IEnumerable<byte> bytes)
+        {
+            return bytes.Aggregate("", (current, t) => current + t.ToString("X2"));
+        }
+
+        public static string GetOpeTypeByPdu(this byte[] pduType)
+        {
+            pduType = pduType.Reverse().ToArray();
+            var btPduType = BitConverter.ToInt16(pduType, 0);
+
+            var operaType = (btPduType >> 8) & 0xFF;
+            string result;
+            switch (operaType)
+            {
+                case 1:
+                    result = "GetRequest";
+                    break;
+                case 2:
+                    result = "GetResponse";
+                    break;
+                case 3:
+                    result = "SetRequest";
+                    break;
+                case 4:
+                    result = "TrapRequest";
+                    break;
+                case 5:
+                    result = "TrapResponse";
+                    break;
+                case 6:
+                    result = "OnlineRequest";
+                    break;
+                case 7:
+                    result = "OnlineResponse";
+                    break;
+                case 8:
+                    result = "StartupRequest";
+                    break;
+                case 9:
+                    result = "StartupResponse";
+                    break;
+                case 10:
+                    result = "WakeupRequest";
+                    break;
+                case 11:
+                    result = "WakeupResponse";
+                    break;
+                case 13:
+                    result = "ClientRequest";
+                    break;
+                case 12:
+                    result = "SetResponse";
+                    break;
+                default:
+                    result = "undefined";
+                    break;
+            }
+
+            return result;
+        }
+
+        public static List<Tag> GetTags(this byte[] strTags)
+        {
+            var tags = new List<Tag>();
+            var i = 0;
+            while (i < strTags.Length)
+            {
+                var oid = new byte[4];
+                var len = new byte[2];
+                Array.Copy(strTags, i, oid, 0, 4);
+                Array.Copy(strTags, i + 4, len, 0, 2);
+
+                Array.Reverse(len);
+                int iLen = BitConverter.ToInt16(len, 0);
+                var strOid = oid.ConvertBytes2String();
+
+                var value = new byte[iLen];
+                Array.Copy(strTags, i + 6, value, 0, iLen);
+
+                i = i + 6 + iLen;
+                var tag = TagFactory.Create(strOid, iLen, value);
+                tags.Add(tag);
+            }
+
+            return tags;
+        }
+
+        public static string AppendLeftZero(this int i)
+        {
+            //数据固定长度2
+            return i.ToString("G").PadLeft(2, '0');
+        }
+
+        public static string ToChineseType(this int i)
+        {
+            //1,2,3,4分别代表流量、压力、液位、噪声
+            switch (i)
+            {
+                case 1:
+                    return "流量数据";
+                case 2:
+                    return "压力数据";
+                case 3:
+                    return "液位数据";
+                case 4:
+                    return "噪声数据";
+                default:
+                    return "未知类型数据";
+            }
         }
     }
 }
