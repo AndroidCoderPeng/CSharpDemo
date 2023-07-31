@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -32,24 +30,37 @@ namespace CSharpDemo.Pages
                 {
                     var fileName = fileDialog.FileName;
                     DataFilePathTextBox.Text = fileName;
-                    var streamReader = new StreamReader(fileName);
-                    var data = streamReader.ReadLine();
-                    streamReader.Close();
-                    if (data == null)
+
+                    var fromFile = fileName.ReadFromFile();
+
+                    var dataBuilder = new StringBuilder();
+                    var doubleArrays = new List<List<double>>();
+                    foreach (var s in fromFile)
                     {
-                        return;
+                        dataBuilder.Append(s);
+                        //处理单条数据
+                        var realData = HandleSerialPortData(s);
+                        doubleArrays.Add(realData);
                     }
 
-                    OriginalDataTextBox.Text = data;
-                    OriginalDataTextBlock.Text = $"原始数据长度：{data.Length / 2} 字节";
+                    OriginalDataTextBox.Text = dataBuilder.ToString();
+                    OriginalDataTextBlock.Text = $"原始数据长度：{dataBuilder.ToString().Length / 2} 字节";
 
-                    //处理单条数据
-                    HandleSerialPortData(data);
+                    //格式化double[]
+                    var totalData = new List<double>();
+                    foreach (var item in doubleArrays)
+                    {
+                        totalData.AddRange(item);
+                    }
+
+                    var resultArray = totalData.ToArray();
+
+                    HandledDataTextBox.Text = JsonConvert.SerializeObject(resultArray);
                 }
             };
         }
 
-        private void HandleSerialPortData(string data)
+        private List<double> HandleSerialPortData(string data)
         {
             //将string转为byte[]
             var temp = new List<string>();
@@ -68,9 +79,9 @@ namespace CSharpDemo.Pages
             if (!data.Equals(BitConverter.ToString(bytes).Replace("-", "")))
             {
                 MessageBox.Show("数据转化失败!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                return new List<double>();
             }
-            
+
             var deviceIdBytes = new byte[6];
             Array.Copy(bytes, 4, deviceIdBytes, 0, 6);
             var deviceId = deviceIdBytes.ConvertBytes2String();
@@ -124,25 +135,18 @@ namespace CSharpDemo.Pages
 
             //其实就3个Tag，[CellTag,TimeTag,UploadTag]
             var noiseTag = tags.Where(tag => tag is UploadTag).Cast<UploadTag>().First();
-            if (noiseTag != null)
+            //理论上noiseTag不会为空
+            var num = noiseTag.Len / 3;
+            var realData = new List<double>();
+            for (var i = 0; i < num; i++)
             {
-                //理论上noiseTag不会为空
-                var num = noiseTag.Len / 3;
-                var realData = new double[num];
-                for (var i = 0; i < num; i++)
-                {
-                    var dStr = new byte[3];
-                    Array.Copy(noiseTag.DataValue, i * 3, dStr, 0, 3);
+                var dStr = new byte[3];
+                Array.Copy(noiseTag.DataValue, i * 3, dStr, 0, 3);
 
-                    realData[i] = dStr.HexToDouble();
-                }
+                realData.Add(dStr.HexToDouble());
+            }
 
-                HandledDataTextBox.Text = JsonConvert.SerializeObject(realData);
-            }
-            else
-            {
-                Debug.WriteLine("DataAnalysisPage.xaml => noiseTag == null");
-            }
+            return realData;
         }
     }
 }
