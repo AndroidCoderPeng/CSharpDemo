@@ -3,11 +3,11 @@ using System.Windows.Controls;
 using ScottPlot;
 using ScottPlot.Plottable;
 
-namespace CSharpDemo.Pages
+namespace CSharpDemo.Views
 {
-    public partial class ScottPlotPage : Page
+    public partial class ScottPlotView : UserControl
     {
-        public ScottPlotPage()
+        public ScottPlotView()
         {
             InitializeComponent();
 
@@ -113,18 +113,18 @@ namespace CSharpDemo.Pages
                 0.0508, 0.0429, 0.0321, 0.0189, 0.0038, 0.0125, 0.0291, 0.0452, 0.0599, 0.0725, 0.0824, 0.0892, 0.0926
             };
 
-            var scottPlot = ScottPlotView.Plot;
+            var scottPlot = ScottPlotChart.Plot;
             scottPlot.XLabel("频率(Hz)");
             scottPlot.YLabel("相关系数");
-            ScottPlotView.Refresh();
+            ScottPlotChart.Refresh();
             
             //点如果较少，可以直接AddBar，但是超过一千个点，不能直接AddBar，否则Bar颜色会被边框覆盖从而呈现黑色
-            ScottPlotView.Plot.Add(new BarPlot(DataGen.Consecutive(redDataY.Length), redDataY, null, null)
+            ScottPlotChart.Plot.Add(new BarPlot(DataGen.Consecutive(redDataY.Length), redDataY, null, null)
             {
                 FillColor = Color.Transparent,
                 BorderColor = Color.FromArgb(255, 49, 151, 36)
             });
-            ScottPlotView.Refresh();
+            ScottPlotChart.Refresh();
         }
     }
 }

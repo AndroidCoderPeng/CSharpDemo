@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using CSharpDemo.Tags;
@@ -9,13 +11,24 @@ using CSharpDemo.Utils;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 
-namespace CSharpDemo.Pages
+namespace CSharpDemo.Views
 {
-    public partial class DataAnalysisPage : Page
+    public partial class DataAnalysisView : UserControl
     {
-        public DataAnalysisPage()
+        private int _runningSeconds;
+
+        private readonly BackgroundWorker _backgroundWorker;
+
+        public DataAnalysisView()
         {
             InitializeComponent();
+
+            _backgroundWorker = new BackgroundWorker();
+            _backgroundWorker.WorkerReportsProgress = true;
+            _backgroundWorker.WorkerSupportsCancellation = true;
+            _backgroundWorker.DoWork += Worker_OnDoWork;
+            _backgroundWorker.ProgressChanged += Worker_OnProgressChanged;
+            _backgroundWorker.RunWorkerCompleted += Worker_OnRunWorkerCompleted;
 
             ImportDataButton.Click += delegate
             {
@@ -28,36 +41,68 @@ namespace CSharpDemo.Pages
                 var result = fileDialog.ShowDialog();
                 if (result == true)
                 {
-                    var fileName = fileDialog.FileName;
-                    DataFilePathTextBox.Text = fileName;
+                    _fileName = fileDialog.FileName;
+                    DataFilePathTextBox.Text = _fileName;
 
-                    var fromFile = fileName.ReadFromFile();
-
-                    var dataBuilder = new StringBuilder();
-                    var doubleArrays = new List<List<double>>();
-                    foreach (var s in fromFile)
-                    {
-                        dataBuilder.Append(s);
-                        //处理单条数据
-                        var realData = HandleSerialPortData(s);
-                        doubleArrays.Add(realData);
-                    }
-
-                    OriginalDataTextBox.Text = dataBuilder.ToString();
-                    OriginalDataTextBlock.Text = $"原始数据长度：{dataBuilder.ToString().Length / 2} 字节";
-
-                    //格式化double[]
-                    var totalData = new List<double>();
-                    foreach (var item in doubleArrays)
-                    {
-                        totalData.AddRange(item);
-                    }
-
-                    var resultArray = totalData.ToArray();
-
-                    HandledDataTextBox.Text = JsonConvert.SerializeObject(resultArray);
+                    //开始进度条
+                    _backgroundWorker?.RunWorkerAsync();
                 }
             };
+        }
+
+        private string _fileName = "";
+        private string _originalData = "";
+        private string _serializeObject = "";
+
+        private void Worker_OnDoWork(object sender, DoWorkEventArgs e)
+        {
+            var startDate = DateTime.Now;
+
+            var fromFile = _fileName.ReadFromFile();
+            var dataBuilder = new StringBuilder();
+            var doubleArrays = new List<List<double>>();
+            foreach (var s in fromFile)
+            {
+                dataBuilder.Append(s);
+                //处理单条数据
+                var realData = HandleSerialPortData(s);
+                doubleArrays.Add(realData);
+
+                _originalData = dataBuilder.ToString();
+            }
+
+            //格式化double[]
+            var totalData = new List<double>();
+            foreach (var item in doubleArrays)
+            {
+                totalData.AddRange(item);
+            }
+
+            var resultArray = totalData.ToArray();
+            _serializeObject = JsonConvert.SerializeObject(resultArray);
+
+            var endDate = DateTime.Now;
+            var diffTime = Convert.ToInt32(Math.Abs((endDate - startDate).TotalMilliseconds));
+            Application.Current.Dispatcher.Invoke(delegate { RedSensorFileProgressBar.Maximum = diffTime; });
+            for (var i = 0; i < diffTime; i++)
+            {
+                _backgroundWorker.ReportProgress(i);
+                Thread.Sleep(5);
+            }
+        }
+
+        private void Worker_OnProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            RedSensorFileProgressBar.Value = e.ProgressPercentage;
+            Console.WriteLine(e.ProgressPercentage);
+        }
+
+        private void Worker_OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            //大文本渲染需要时间
+            OriginalDataTextBox.Text = _originalData;
+            OriginalDataTextBlock.Text = $"原始数据长度：{_originalData.Length / 2} 字节";
+            HandledDataTextBox.Text = _serializeObject;
         }
 
         private List<double> HandleSerialPortData(string data)
@@ -85,14 +130,12 @@ namespace CSharpDemo.Pages
             var deviceIdBytes = new byte[6];
             Array.Copy(bytes, 4, deviceIdBytes, 0, 6);
             var deviceId = deviceIdBytes.ConvertBytes2String();
-
-            DeviceIdTextBlock.Text = $"设备ID：{deviceId}";
+            Application.Current.Dispatcher.Invoke(delegate { DeviceIdTextBlock.Text = $"设备ID：{deviceId}"; });
 
             var pduTypeBytes = new byte[2];
             Array.Copy(bytes, 13, pduTypeBytes, 0, 2);
             var operateType = pduTypeBytes.GetOpeTypeByPdu();
-
-            PduTypeTextBlock.Text = $"{operateType}";
+            Application.Current.Dispatcher.Invoke(delegate { PduTypeTextBlock.Text = $"{operateType}"; });
 
             var tagBytes = new byte[bytes.Length - 18];
             Array.Copy(bytes, 16, tagBytes, 0, bytes.Length - 18);
@@ -131,7 +174,7 @@ namespace CSharpDemo.Pages
                 }
             }
 
-            TagTypeTextBlock.Text = tagBuilder.ToString();
+            Application.Current.Dispatcher.Invoke(delegate { TagTypeTextBlock.Text = tagBuilder.ToString(); });
 
             //其实就3个Tag，[CellTag,TimeTag,UploadTag]
             var noiseTag = tags.Where(tag => tag is UploadTag).Cast<UploadTag>().First();

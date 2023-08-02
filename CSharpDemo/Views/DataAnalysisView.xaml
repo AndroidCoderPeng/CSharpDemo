@@ -1,14 +1,14 @@
-﻿<Page
-    x:Class="CSharpDemo.Pages.DataAnalysisPage"
+﻿<UserControl
+    x:Class="CSharpDemo.Views.DataAnalysisView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="DataAnalysisPage"
     d:DesignHeight="720"
     d:DesignWidth="1280"
     mc:Ignorable="d">
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -56,20 +56,17 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
+            <ProgressBar
+                x:Name="RedSensorFileProgressBar"
+                Grid.Column="0"
+                Margin="0,0,10,0"
+                Minimum="0" />
+
             <TextBlock
                 x:Name="OriginalDataTextBlock"
-                Grid.Column="0"
+                Grid.Column="1"
                 VerticalAlignment="Center"
                 FontSize="16" />
-
-            <Button
-                x:Name="AnalysisDataButton"
-                Grid.Column="1"
-                Height="35"
-                Margin="10,0,0,0"
-                Content="解析数据"
-                FontSize="16"
-                Style="{StaticResource ButtonPrimary}" />
         </Grid>
 
         <hc:TextBox
@@ -107,4 +104,4 @@
                 FontSize="16" />
         </Grid>
     </Grid>
-</Page>
+</UserControl>

@@ -6,14 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using CSharpDemo.Utils;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using HandyControl.Controls;
+using Prism.Commands;
+using Prism.Mvvm;
 using MessageBox = HandyControl.Controls.MessageBox;
 
-namespace CSharpDemo.ViewModel
+namespace CSharpDemo.ViewModels
 {
-    public class SerialPortViewModel : ViewModelBase
+    public class SerialPortViewModel : BindableBase
     {
         #region VM
 
@@ -237,17 +237,17 @@ namespace CSharpDemo.ViewModel
 
         #endregion
 
-        #region RelayCommand
+        #region DelegateCommand
 
-        public RelayCommand<ComboBox> PortItemSelectedCommand { get; }
-        public RelayCommand<ComboBox> BaudRateItemSelectedCommand { get; }
-        public RelayCommand<ComboBox> DataBitItemSelectedCommand { get; }
-        public RelayCommand<ComboBox> CheckModeItemSelectedCommand { get; }
-        public RelayCommand<ComboBox> StopBitItemSelectedCommand { get; }
-        public RelayCommand OpenSerialPortCommand { get; }
-        public RelayCommand CloseSerialPortCommand { get; }
-        public RelayCommand ClearMessageCommand { get; }
-        public RelayCommand SendMessageCommand { get; }
+        public DelegateCommand<ComboBox> PortItemSelectedCommand { get; }
+        public DelegateCommand<ComboBox> BaudRateItemSelectedCommand { get; }
+        public DelegateCommand<ComboBox> DataBitItemSelectedCommand { get; }
+        public DelegateCommand<ComboBox> CheckModeItemSelectedCommand { get; }
+        public DelegateCommand<ComboBox> StopBitItemSelectedCommand { get; }
+        public DelegateCommand OpenSerialPortCommand { get; }
+        public DelegateCommand CloseSerialPortCommand { get; }
+        public DelegateCommand ClearMessageCommand { get; }
+        public DelegateCommand SendMessageCommand { get; }
 
         #endregion
 
@@ -265,32 +265,32 @@ namespace CSharpDemo.ViewModel
             ParityList = new List<Parity> { Parity.None, Parity.Odd, Parity.Even, Parity.Mark, Parity.Space };
             StopBitList = new List<int> { 1, 2 };
 
-            PortItemSelectedCommand = new RelayCommand<ComboBox>(delegate(ComboBox box)
+            PortItemSelectedCommand = new DelegateCommand<ComboBox>(delegate(ComboBox box)
             {
                 PortName = box.SelectedItem.ToString();
             });
 
-            BaudRateItemSelectedCommand = new RelayCommand<ComboBox>(delegate(ComboBox box)
+            BaudRateItemSelectedCommand = new DelegateCommand<ComboBox>(delegate(ComboBox box)
             {
                 BaudRate = int.Parse(box.SelectedItem.ToString());
             });
 
-            DataBitItemSelectedCommand = new RelayCommand<ComboBox>(delegate(ComboBox box)
+            DataBitItemSelectedCommand = new DelegateCommand<ComboBox>(delegate(ComboBox box)
             {
                 DataBit = int.Parse(box.SelectedItem.ToString());
             });
 
-            CheckModeItemSelectedCommand = new RelayCommand<ComboBox>(delegate(ComboBox box)
+            CheckModeItemSelectedCommand = new DelegateCommand<ComboBox>(delegate(ComboBox box)
             {
                 Parity = (Parity)box.SelectedItem;
             });
 
-            StopBitItemSelectedCommand = new RelayCommand<ComboBox>(delegate(ComboBox box)
+            StopBitItemSelectedCommand = new DelegateCommand<ComboBox>(delegate(ComboBox box)
             {
                 StopBit = int.Parse(box.SelectedItem.ToString());
             });
 
-            OpenSerialPortCommand = new RelayCommand(delegate
+            OpenSerialPortCommand = new DelegateCommand(delegate
             {
                 _serialPortManager.PortName = _portName;
                 _serialPortManager.BaudRate = _baudRate;
@@ -310,7 +310,7 @@ namespace CSharpDemo.ViewModel
                 }
             });
 
-            CloseSerialPortCommand = new RelayCommand(delegate
+            CloseSerialPortCommand = new DelegateCommand(delegate
             {
                 _serialPortManager.Close();
                 if (!_serialPortManager.IsOpen)
@@ -324,9 +324,9 @@ namespace CSharpDemo.ViewModel
                 }
             });
 
-            ClearMessageCommand = new RelayCommand(delegate { ResponseCollection.Clear(); });
+            ClearMessageCommand = new DelegateCommand(delegate { ResponseCollection.Clear(); });
 
-            SendMessageCommand = new RelayCommand(delegate
+            SendMessageCommand = new DelegateCommand(delegate
             {
                 if (!_serialPortManager.IsOpen)
                 {

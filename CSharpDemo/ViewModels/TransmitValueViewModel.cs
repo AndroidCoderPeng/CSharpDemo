@@ -1,12 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using CSharpDemo.Dialogs;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using Prism.Commands;
+using Prism.Mvvm;
 
-namespace CSharpDemo.ViewModel
+namespace CSharpDemo.ViewModels
 {
-    public class TransmitValueViewModel : ViewModelBase
+    public class TransmitValueViewModel : BindableBase
     {
         #region VM
 
@@ -18,7 +18,7 @@ namespace CSharpDemo.ViewModel
             set
             {
                 _delegateValue = value;
-                RaisePropertyChanged(() => DelegateValue);
+                RaisePropertyChanged();
             }
         }
 
@@ -30,16 +30,16 @@ namespace CSharpDemo.ViewModel
             set
             {
                 _eventValue = value;
-                RaisePropertyChanged(() => EventValue);
+                RaisePropertyChanged();
             }
         }
 
         #endregion
 
-        #region RelayCommand
+        #region DelegateCommand
 
-        public RelayCommand<Page> DelegateCommand { get; }
-        public RelayCommand<Page> EventCommand { get; }
+        public DelegateCommand<UserControl> DelegateCommand { get; }
+        public DelegateCommand<UserControl> EventCommand { get; }
 
         #endregion
 
@@ -50,20 +50,20 @@ namespace CSharpDemo.ViewModel
         /// </summary>
         public TransmitValueViewModel()
         {
-            DelegateCommand = new RelayCommand<Page>(it =>
+            DelegateCommand = new DelegateCommand<UserControl>(delegate(UserControl control)
             {
                 var dialog = new DelegateValueDialog(ShowDelegateValue)
                 {
-                    Owner = Window.GetWindow(it)
+                    Owner = Window.GetWindow(control)
                 };
                 dialog.ShowDialog();
             });
 
-            EventCommand = new RelayCommand<Page>(it =>
+            EventCommand = new DelegateCommand<UserControl>(delegate(UserControl control)
             {
                 var dialog = new EventValueDialog
                 {
-                    Owner = Window.GetWindow(it)
+                    Owner = Window.GetWindow(control)
                 };
                 dialog.ValueChangedEventHandler += Dialog_TextChangedEventHandler;
                 dialog.ShowDialog();

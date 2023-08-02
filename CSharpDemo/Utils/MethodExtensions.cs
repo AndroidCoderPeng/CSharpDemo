@@ -104,9 +104,7 @@ namespace CSharpDemo.Utils
 
         private static bool IsUriExist(this string xamlName)
         {
-            return UriDictionary.Any(
-                keyValuePair => keyValuePair.Key.Equals(xamlName)
-            );
+            return UriDictionary.Any(keyValuePair => keyValuePair.Key.Equals(xamlName));
         }
 
         public static string ConvertBytes2String(this IEnumerable<byte> bytes)

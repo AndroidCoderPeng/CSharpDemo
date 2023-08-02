@@ -4,6 +4,6 @@ namespace CSharpDemo.Service
 {
     public interface IMainDataService
     {
-        ObservableCollection<string> GetFunctionModels();
+        ObservableCollection<string> GetItemModels();
     }
 }

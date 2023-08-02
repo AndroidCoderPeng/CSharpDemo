@@ -10,9 +10,9 @@ using System.Windows.Threading;
 using WPFMediaKit.DirectShow.Controls;
 using MessageBox = HandyControl.Controls.MessageBox;
 
-namespace CSharpDemo.Pages
+namespace CSharpDemo.Views
 {
-    public partial class CameraPage : Page
+    public partial class CameraView : UserControl
     {
         private readonly DispatcherTimer _faceImageTimer = new DispatcherTimer
         {
@@ -21,7 +21,7 @@ namespace CSharpDemo.Pages
 
         private byte[] _faceBytes;
 
-        public CameraPage()
+        public CameraView()
         {
             InitializeComponent();
 

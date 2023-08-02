@@ -1,11 +1,10 @@
-﻿<Page
-    x:Class="CSharpDemo.Pages.CameraPage"
+﻿<UserControl
+    x:Class="CSharpDemo.Views.CameraView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mk="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit"
-    Title="CameraPage"
     d:DesignHeight="720"
     d:DesignWidth="1280"
     Background="White"
@@ -67,4 +66,4 @@
             <mk:VideoCaptureElement x:Name="DeviceCamera" Margin="1" />
         </Border>
     </Grid>
-</Page>
+</UserControl>
