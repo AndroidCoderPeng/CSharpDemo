@@ -17,94 +17,94 @@
         </b:EventTrigger>
     </b:Interaction.Triggers>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="140" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+    <Border BorderBrush="LightGray" BorderThickness="0,1,0,0">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="1" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
-        <ListBox
-            Grid.Column="0"
-            HorizontalAlignment="Center"
-            BorderBrush="LightGray"
-            BorderThickness="0,1,1,0"
-            ItemsSource="{Binding ItemModels}"
-            SelectedIndex="0">
+            <ListBox
+                Grid.Column="0"
+                HorizontalAlignment="Center"
+                BorderThickness="0"
+                ItemsSource="{Binding ItemModels}"
+                SelectedIndex="0">
 
-            <b:Interaction.Triggers>
-                <b:EventTrigger EventName="SelectionChanged">
-                    <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
-                </b:EventTrigger>
-            </b:Interaction.Triggers>
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="SelectionChanged">
+                        <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
 
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border
-                        x:Name="ListBoxItemBorder"
-                        Width="125"
-                        Height="50"
-                        Background="#F1F1F1"
-                        BorderThickness="0"
-                        CornerRadius="5">
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontFamily="微软雅黑"
-                            FontSize="16"
-                            Text="{Binding}" />
-                    </Border>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            x:Name="ListBoxItemBorder"
+                            Width="135"
+                            Height="50"
+                            Background="#F1F1F1"
+                            BorderThickness="0"
+                            CornerRadius="5">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontFamily="微软雅黑"
+                                FontSize="16"
+                                Text="{Binding}" />
+                        </Border>
 
-                    <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding IsFocused, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}, AncestorLevel=1}}" Value="True">
-                            <Setter Property="IsHitTestVisible" Value="True" />
-                            <Setter TargetName="ListBoxItemBorder" Property="Background" Value="#0094FF" />
-                        </DataTrigger>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsFocused, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}, AncestorLevel=1}}" Value="True">
+                                <Setter Property="IsHitTestVisible" Value="True" />
+                                <Setter TargetName="ListBoxItemBorder" Property="Background" Value="#0094FF" />
+                            </DataTrigger>
 
-                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}, AncestorLevel=1}}" Value="True">
-                            <Setter Property="IsHitTestVisible" Value="True" />
-                            <Setter TargetName="ListBoxItemBorder" Property="Background" Value="#0094FF" />
-                        </DataTrigger>
-                    </DataTemplate.Triggers>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
+                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}, AncestorLevel=1}}" Value="True">
+                                <Setter Property="IsHitTestVisible" Value="True" />
+                                <Setter TargetName="ListBoxItemBorder" Property="Background" Value="#0094FF" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
 
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="OverridesDefaultStyle" Value="True" />
-                    <Setter Property="VerticalContentAlignment" Value="Center" />
-                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    <Setter Property="Width" Value="135" />
-                    <Setter Property="Height" Value="60" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                <Border x:Name="ListBoxItemBorder" Margin="0,5">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsFocused" Value="True">
-                                        <Setter TargetName="ListBoxItemBorder" Property="BorderBrush" Value="#00E3C7" />
-                                        <Setter TargetName="ListBoxItemBorder" Property="BorderThickness" Value="5,0,0,0" />
-                                        <Setter Property="TextBlock.Foreground" Value="White" />
-                                    </Trigger>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="OverridesDefaultStyle" Value="True" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="Width" Value="145" />
+                        <Setter Property="Height" Value="60" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Border x:Name="ListBoxItemBorder" Margin="0,5">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsFocused" Value="True">
+                                            <Setter TargetName="ListBoxItemBorder" Property="BorderBrush" Value="#00E3C7" />
+                                            <Setter TargetName="ListBoxItemBorder" Property="BorderThickness" Value="5,0,0,0" />
+                                            <Setter Property="TextBlock.Foreground" Value="White" />
+                                        </Trigger>
 
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="ListBoxItemBorder" Property="BorderBrush" Value="#00E3C7" />
-                                        <Setter TargetName="ListBoxItemBorder" Property="BorderThickness" Value="5,0,0,0" />
-                                        <Setter Property="TextBlock.Foreground" Value="White" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="ListBoxItemBorder" Property="BorderBrush" Value="#00E3C7" />
+                                            <Setter TargetName="ListBoxItemBorder" Property="BorderThickness" Value="5,0,0,0" />
+                                            <Setter Property="TextBlock.Foreground" Value="White" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
 
-        <ContentControl
-            Grid.Column="1"
-            prism:RegionManager.RegionName="ContentRegion"
-            BorderBrush="LightGray"
-            BorderThickness="0,1,0,0" />
-    </Grid>
+            <Grid Grid.Column="1" Background="LightGray" />
+
+            <ContentControl Grid.Column="2" prism:RegionManager.RegionName="ContentRegion" />
+        </Grid>
+    </Border>
 </Window>

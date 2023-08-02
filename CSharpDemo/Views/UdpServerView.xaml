@@ -12,7 +12,7 @@
     Background="White"
     mc:Ignorable="d">
 
-    <ListBox ItemsSource="{Binding Messages}">
+    <ListBox BorderThickness="0" ItemsSource="{Binding Messages}">
         <b:Interaction.Triggers>
             <b:EventTrigger EventName="SelectionChanged">
                 <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
