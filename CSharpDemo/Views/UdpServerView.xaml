@@ -12,25 +12,79 @@
     Background="White"
     mc:Ignorable="d">
 
-    <ListBox BorderThickness="0" ItemsSource="{Binding Messages}">
-        <b:Interaction.Triggers>
-            <b:EventTrigger EventName="SelectionChanged">
-                <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
-            </b:EventTrigger>
-        </b:Interaction.Triggers>
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Unloaded">
+            <b:InvokeCommandAction Command="{Binding ViewOnUnloadedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
 
-        <ListBox.ItemTemplate>
-            <DataTemplate>
-                <Border Height="50">
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontFamily="微软雅黑"
-                        FontSize="18"
-                        Text="{Binding}"
-                        TextWrapping="Wrap" />
-                </Border>
-            </DataTemplate>
-        </ListBox.ItemTemplate>
-    </ListBox>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="1" />
+            <ColumnDefinition Width="150" />
+        </Grid.ColumnDefinitions>
+
+        <ListBox
+            Grid.Column="0"
+            BorderThickness="0"
+            ItemsSource="{Binding Messages}">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="SelectionChanged">
+                    <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Height="50">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="微软雅黑"
+                            FontSize="18"
+                            Text="{Binding}"
+                            TextWrapping="Wrap" />
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Grid Grid.Column="1" Background="LightGray" />
+
+        <Grid Grid.Column="2" VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Button
+                Grid.Row="0"
+                Width="145"
+                Height="35"
+                Margin="0,2"
+                Command="{Binding StartServerCommand}"
+                Content="启动UDP服务"
+                FontSize="16"
+                Style="{StaticResource ButtonInfo}" />
+
+            <ListBox
+                Grid.Row="1"
+                BorderThickness="0"
+                ItemsSource="{Binding ConnectedLinks}">
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Height="35">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontFamily="微软雅黑"
+                                FontSize="16"
+                                Text="{Binding}" />
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Grid>
 </UserControl>
