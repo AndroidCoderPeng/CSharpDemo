@@ -46,7 +46,6 @@ namespace CSharpDemo
             
             //Navigation
             containerRegistry.RegisterForNavigation<CameraView>();
-            containerRegistry.RegisterForNavigation<ScottPlotView>();
             containerRegistry.RegisterForNavigation<TransmitValueView>();
             containerRegistry.RegisterForNavigation<SerialPortView>();
             containerRegistry.RegisterForNavigation<DataAnalysisView>();

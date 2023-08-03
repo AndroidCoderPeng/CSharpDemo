@@ -125,9 +125,6 @@
     <Compile Include="Views\TransmitValueView.xaml.cs">
       <DependentUpon>TransmitValueView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ScottPlotView.xaml.cs">
-      <DependentUpon>ScottPlotView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ServiceImpl\MainDataServiceImpl.cs" />
     <Compile Include="Service\IMainDataService.cs" />
     <Compile Include="Tags\CellTag.cs" />
@@ -200,9 +197,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\TransmitValueView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ScottPlotView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\HikVisionWindow.xaml" />

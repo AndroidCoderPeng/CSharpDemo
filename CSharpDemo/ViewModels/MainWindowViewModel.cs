@@ -53,15 +53,12 @@ namespace CSharpDemo.ViewModels
                         region.RequestNavigate("CameraView");
                         break;
                     case 1:
-                        region.RequestNavigate("ScottPlotView");
-                        break;
-                    case 2:
                         region.RequestNavigate("TransmitValueView");
                         break;
-                    case 3:
+                    case 2:
                         region.RequestNavigate("SerialPortView");
                         break;
-                    case 4:
+                    case 3:
                         //初始化海康网络摄像头
                         if (InitHikVisionSdk())
                         {
@@ -73,7 +70,7 @@ namespace CSharpDemo.ViewModels
                         }
 
                         break;
-                    case 5:
+                    case 4:
                         region.RequestNavigate("DataAnalysisView");
                         break;
                 }

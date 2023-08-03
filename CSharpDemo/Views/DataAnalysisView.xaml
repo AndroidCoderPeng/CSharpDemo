@@ -11,97 +11,101 @@
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition />
-            <RowDefinition Height="Auto" />
             <RowDefinition />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <hc:TextBox
-                x:Name="DataFilePathTextBox"
-                Grid.Column="0"
-                hc:InfoElement.Placeholder="请选择水听器数据文件"
-                hc:InfoElement.ShowClearButton="True"
-                FontSize="16" />
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-            <Button
-                x:Name="ImportDataButton"
-                Grid.Column="1"
-                Height="35"
-                Margin="10,0,0,0"
-                Content="导入数据"
-                FontSize="16"
-                Style="{StaticResource ButtonPrimary}" />
+                <hc:TextBox
+                    x:Name="DataFilePathTextBox"
+                    Grid.Column="0"
+                    hc:InfoElement.Placeholder="请选择水听器数据文件"
+                    hc:InfoElement.ShowClearButton="True"
+                    FontSize="16" />
+
+                <Button
+                    x:Name="ImportDataButton"
+                    Grid.Column="1"
+                    Height="35"
+                    Margin="10,0,0,0"
+                    Content="导入数据"
+                    FontSize="16"
+                    Style="{StaticResource ButtonPrimary}" />
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <hc:TextBox
+                    x:Name="OriginalDataTextBox"
+                    Grid.Column="0"
+                    Margin="0,0,5,0"
+                    VerticalContentAlignment="Top"
+                    FontSize="16"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+
+                <hc:TextBox
+                    x:Name="HandledDataTextBox"
+                    Grid.Column="1"
+                    Margin="5,0,0,0"
+                    VerticalContentAlignment="Top"
+                    FontSize="16"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="0" LastChildFill="True">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        Text="处理进度：" />
+
+                    <ProgressBar x:Name="RedSensorFileProgressBar" Minimum="0" />
+                </DockPanel>
+
+                <UniformGrid
+                    Grid.Row="1"
+                    Margin="0,10"
+                    Columns="2"
+                    Rows="1">
+                    <TextBlock
+                        x:Name="DeviceIdTextBlock"
+                        VerticalAlignment="Center"
+                        FontSize="16" />
+
+                    <TextBlock
+                        x:Name="OriginalDataTextBlock"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        FontSize="16" />
+                </UniformGrid>
+            </Grid>
         </Grid>
 
-        <hc:TextBox
-            x:Name="OriginalDataTextBox"
-            Grid.Row="1"
-            Margin="0,10"
-            VerticalContentAlignment="Top"
-            FontSize="16"
-            TextWrapping="Wrap"
-            VerticalScrollBarVisibility="Auto" />
-
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <ProgressBar
-                x:Name="RedSensorFileProgressBar"
-                Grid.Column="0"
-                Margin="0,0,10,0"
-                Minimum="0" />
-
-            <TextBlock
-                x:Name="OriginalDataTextBlock"
-                Grid.Column="1"
-                VerticalAlignment="Center"
-                FontSize="16" />
-        </Grid>
-
-        <hc:TextBox
-            x:Name="HandledDataTextBox"
-            Grid.Row="3"
-            Margin="0,10"
-            VerticalContentAlignment="Top"
-            FontSize="16"
-            TextWrapping="Wrap"
-            VerticalScrollBarVisibility="Auto" />
-
-        <Grid Grid.Row="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-
-            <TextBlock
-                x:Name="DeviceIdTextBlock"
-                Grid.Column="0"
-                VerticalAlignment="Center"
-                FontSize="16" />
-
-            <TextBlock
-                x:Name="PduTypeTextBlock"
-                Grid.Column="1"
-                VerticalAlignment="Center"
-                FontSize="16" />
-
-            <TextBlock
-                x:Name="TagTypeTextBlock"
-                Grid.Column="2"
-                VerticalAlignment="Center"
-                FontSize="16" />
+        <Grid Grid.Row="1">
+            <WpfPlot x:Name="ScottPlotChart" IsEnabled="False" />
         </Grid>
     </Grid>
 </UserControl>

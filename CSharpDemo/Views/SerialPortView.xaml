@@ -220,7 +220,8 @@
                     Grid.Column="0"
                     Margin="15"
                     VerticalContentAlignment="Center"
-                    hc:InfoElement.Placeholder="请输入用户名"
+                    hc:InfoElement.Placeholder="请要发送的数据"
+                    hc:InfoElement.ShowClearButton="True"
                     Text="{Binding UserInputHex}" />
 
                 <Button
