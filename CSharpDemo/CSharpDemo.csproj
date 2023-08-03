@@ -113,11 +113,15 @@
       <DependentUpon>HikVisionLoginDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\ReginModel.cs" />
+    <Compile Include="ViewModels\DataAnalysisViewModel.cs" />
     <Compile Include="Views\CameraView.xaml.cs">
       <DependentUpon>CameraView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DataAnalysisView.xaml.cs">
       <DependentUpon>DataAnalysisView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SerialPortView.xaml.cs">
       <DependentUpon>SerialPortView.xaml</DependentUpon>
@@ -193,6 +197,7 @@
     <Page Include="Views\DataAnalysisView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\LoginWindow.xaml" />
     <Page Include="Views\SerialPortView.xaml">
       <SubType>Designer</SubType>
     </Page>

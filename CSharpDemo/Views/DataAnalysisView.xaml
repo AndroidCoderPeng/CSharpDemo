@@ -5,6 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
+    d:DataContext="{d:DesignInstance Type=vm:DataAnalysisViewModel}"
     d:DesignHeight="720"
     d:DesignWidth="1280"
     mc:Ignorable="d">
@@ -18,6 +20,7 @@
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -29,18 +32,19 @@
                 </Grid.ColumnDefinitions>
 
                 <hc:TextBox
-                    x:Name="DataFilePathTextBox"
                     Grid.Column="0"
                     hc:InfoElement.Placeholder="请选择水听器数据文件"
                     hc:InfoElement.ShowClearButton="True"
-                    FontSize="16" />
+                    FontSize="16"
+                    Foreground="Red"
+                    Text="{Binding RedDataPath}" />
 
                 <Button
-                    x:Name="ImportDataButton"
                     Grid.Column="1"
                     Height="35"
                     Margin="10,0,0,0"
-                    Content="导入数据"
+                    Command="{Binding ImportRedDataCommand}"
+                    Content="导入红色传感器数据"
                     FontSize="16"
                     Style="{StaticResource ButtonPrimary}" />
             </Grid>
@@ -48,59 +52,81 @@
             <Grid Grid.Row="1" Margin="0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <hc:TextBox
+                    Grid.Column="0"
+                    hc:InfoElement.Placeholder="请选择水听器数据文件"
+                    hc:InfoElement.ShowClearButton="True"
+                    FontSize="16"
+                    Foreground="Blue"
+                    Text="{Binding BlueDataPath}" />
+
+                <Button
+                    Grid.Column="1"
+                    Height="35"
+                    Margin="10,0,0,0"
+                    Command="{Binding ImportBlueDataCommand}"
+                    Content="导入蓝色传感器数据"
+                    FontSize="16"
+                    Style="{StaticResource ButtonPrimary}" />
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
                 <hc:TextBox
-                    x:Name="OriginalDataTextBox"
                     Grid.Column="0"
                     Margin="0,0,5,0"
                     VerticalContentAlignment="Top"
                     FontSize="16"
+                    Foreground="Red"
+                    Text="{Binding RedHandledData}"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto" />
 
                 <hc:TextBox
-                    x:Name="HandledDataTextBox"
                     Grid.Column="1"
                     Margin="5,0,0,0"
                     VerticalContentAlignment="Top"
                     FontSize="16"
+                    Foreground="Blue"
+                    Text="{Binding BlueHandledData}"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto" />
             </Grid>
 
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+            <Grid Grid.Row="3" Margin="0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-                <DockPanel Grid.Row="0" LastChildFill="True">
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        FontSize="16"
-                        Text="处理进度：" />
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    Text="处理进度：" />
 
-                    <ProgressBar x:Name="RedSensorFileProgressBar" Minimum="0" />
-                </DockPanel>
+                <ProgressBar
+                    Grid.Column="1"
+                    Height="35"
+                    Minimum="0"
+                    Value="{Binding ProgressBarValue}" />
 
-                <UniformGrid
-                    Grid.Row="1"
-                    Margin="0,10"
-                    Columns="2"
-                    Rows="1">
-                    <TextBlock
-                        x:Name="DeviceIdTextBlock"
-                        VerticalAlignment="Center"
-                        FontSize="16" />
-
-                    <TextBlock
-                        x:Name="OriginalDataTextBlock"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        FontSize="16" />
-                </UniformGrid>
+                <Button
+                    Grid.Column="2"
+                    Height="35"
+                    Margin="10,0,0,0"
+                    Command="{Binding StartCalculateCommand}"
+                    Content="开始计算"
+                    FontSize="16"
+                    Style="{StaticResource ButtonPrimary}" />
             </Grid>
         </Grid>
 

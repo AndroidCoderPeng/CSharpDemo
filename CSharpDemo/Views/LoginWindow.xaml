@@ -1,0 +1,80 @@
+﻿<Window
+    x:Class="CSharpDemo.Views.LoginWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="LoginWindow"
+    Width="400"
+    Height="200"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Loaded="LoginWindow_OnLoaded"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+
+    <Border
+        Margin="5"
+        Background="White"
+        CornerRadius="10">
+        <Border.Effect>
+            <DropShadowEffect
+                BlurRadius="5"
+                Direction="0"
+                Opacity="0.5"
+                ShadowDepth="0"
+                Color="LightGray" />
+        </Border.Effect>
+        <Grid VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <hc:TextBox
+                Grid.Row="0"
+                Width="300"
+                Height="35"
+                hc:InfoElement.Placeholder="请输入账号"
+                hc:InfoElement.ShowClearButton="True" />
+
+            <hc:TextBox
+                Grid.Row="1"
+                Width="300"
+                Height="35"
+                Margin="0,20"
+                hc:InfoElement.Placeholder="请输入密码"
+                hc:InfoElement.ShowClearButton="True" />
+
+            <Grid
+                Grid.Row="2"
+                Width="300"
+                Height="35">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    x:Name="CancalButton"
+                    Grid.Column="0"
+                    Width="140"
+                    HorizontalAlignment="Left"
+                    Content="取消"
+                    Style="{StaticResource ButtonDefault}" />
+
+                <Button
+                    x:Name="ConfirmButton"
+                    Grid.Column="1"
+                    Width="140"
+                    HorizontalAlignment="Right"
+                    Content="确定"
+                    Style="{StaticResource ButtonPrimary}" />
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
