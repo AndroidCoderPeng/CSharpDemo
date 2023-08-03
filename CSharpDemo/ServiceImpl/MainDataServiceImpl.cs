@@ -5,7 +5,7 @@ namespace CSharpDemo.ServiceImpl
 {
     public class MainDataServiceImpl : IMainDataService
     {
-        private readonly string[] _itemTitles = { "摄像头", "波形图", "UDP服务端", "界面传值", "串口通信", "海康摄像头", "水听器数据解析" };
+        private readonly string[] _itemTitles = { "摄像头", "波形图", "界面传值", "串口通信", "海康摄像头", "水听器数据解析" };
 
         public ObservableCollection<string> GetItemModels()
         {

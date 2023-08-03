@@ -70,21 +70,6 @@
     <Reference Include="ScottPlot.WPF, Version=4.1.65.0, Culture=neutral, PublicKeyToken=e53b06131e34a3aa, processorArchitecture=MSIL">
       <HintPath>..\packages\ScottPlot.WPF.4.1.65\lib\net48\ScottPlot.WPF.dll</HintPath>
     </Reference>
-    <Reference Include="SuperSocket.Common, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
-      <HintPath>..\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="SuperSocket.Facility, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
-      <HintPath>..\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Facility.dll</HintPath>
-    </Reference>
-    <Reference Include="SuperSocket.SocketBase, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
-      <HintPath>..\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.SocketBase.dll</HintPath>
-    </Reference>
-    <Reference Include="SuperSocket.SocketEngine, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
-      <HintPath>..\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="SuperSocket.SocketService, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
-      <HintPath>..\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketService.exe</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -143,9 +128,6 @@
     <Compile Include="Views\ScottPlotView.xaml.cs">
       <DependentUpon>ScottPlotView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UdpServerView.xaml.cs">
-      <DependentUpon>UdpServerView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ServiceImpl\MainDataServiceImpl.cs" />
     <Compile Include="Service\IMainDataService.cs" />
     <Compile Include="Tags\CellTag.cs" />
@@ -163,7 +145,6 @@
     <Compile Include="ViewModels\SerialPortViewModel.cs" />
     <Compile Include="ViewModels\TransmitValueViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\UdpServerViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -224,9 +205,6 @@
     <Page Include="Views\ScottPlotView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\UdpServerView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\HikVisionWindow.xaml" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -242,10 +220,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\return_g.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="supersocket.cmd" />
-    <Content Include="supersocket.sh" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets" Condition="Exists('..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets')" />
