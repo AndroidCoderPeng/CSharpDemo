@@ -5,10 +5,10 @@
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:prism="http://prismlibrary.com/"
+    xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
+    d:DataContext="{d:DesignInstance Type=vm:UdpServerViewModel}"
     d:DesignHeight="600"
     d:DesignWidth="800"
-    prism:ViewModelLocator.AutoWireViewModel="True"
     Background="White"
     mc:Ignorable="d">
 
