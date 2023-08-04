@@ -1,20 +1,36 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace CSharpDemo.Views
 {
     public partial class LoginWindow : Window
     {
+        private readonly DispatcherTimer _timer = new DispatcherTimer
+        {
+            Interval = new TimeSpan(0, 0, 1)
+        };
+        
+        private int _counterTime = 3;
+        
         public LoginWindow()
         {
             InitializeComponent();
 
-            CancelButton.Click += delegate { DialogResult = false; };
-            ConfirmButton.Click += delegate { DialogResult = true; };
-        }
-
-        private void LoginWindow_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            MouseDown += delegate { DragMove(); };
+            //倒计时显示大屏Logo
+            _timer.Start();
+            _timer.Tick += delegate
+            {
+                if (_counterTime > 0)
+                {
+                    _counterTime--;
+                }
+                else
+                {
+                    _timer.Stop();
+                    DialogResult = true;
+                }
+            };
         }
     }
 }
