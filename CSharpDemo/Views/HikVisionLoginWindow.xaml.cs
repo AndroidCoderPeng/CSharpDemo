@@ -1,21 +1,23 @@
 ﻿using System.Windows;
 using MessageBox = HandyControl.Controls.MessageBox;
 
-namespace CSharpDemo.Dialogs
+namespace CSharpDemo.Views
 {
     /// <summary>
     /// HikVisionLoginDialog.xaml 的交互逻辑
     /// </summary>
-    public partial class HikVisionLoginDialog : Window
+    public partial class HikVisionLoginWindow : Window
     {
         /// <summary>
         /// 窗口传值委托
         /// </summary>
         public delegate void TransferValueDelegateHandler(string host, string name, string port, string password);
 
-        public HikVisionLoginDialog(TransferValueDelegateHandler delegateHandler)
+        public HikVisionLoginWindow(TransferValueDelegateHandler delegateHandler)
         {
             InitializeComponent();
+
+            CancelButton.Click += delegate { Close(); };
 
             LoginButton.Click += delegate
             {
@@ -33,7 +35,7 @@ namespace CSharpDemo.Dialogs
             };
         }
 
-        private void HikVisionLoginDialog_OnLoaded(object sender, RoutedEventArgs e)
+        private void HikVisionLoginWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             MouseDown += delegate { DragMove(); };
         }

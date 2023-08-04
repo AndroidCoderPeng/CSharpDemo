@@ -8,8 +8,8 @@ namespace CSharpDemo.Views
         {
             InitializeComponent();
 
-            CancalButton.Click += delegate { Close(); };
-            ConfirmButton.Click += delegate { };
+            CancelButton.Click += delegate { DialogResult = false; };
+            ConfirmButton.Click += delegate { DialogResult = true; };
         }
 
         private void LoginWindow_OnLoaded(object sender, RoutedEventArgs e)

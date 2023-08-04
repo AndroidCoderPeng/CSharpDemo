@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using CSharpDemo.Dialogs;
 using CSharpDemo.Service;
 using CSharpDemo.Views;
 using HandyControl.Controls;
@@ -62,7 +61,7 @@ namespace CSharpDemo.ViewModels
                         //初始化海康网络摄像头
                         if (InitHikVisionSdk())
                         {
-                            new HikVisionLoginDialog(GetLoginParam) { Owner = _window }.ShowDialog();
+                            new HikVisionLoginWindow(GetLoginParam) { Owner = _window }.ShowDialog();
                         }
                         else
                         {

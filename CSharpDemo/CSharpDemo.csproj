@@ -109,11 +109,11 @@
     <Compile Include="Dialogs\EventValueDialog.xaml.cs">
       <DependentUpon>EventValueDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\HikVisionLoginDialog.xaml.cs">
-      <DependentUpon>HikVisionLoginDialog.xaml</DependentUpon>
+    <Compile Include="Views\HikVisionLoginWindow.xaml.cs">
+      <DependentUpon>HikVisionLoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\ReginModel.cs" />
-    <Compile Include="ViewModels\DataAnalysisViewModel.cs" />
+    <Compile Include="Model\ReginModel.cs"/>
+    <Compile Include="ViewModels\DataAnalysisViewModel.cs"/>
     <Compile Include="Views\CameraView.xaml.cs">
       <DependentUpon>CameraView.xaml</DependentUpon>
     </Compile>
@@ -187,7 +187,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialogs\HikVisionLoginDialog.xaml">
+    <Page Include="Views\HikVisionLoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

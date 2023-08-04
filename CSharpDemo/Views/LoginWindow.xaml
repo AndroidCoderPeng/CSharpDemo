@@ -55,12 +55,12 @@
                 Width="300"
                 Height="35">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
                 <Button
-                    x:Name="CancalButton"
+                    x:Name="CancelButton"
                     Grid.Column="0"
                     Width="140"
                     HorizontalAlignment="Left"

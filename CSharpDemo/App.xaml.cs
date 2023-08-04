@@ -24,15 +24,22 @@ namespace CSharpDemo
         protected override void InitializeShell(Window shell)
         {
             //可以实现登录
-            // var window = Container.Resolve<LoginWindow>();
-            // if (window == null || window.ShowDialog() != true)
-            // {
-            //     Current.Shutdown();
-            // }
-            // else
-            // {
-            //     base.InitializeShell(shell);
-            // }
+            var loginWindow = Container.Resolve<LoginWindow>();
+            var loginResult = loginWindow.ShowDialog();
+            if (loginResult == null)
+            {
+                Current.Shutdown();
+                return;
+            }
+
+            if (loginResult.Value)
+            {
+                base.OnInitialized();
+            }
+            else
+            {
+                Current.Shutdown();
+            }
         }
 
         /// <summary>
@@ -43,7 +50,7 @@ namespace CSharpDemo
         {
             //Data
             containerRegistry.Register<IMainDataService, MainDataServiceImpl>();
-            
+
             //Navigation
             containerRegistry.RegisterForNavigation<CameraView>();
             containerRegistry.RegisterForNavigation<TransmitValueView>();
