@@ -115,18 +115,9 @@
 
                 <ProgressBar
                     Grid.Column="1"
-                    Height="35"
+                    Maximum="{Binding MaximumValue}"
                     Minimum="0"
                     Value="{Binding ProgressBarValue}" />
-
-                <Button
-                    Grid.Column="2"
-                    Height="35"
-                    Margin="10,0,0,0"
-                    Command="{Binding StartCalculateCommand}"
-                    Content="开始计算"
-                    FontSize="16"
-                    Style="{StaticResource ButtonPrimary}" />
             </Grid>
         </Grid>
 

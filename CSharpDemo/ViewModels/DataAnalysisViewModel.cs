@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using CSharpDemo.Tags;
 using CSharpDemo.Utils;
@@ -65,20 +65,41 @@ namespace CSharpDemo.ViewModels
             }
         }
 
+        private int _progressBarValue;
+
+        public int ProgressBarValue
+        {
+            get => _progressBarValue;
+            set
+            {
+                _progressBarValue = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _maximumValue;
+
+        public int MaximumValue
+        {
+            get => _maximumValue;
+            set
+            {
+                _maximumValue = value;
+                RaisePropertyChanged();
+            }
+        }
+
         #endregion
 
         #region DelegateCommand
 
         public DelegateCommand ImportRedDataCommand { get; }
         public DelegateCommand ImportBlueDataCommand { get; }
-        public DelegateCommand StartCalculateCommand { get; }
 
         #endregion
 
         private bool _isRedSensor;
-        private bool _isHandleData;
 
-        // private string _serializeObject = "";
         private readonly BackgroundWorker _backgroundWorker;
 
         public DataAnalysisViewModel()
@@ -93,7 +114,6 @@ namespace CSharpDemo.ViewModels
             ImportRedDataCommand = new DelegateCommand(delegate
             {
                 _isRedSensor = true;
-                _isHandleData = true;
                 var fileDialog = new OpenFileDialog
                 {
                     // 设置默认格式
@@ -112,7 +132,6 @@ namespace CSharpDemo.ViewModels
             ImportBlueDataCommand = new DelegateCommand(delegate
             {
                 _isRedSensor = false;
-                _isHandleData = true;
                 var fileDialog = new OpenFileDialog
                 {
                     // 设置默认格式
@@ -127,55 +146,41 @@ namespace CSharpDemo.ViewModels
                     _backgroundWorker.RunWorkerAsync();
                 }
             });
-
-            //开始计算
-            StartCalculateCommand = new DelegateCommand(delegate
-            {
-                _isHandleData = false;
-                //开始计算数据
-                _backgroundWorker.RunWorkerAsync();
-            });
         }
 
         private void Worker_OnDoWork(object sender, DoWorkEventArgs e)
         {
-            if (_isHandleData)
+            var fileName = _isRedSensor ? RedDataPath : BlueDataPath;
+
+            var fromFile = fileName.ReadFromFile();
+            var doubleArrays = fromFile.Select(HandleSerialPortData).ToList();
+            MaximumValue = doubleArrays.Count;
+
+            //格式化double[]
+            var totalData = new List<double>();
+            for (var i = 0; i < doubleArrays.Count; i++)
             {
-                var startDate = DateTime.Now;
+                totalData.AddRange(doubleArrays[i]);
+                _backgroundWorker.ReportProgress(i + 1);
+                Thread.Sleep(10);
+            }
 
-                var fileName = _isRedSensor ? RedDataPath : BlueDataPath;
-
-                var fromFile = fileName.ReadFromFile();
-                var doubleArrays = fromFile.Select(HandleSerialPortData).ToList();
-
-                //格式化double[]
-                var totalData = new List<double>();
-                foreach (var item in doubleArrays)
-                {
-                    totalData.AddRange(item);
-                }
-
-                var resultArray = totalData.ToArray();
-                if (_isRedSensor)
-                {
-                    RedHandledData = JsonConvert.SerializeObject(resultArray);
-                }
-                else
-                {
-                    BlueHandledData = JsonConvert.SerializeObject(resultArray);
-                }
-
-                var endDate = DateTime.Now;
-                var diffTime = Convert.ToInt32(Math.Abs((endDate - startDate).TotalMilliseconds));
+            var resultArray = totalData.ToArray();
+            if (_isRedSensor)
+            {
+                RedHandledData = "数据渲染中...";
+                RedHandledData = JsonConvert.SerializeObject(resultArray);
             }
             else
             {
-                Debug.WriteLine("DataAnalysisViewModel => 计算数据");
+                BlueHandledData = "数据渲染中...";
+                BlueHandledData = JsonConvert.SerializeObject(resultArray);
             }
         }
 
         private void Worker_OnProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            ProgressBarValue = e.ProgressPercentage;
         }
 
         private void Worker_OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
