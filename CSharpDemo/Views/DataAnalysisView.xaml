@@ -7,14 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
     d:DataContext="{d:DesignInstance Type=vm:DataAnalysisViewModel}"
-    d:DesignHeight="720"
-    d:DesignWidth="1280"
+    d:DesignHeight="768"
+    d:DesignWidth="1366"
     mc:Ignorable="d">
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="1.5*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
