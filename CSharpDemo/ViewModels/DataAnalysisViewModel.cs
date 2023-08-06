@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
+using CorrelatorSingle;
+using CSharpDemo.Events;
+using CSharpDemo.Model;
 using CSharpDemo.Tags;
 using CSharpDemo.Utils;
+using MathWorks.MATLAB.NET.Arrays;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 
 namespace CSharpDemo.ViewModels
@@ -77,39 +84,39 @@ namespace CSharpDemo.ViewModels
             }
         }
 
-        private int _maximumValue;
-
-        public int MaximumValue
-        {
-            get => _maximumValue;
-            set
-            {
-                _maximumValue = value;
-                RaisePropertyChanged();
-            }
-        }
-
         #endregion
 
         #region DelegateCommand
 
+        public DelegateCommand<UserControl> WindowLoadedCommand { get; }
         public DelegateCommand ImportRedDataCommand { get; }
         public DelegateCommand ImportBlueDataCommand { get; }
 
         #endregion
 
+        private UserControl _userControl;
         private bool _isRedSensor;
-
+        private readonly CorrelatorDataModel _dataModel;
         private readonly BackgroundWorker _backgroundWorker;
+        private static readonly Lazy<Correlator> LazyCorrelator = new Lazy<Correlator>(() => new Correlator());
+        private readonly IEventAggregator _eventAggregator;
 
-        public DataAnalysisViewModel()
+        public DataAnalysisViewModel(IEventAggregator eventAggregator)
         {
+            _eventAggregator = eventAggregator;
+            _dataModel = new CorrelatorDataModel();
+
             _backgroundWorker = new BackgroundWorker();
             _backgroundWorker.WorkerReportsProgress = true;
             _backgroundWorker.WorkerSupportsCancellation = true;
             _backgroundWorker.DoWork += Worker_OnDoWork;
             _backgroundWorker.ProgressChanged += Worker_OnProgressChanged;
             _backgroundWorker.RunWorkerCompleted += Worker_OnRunWorkerCompleted;
+
+            WindowLoadedCommand = new DelegateCommand<UserControl>(delegate(UserControl control)
+            {
+                _userControl = control;
+            });
 
             ImportRedDataCommand = new DelegateCommand(delegate
             {
@@ -154,25 +161,34 @@ namespace CSharpDemo.ViewModels
 
             var fromFile = fileName.ReadFromFile();
             var doubleArrays = fromFile.Select(HandleSerialPortData).ToList();
-            MaximumValue = doubleArrays.Count;
 
             //格式化double[]
             var totalData = new List<double>();
             for (var i = 0; i < doubleArrays.Count; i++)
             {
                 totalData.AddRange(doubleArrays[i]);
-                _backgroundWorker.ReportProgress(i + 1);
+
+                var percent = (i + 1) / (float)doubleArrays.Count;
+                _backgroundWorker.ReportProgress((int)(percent * 100));
                 Thread.Sleep(10);
             }
 
             var resultArray = totalData.ToArray();
             if (_isRedSensor)
             {
+                _dataModel.DevCode = "211700082201";
+                _dataModel.LeftReceiveDataTime = DateTime.Now;
+                _dataModel.LeftDeviceDataArray = resultArray;
+
                 RedHandledData = "数据渲染中...";
                 RedHandledData = JsonConvert.SerializeObject(resultArray);
             }
             else
             {
+                _dataModel.DevCode = "211700082202";
+                _dataModel.RightReceiveDataTime = DateTime.Now;
+                _dataModel.RightDeviceDataArray = resultArray;
+
                 BlueHandledData = "数据渲染中...";
                 BlueHandledData = JsonConvert.SerializeObject(resultArray);
             }
@@ -185,6 +201,37 @@ namespace CSharpDemo.ViewModels
 
         private void Worker_OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (_dataModel.LeftDeviceDataArray == null || _dataModel.RightDeviceDataArray == null)
+            {
+                return;
+            }
+
+            new Thread(CalculateData).Start();
+        }
+
+        private void CalculateData()
+        {
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                DialogHub.Get.ShowLoadingDialog(Window.GetWindow(_userControl), "样品数据计算中，请稍后...");
+            });
+            Debug.WriteLine("DataAnalysisViewModel => 开始计算");
+            var array = LazyCorrelator.Value.locating(11,
+                (MWNumericArray)_dataModel.LeftDeviceDataArray, (MWNumericArray)_dataModel.RightDeviceDataArray,
+                7500,
+                int.Parse("150"), int.Parse("1130"),
+                0, 0,
+                0, 0,
+                "",
+                int.Parse("300"), int.Parse("300"),
+                1, -1,
+                -1, -1,
+                int.Parse("10"), int.Parse("300"));
+            Debug.WriteLine("DataAnalysisViewModel => 计算结束");
+            Application.Current.Dispatcher.Invoke(delegate { DialogHub.Get.DismissLoadingDialog(); });
+
+            //渲染波形图
+            _eventAggregator.GetEvent<CalculateResultEvent>().Publish(array);
         }
 
         private List<double> HandleSerialPortData(string data)

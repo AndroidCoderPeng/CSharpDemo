@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using CSharpDemo.Tags;
+using MathWorks.MATLAB.NET.Arrays;
 using PixelFormat = System.Windows.Media.PixelFormat;
 
 namespace CSharpDemo.Utils
@@ -217,7 +218,7 @@ namespace CSharpDemo.Utils
                     return "未知类型数据";
             }
         }
-        
+
         public static double HexToDouble(this IReadOnlyList<byte> src)
         {
             if (src.Count != 3)
@@ -236,7 +237,7 @@ namespace CSharpDemo.Utils
 
             return (result1 * 65536 + result2 * 256 + result3) * 5 / 83.88607 / 100000;
         }
-        
+
         public static List<string> ReadFromFile(this string filePath)
         {
             var list = new List<string>();
@@ -249,6 +250,23 @@ namespace CSharpDemo.Utils
 
             streamReader.Close();
             return list;
+        }
+
+        /// <summary>
+        /// MWNumericArray转double[]
+        /// </summary>
+        /// <param name="inputMw"></param>
+        /// <returns></returns>
+        public static double[] GetArray(this MWNumericArray inputMw)
+        {
+            var num = inputMw.NumberOfElements;
+            var outArray = new double[num];
+            for (var i = 0; i < num; i++)
+            {
+                outArray[i] = Convert.ToDouble(inputMw[i + 1].ToString());
+            }
+
+            return outArray;
         }
     }
 }

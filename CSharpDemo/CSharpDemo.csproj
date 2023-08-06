@@ -39,6 +39,12 @@
     <ApplicationIcon>Image\favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CorrelatorCSharp">
+      <HintPath>..\..\..\..\dll\CorrelatorCSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="CorrelatorSingle">
+      <HintPath>..\..\..\..\dll\CorrelatorSingle.dll</HintPath>
+    </Reference>
     <Reference Include="DryIoc, Version=4.7.7.0, Culture=neutral, PublicKeyToken=dfbf2bd50fcf7768, processorArchitecture=MSIL">
       <HintPath>..\packages\DryIoc.dll.4.7.7\lib\net45\DryIoc.dll</HintPath>
     </Reference>
@@ -52,8 +58,14 @@
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.31\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
+    <Reference Include="MWArray">
+      <HintPath>..\..\..\..\dll\MWArray.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="playWaveNamespace">
+      <HintPath>..\..\..\..\dll\playWaveNamespace.dll</HintPath>
     </Reference>
     <Reference Include="Prism, Version=8.1.97.5141, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.8.1.97\lib\net47\Prism.dll</HintPath>
@@ -109,6 +121,12 @@
     <Compile Include="Dialogs\EventValueDialog.xaml.cs">
       <DependentUpon>EventValueDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\LoadingDialog.xaml.cs">
+      <DependentUpon>LoadingDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Events\CalculateResultEvent.cs" />
+    <Compile Include="Model\CorrelatorDataModel.cs" />
+    <Compile Include="Utils\DialogHub.cs" />
     <Compile Include="Views\HikVisionLoginWindow.xaml.cs">
       <DependentUpon>HikVisionLoginWindow.xaml</DependentUpon>
     </Compile>
@@ -187,6 +205,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\LoadingDialog.xaml" />
     <Page Include="Views\HikVisionLoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
