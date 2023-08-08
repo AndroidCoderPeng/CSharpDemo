@@ -72,6 +72,9 @@ namespace CSharpDemo.ViewModels
                     case 4:
                         region.RequestNavigate("DataAnalysisView");
                         break;
+                    case 5:
+                        region.RequestNavigate("RealTimeAudioView");
+                        break;
                 }
             });
         }

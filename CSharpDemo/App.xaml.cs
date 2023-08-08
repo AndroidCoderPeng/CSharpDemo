@@ -56,6 +56,7 @@ namespace CSharpDemo
             containerRegistry.RegisterForNavigation<TransmitValueView>();
             containerRegistry.RegisterForNavigation<SerialPortView>();
             containerRegistry.RegisterForNavigation<DataAnalysisView>();
+            containerRegistry.RegisterForNavigation<RealTimeAudioView>();
         }
     }
 }
