@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using NAudio.CoreAudioApi;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -38,10 +39,10 @@ namespace CSharpDemo.ViewModels
             CurrentVolume = GetCurrentMicVolume();
 
             ListenRedSensorCommand = new DelegateCommand(delegate { });
-            RedSensorMuteCommand = new DelegateCommand(delegate { });
+            RedSensorMuteCommand = new DelegateCommand(delegate { SetCurrentMicVolume(true); });
 
             ListenBlueSensorCommand = new DelegateCommand(delegate { });
-            BlueSensorMuteCommand = new DelegateCommand(delegate { });
+            BlueSensorMuteCommand = new DelegateCommand(delegate { SetCurrentMicVolume(false); });
         }
 
         private int GetCurrentMicVolume()
@@ -65,16 +66,35 @@ namespace CSharpDemo.ViewModels
             return volume;
         }
 
+        #region 静音
+
+        //函数名不能改，否则会报找不到函数错误，dll里面定好了的
+        [DllImport("user32.dll")]
+        private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
+
+        [DllImport("user32.dll")]
+        private static extern byte MapVirtualKey(uint uCode, uint uMapType);
+
         private void SetCurrentMicVolume(bool isMute)
         {
-            var enumerator = new MMDeviceEnumerator();
-            var captureDevices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
-            if (captureDevices.Any())
+            if (isMute)
             {
-                var mMDevice = captureDevices.ToList()[1];
-                //false是静音，true是关闭静音
-                mMDevice.AudioEndpointVolume.Mute = isMute;
+                //静音
+                keybd_event(0xAD, MapVirtualKey(0xAD, 0), 0x0001, 0);
+                keybd_event(0xAD, MapVirtualKey(0xAD, 0), 0x0001 | 0x0002, 0);
+
+                CurrentVolume = 0;
+            }
+            else
+            {
+                //非静音
+                keybd_event(0xAD, MapVirtualKey(0xAD, 0), 0x0001, 0);
+                keybd_event(0xAD, MapVirtualKey(0xAD, 0), 0x0001 | 0x0002, 0);
+
+                CurrentVolume = GetCurrentMicVolume();
             }
         }
+
+        #endregion
     }
 }
