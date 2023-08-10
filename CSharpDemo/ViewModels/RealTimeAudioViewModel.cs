@@ -54,13 +54,18 @@ namespace CSharpDemo.ViewModels
             var captureDevices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
             foreach (var device in captureDevices)
             {
-                Debug.WriteLine($"RealTimeAudioViewModel => {device.DeviceFriendlyName}");
+                Debug.WriteLine($"RealTimeAudioViewModel => {device.FriendlyName}");
             }
 
             if (captureDevices.Any())
             {
-                var mMDevice = captureDevices.ToList()[1];
-                volume = (int)(mMDevice.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
+                foreach (var device in captureDevices)
+                {
+                    if (device.FriendlyName.Contains("Realtek High Definition Audio"))
+                    {
+                        volume = (int)(device.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
+                    }
+                }
             }
 
             return volume;

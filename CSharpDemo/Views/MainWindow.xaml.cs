@@ -7,8 +7,6 @@ namespace CSharpDemo.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        // private readonly NavigationService _service;
-
         public MainWindow()
         {
             InitializeComponent();

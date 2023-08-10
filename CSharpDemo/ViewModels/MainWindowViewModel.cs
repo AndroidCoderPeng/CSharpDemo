@@ -8,6 +8,7 @@ using CSharpDemo.Views;
 using HandyControl.Controls;
 using HikVisionPreview;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 using MessageBox = HandyControl.Controls.MessageBox;
@@ -32,7 +33,8 @@ namespace CSharpDemo.ViewModels
 
         private Window _window;
 
-        public MainWindowViewModel(IRegionManager regionManager, IMainDataService dataService)
+        public MainWindowViewModel(IRegionManager regionManager, IContainerProvider container,
+            IMainDataService dataService)
         {
             ItemModels = dataService.GetItemModels();
 
@@ -40,7 +42,7 @@ namespace CSharpDemo.ViewModels
             {
                 _window = window;
                 //显示默认View
-                regionManager.Regions["ContentRegion"].RequestNavigate("CameraView");
+                regionManager.AddToRegion("ContentRegion", container.Resolve<CameraView>());
             });
 
             ItemSelectedCommand = new DelegateCommand<ListBox>(delegate(ListBox box)
@@ -58,6 +60,12 @@ namespace CSharpDemo.ViewModels
                         region.RequestNavigate("SerialPortView");
                         break;
                     case 3:
+                        region.RequestNavigate("DataAnalysisView");
+                        break;
+                    case 4:
+                        region.RequestNavigate("RealTimeAudioView");
+                        break;
+                    case 5:
                         //初始化海康网络摄像头
                         if (InitHikVisionSdk())
                         {
@@ -68,12 +76,6 @@ namespace CSharpDemo.ViewModels
                             MessageBox.Show("NET_DVR_Init error!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
 
-                        break;
-                    case 4:
-                        region.RequestNavigate("DataAnalysisView");
-                        break;
-                    case 5:
-                        region.RequestNavigate("RealTimeAudioView");
                         break;
                 }
             });
