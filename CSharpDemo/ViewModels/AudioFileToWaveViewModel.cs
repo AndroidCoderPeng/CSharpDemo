@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Threading;
 using System.Windows;
+using CSharpDemo.Events;
 using CSharpDemo.Views;
 using Microsoft.Win32;
 using NAudio.Wave;
-using Newtonsoft.Json;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 
 namespace CSharpDemo.ViewModels
@@ -51,12 +51,15 @@ namespace CSharpDemo.ViewModels
         #endregion
 
         private AudioFileToWaveView _view;
+        private readonly IEventAggregator _eventAggregator;
         private readonly BackgroundWorker _backgroundWorker;
         private AudioFileReader _audioFileReader;
         private readonly List<Point> _lineData = new List<Point>();
 
-        public AudioFileToWaveViewModel()
+        public AudioFileToWaveViewModel(IEventAggregator eventAggregator)
         {
+            _eventAggregator = eventAggregator;
+
             _backgroundWorker = new BackgroundWorker();
             _backgroundWorker.WorkerReportsProgress = true;
             _backgroundWorker.WorkerSupportsCancellation = true;
@@ -95,18 +98,15 @@ namespace CSharpDemo.ViewModels
             var waveData = new float[bytes.Length / sizeof(float)];
             Buffer.BlockCopy(bytes, 0, waveData, 0, bytes.Length);
 
-            var actualWidth = _view.AudioWaveCanvas.ActualWidth;
-            var yScale = _view.AudioWaveCanvas.ActualHeight / 2;
+            var actualWidth = _view.ScottPlotChart.ActualWidth;
+            var yScale = _view.ScottPlotChart.ActualHeight;
             var index = waveData.Length / (int)actualWidth;
 
             for (var i = 0; i < actualWidth; i++)
             {
-                double x = i;
-                var y1 = yScale - waveData[i * index] * yScale;
-                var y2 = yScale + waveData[i * index] * yScale;
+                var y = yScale - waveData[i * index] * yScale;
 
-                _lineData.Add(new Point(x, y1));
-                _lineData.Add(new Point(x, y2));
+                _lineData.Add(new Point(i, y));
 
                 var percent = (i + 1) / (float)actualWidth;
                 _backgroundWorker.ReportProgress((int)(percent * 100));
@@ -121,7 +121,7 @@ namespace CSharpDemo.ViewModels
 
         private void Worker_OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Debug.WriteLine($"AudioFileToWaveViewModel => {JsonConvert.SerializeObject(_lineData)}");
+            _eventAggregator.GetEvent<WavePointEvent>().Publish(_lineData);
         }
     }
 }

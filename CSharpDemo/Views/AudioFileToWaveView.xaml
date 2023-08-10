@@ -67,6 +67,8 @@
                 Value="{Binding ProgressBarValue}" />
         </Grid>
 
-        <Canvas x:Name="AudioWaveCanvas" Grid.Row="2" />
+        <Grid Grid.Row="2">
+            <WpfPlot x:Name="ScottPlotChart" IsEnabled="False" />
+        </Grid>
     </Grid>
 </UserControl>

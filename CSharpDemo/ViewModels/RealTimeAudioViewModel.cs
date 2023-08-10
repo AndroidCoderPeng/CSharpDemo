@@ -171,7 +171,7 @@ namespace CSharpDemo.ViewModels
         #endregion
     }
 
-    public class WavePoint : INotifyPropertyChanged
+    public partial class WavePoint : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -156,6 +156,7 @@
     <Compile Include="Dialogs\LoadingDialog.xaml.cs">
       <DependentUpon>LoadingDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Events\WavePointEvent.cs"/>
     <Compile Include="Model\CorrelatorDataModel.cs"/>
     <Compile Include="Utils\DialogHub.cs"/>
     <Compile Include="Utils\DirectoryManager.cs"/>
