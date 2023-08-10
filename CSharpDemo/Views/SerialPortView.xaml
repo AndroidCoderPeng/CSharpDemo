@@ -157,23 +157,29 @@
 
             <Button
                 Width="195"
+                Height="35"
                 Margin="15,0,15,15"
                 Command="{Binding OpenSerialPortCommand}"
                 Content="打开串口"
+                FontSize="16"
                 Style="{StaticResource ButtonPrimary}" />
 
             <Button
                 Width="195"
+                Height="35"
                 Margin="15,0"
                 Command="{Binding CloseSerialPortCommand}"
                 Content="关闭串口"
+                FontSize="16"
                 Style="{StaticResource ButtonPrimary}" />
 
             <Button
                 Width="195"
+                Height="35"
                 Margin="15"
                 Command="{Binding ClearMessageCommand}"
                 Content="清空数据"
+                FontSize="16"
                 Style="{StaticResource ButtonPrimary}" />
         </StackPanel>
 
@@ -218,17 +224,21 @@
 
                 <hc:TextBox
                     Grid.Column="0"
+                    Height="35"
                     Margin="15"
                     VerticalContentAlignment="Center"
                     hc:InfoElement.Placeholder="请要发送的数据"
                     hc:InfoElement.ShowClearButton="True"
+                    FontSize="16"
                     Text="{Binding UserInputHex}" />
 
                 <Button
                     Grid.Column="1"
+                    Height="35"
                     Margin="0,0,15,0"
                     Command="{Binding SendMessageCommand}"
                     Content="发送数据"
+                    FontSize="16"
                     Style="{StaticResource ButtonPrimary}" />
             </Grid>
         </Grid>
