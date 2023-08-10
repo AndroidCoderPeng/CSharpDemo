@@ -146,6 +146,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\ButtonImageConverter.cs"/>
     <Compile Include="Dialogs\DelegateValueDialog.xaml.cs">
       <DependentUpon>DelegateValueDialog.xaml</DependentUpon>
     </Compile>

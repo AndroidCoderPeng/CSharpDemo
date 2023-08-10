@@ -2,6 +2,7 @@
     x:Class="CSharpDemo.Views.RealTimeAudioView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:CSharpDemo.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
@@ -9,6 +10,11 @@
     d:DesignHeight="768"
     d:DesignWidth="1366"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converter:ButtonImageConverter x:Key="ButtonImageConverter" />
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -44,7 +50,7 @@
                     <Image
                         Width="30"
                         Height="30"
-                        Source="/CSharpDemo;component/Image/t_icon6.png" />
+                        Source="{Binding CurrentVolume, Converter={StaticResource ButtonImageConverter}}" />
                 </Button>
             </StackPanel>
 
@@ -96,7 +102,7 @@
                     <Image
                         Width="30"
                         Height="30"
-                        Source="/CSharpDemo;component/Image/t_icon6.png" />
+                        Source="{Binding CurrentVolume, Converter={StaticResource ButtonImageConverter}}" />
                 </Button>
             </StackPanel>
 

@@ -39,10 +39,10 @@ namespace CSharpDemo.ViewModels
             CurrentVolume = GetCurrentMicVolume();
 
             ListenRedSensorCommand = new DelegateCommand(delegate { });
-            RedSensorMuteCommand = new DelegateCommand(delegate { SetCurrentMicVolume(true); });
+            RedSensorMuteCommand = new DelegateCommand(SetCurrentMicVolume);
 
             ListenBlueSensorCommand = new DelegateCommand(delegate { });
-            BlueSensorMuteCommand = new DelegateCommand(delegate { SetCurrentMicVolume(false); });
+            BlueSensorMuteCommand = new DelegateCommand(SetCurrentMicVolume);
         }
 
         private int GetCurrentMicVolume()
@@ -80,9 +80,9 @@ namespace CSharpDemo.ViewModels
         [DllImport("user32.dll")]
         private static extern byte MapVirtualKey(uint uCode, uint uMapType);
 
-        private void SetCurrentMicVolume(bool isMute)
+        private void SetCurrentMicVolume()
         {
-            if (isMute)
+            if (_currentVolume > 0)
             {
                 //静音
                 keybd_event(0xAD, MapVirtualKey(0xAD, 0), 0x0001, 0);
