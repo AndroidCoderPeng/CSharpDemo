@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
 using CSharpDemo.Utils;
 using CSharpDemo.Views;
@@ -115,28 +113,12 @@ namespace CSharpDemo.ViewModels
 
         private int GetCurrentMicVolume()
         {
-            var volume = 0;
             var enumerator = new MMDeviceEnumerator();
 
             //获取音频输入设备
-            var captureDevices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
-            foreach (var device in captureDevices)
-            {
-                Debug.WriteLine($"RealTimeAudioViewModel => {device.FriendlyName}");
-            }
-
-            if (captureDevices.Any())
-            {
-                foreach (var device in captureDevices)
-                {
-                    if (device.FriendlyName.Contains("Realtek High Definition Audio"))
-                    {
-                        volume = (int)(device.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
-                    }
-                }
-            }
-
-            return volume;
+            var device = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+            Debug.WriteLine($"RealTimeAudioViewModel => {device.FriendlyName}");
+            return (int)(device.AudioEndpointVolume.MasterVolumeLevelScalar * 100);
         }
 
         #region 静音
@@ -169,12 +151,5 @@ namespace CSharpDemo.ViewModels
         }
 
         #endregion
-    }
-
-    public partial class WavePoint : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private float _heigth;
     }
 }
