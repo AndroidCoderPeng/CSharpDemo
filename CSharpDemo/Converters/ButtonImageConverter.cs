@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
@@ -10,7 +9,6 @@ namespace CSharpDemo.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Debug.WriteLine($"ButtonImageConverter => {value}");
             if (value == null)
             {
                 return new BitmapImage(new Uri(@"..\..\Image\t_icon3.png", UriKind.Relative));
