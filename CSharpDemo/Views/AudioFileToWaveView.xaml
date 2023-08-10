@@ -1,0 +1,72 @@
+﻿<UserControl
+    x:Class="CSharpDemo.Views.AudioFileToWaveView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
+    d:DataContext="{d:DesignInstance Type=vm:AudioFileToWaveViewModel}"
+    d:DesignHeight="768"
+    d:DesignWidth="1366"
+    mc:Ignorable="d">
+
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded">
+            <b:InvokeCommandAction Command="{Binding WindowLoadedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <hc:TextBox
+                Grid.Column="0"
+                hc:InfoElement.Placeholder="请选择音频文件"
+                hc:InfoElement.ShowClearButton="True"
+                FontSize="16"
+                Text="{Binding AudioFilePath}" />
+
+            <Button
+                Grid.Column="1"
+                Height="35"
+                Margin="10,0,0,0"
+                Command="{Binding ImportAudioFileCommand}"
+                Content="导入音频文件"
+                FontSize="16"
+                Style="{StaticResource ButtonPrimary}" />
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                FontSize="16"
+                Text="处理进度：" />
+
+            <ProgressBar
+                Grid.Column="1"
+                Minimum="0"
+                Value="{Binding ProgressBarValue}" />
+        </Grid>
+
+        <Canvas x:Name="AudioWaveCanvas" Grid.Row="2" />
+    </Grid>
+</UserControl>

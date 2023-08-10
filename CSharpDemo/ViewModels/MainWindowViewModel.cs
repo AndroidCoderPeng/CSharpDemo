@@ -63,9 +63,12 @@ namespace CSharpDemo.ViewModels
                         region.RequestNavigate("DataAnalysisView");
                         break;
                     case 4:
-                        region.RequestNavigate("RealTimeAudioView");
+                        region.RequestNavigate("AudioFileToWaveView");
                         break;
                     case 5:
+                        region.RequestNavigate("RealTimeAudioView");
+                        break;
+                    case 6:
                         //初始化海康网络摄像头
                         if (InitHikVisionSdk())
                         {

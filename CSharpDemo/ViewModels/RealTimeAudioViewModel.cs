@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -48,9 +48,6 @@ namespace CSharpDemo.ViewModels
 
         private WaveFileWriter _waveFileWriter;
 
-        //波形数据集
-        private List<float> _waveDataArray = new List<float>();
-
         public RealTimeAudioViewModel()
         {
             CurrentVolume = GetCurrentMicVolume();
@@ -76,14 +73,12 @@ namespace CSharpDemo.ViewModels
                 //写入wav文件
                 _waveFileWriter.Write(buffer, 0, bytesRecorded);
 
-                // for (var index = 0; index < bytesRecorded; index += 2)
-                // {
-                //     var sample = (short)((buffer[index + 1] << 8) | buffer[index + 0]);
-                //     var sample32 = sample / 32768f;
-                //     _waveDataArray.Add(sample32);
-                // }
-
-                // new Label { BackColor = Color.Pink, Width = 5, Height = (int)h, Margin = new Padding(0, baseMidHeight-(int)h, 0, 0) }
+                var sts = new float[buffer.Length / 2];
+                var outIndex = 0;
+                for (var i = 0; i < buffer.Length; i += 2)
+                {
+                    sts[outIndex++] = BitConverter.ToInt16(buffer, i) / 32768f;
+                }
             };
 
             LazyWaveIn.Value.RecordingStopped += delegate
@@ -174,5 +169,12 @@ namespace CSharpDemo.ViewModels
         }
 
         #endregion
+    }
+
+    public class WavePoint : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private float _heigth;
     }
 }

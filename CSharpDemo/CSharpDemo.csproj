@@ -156,15 +156,19 @@
     <Compile Include="Dialogs\LoadingDialog.xaml.cs">
       <DependentUpon>LoadingDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\CorrelatorDataModel.cs" />
-    <Compile Include="Utils\DialogHub.cs" />
+    <Compile Include="Model\CorrelatorDataModel.cs"/>
+    <Compile Include="Utils\DialogHub.cs"/>
     <Compile Include="Utils\DirectoryManager.cs"/>
-    <Compile Include="ViewModels\RealTimeAudioViewModel.cs" />
+    <Compile Include="ViewModels\AudioFileToWaveViewModel.cs"/>
+    <Compile Include="ViewModels\RealTimeAudioViewModel.cs"/>
+    <Compile Include="Views\AudioFileToWaveView.xaml.cs">
+      <DependentUpon>AudioFileToWaveView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HikVisionLoginWindow.xaml.cs">
       <DependentUpon>HikVisionLoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\ReginModel.cs" />
-    <Compile Include="ViewModels\DataAnalysisViewModel.cs" />
+    <Compile Include="Model\ReginModel.cs"/>
+    <Compile Include="ViewModels\DataAnalysisViewModel.cs"/>
     <Compile Include="Views\CameraView.xaml.cs">
       <DependentUpon>CameraView.xaml</DependentUpon>
     </Compile>
@@ -242,6 +246,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\LoadingDialog.xaml" />
+    <Page Include="Views\AudioFileToWaveView.xaml"/>
     <Page Include="Views\HikVisionLoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
