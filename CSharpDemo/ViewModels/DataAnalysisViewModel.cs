@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using CorrelatorSingle;
-using CSharpDemo.Events;
 using CSharpDemo.Model;
 using CSharpDemo.Tags;
 using CSharpDemo.Utils;
+using CSharpDemo.Views;
 using MathWorks.MATLAB.NET.Arrays;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using Prism.Commands;
-using Prism.Events;
 using Prism.Mvvm;
+using ScottPlot;
+using ScottPlot.Plottable;
 
 namespace CSharpDemo.ViewModels
 {
@@ -88,22 +89,20 @@ namespace CSharpDemo.ViewModels
 
         #region DelegateCommand
 
-        public DelegateCommand<UserControl> WindowLoadedCommand { get; }
+        public DelegateCommand<DataAnalysisView> WindowLoadedCommand { get; }
         public DelegateCommand ImportRedDataCommand { get; }
         public DelegateCommand ImportBlueDataCommand { get; }
 
         #endregion
 
-        private UserControl _userControl;
+        private DataAnalysisView _view;
         private bool _isRedSensor;
         private readonly CorrelatorDataModel _dataModel;
         private readonly BackgroundWorker _backgroundWorker;
         private static readonly Lazy<Correlator> LazyCorrelator = new Lazy<Correlator>(() => new Correlator());
-        private readonly IEventAggregator _eventAggregator;
 
-        public DataAnalysisViewModel(IEventAggregator eventAggregator)
+        public DataAnalysisViewModel()
         {
-            _eventAggregator = eventAggregator;
             _dataModel = new CorrelatorDataModel();
 
             _backgroundWorker = new BackgroundWorker();
@@ -113,9 +112,9 @@ namespace CSharpDemo.ViewModels
             _backgroundWorker.ProgressChanged += Worker_OnProgressChanged;
             _backgroundWorker.RunWorkerCompleted += Worker_OnRunWorkerCompleted;
 
-            WindowLoadedCommand = new DelegateCommand<UserControl>(delegate(UserControl control)
+            WindowLoadedCommand = new DelegateCommand<DataAnalysisView>(delegate(DataAnalysisView view)
             {
-                _userControl = control;
+                _view = view;
             });
 
             ImportRedDataCommand = new DelegateCommand(delegate
@@ -213,7 +212,7 @@ namespace CSharpDemo.ViewModels
         {
             Application.Current.Dispatcher.Invoke(delegate
             {
-                DialogHub.Get.ShowLoadingDialog(Window.GetWindow(_userControl), "样品数据计算中，请稍后...");
+                DialogHub.Get.ShowLoadingDialog(Window.GetWindow(_view), "样品数据计算中，请稍后...");
             });
             Debug.WriteLine("DataAnalysisViewModel => 开始计算");
             var array = LazyCorrelator.Value.locating(11,
@@ -228,10 +227,25 @@ namespace CSharpDemo.ViewModels
                 -1, -1,
                 int.Parse("10"), int.Parse("300"));
             Debug.WriteLine("DataAnalysisViewModel => 计算结束");
-            Application.Current.Dispatcher.Invoke(delegate { DialogHub.Get.DismissLoadingDialog(); });
 
-            //渲染波形图
-            _eventAggregator.GetEvent<CalculateResultEvent>().Publish(array);
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                //渲染波形图
+                Debug.WriteLine("DataAnalysisView.xaml => 开始渲染波形图");
+                var xDoubles = ((MWNumericArray)array[5]).GetArray();
+                var yDoubles = ((MWNumericArray)array[4]).GetArray();
+                //点如果较少，可以直接AddBar，但是超过一千个点，不能直接AddBar，否则Bar颜色会被边框覆盖从而呈现黑色
+                var scottPlot = _view.ScottPlotChart;
+                scottPlot.Plot.Add(new BarPlot(DataGen.Consecutive(xDoubles.Length), yDoubles, null, null)
+                {
+                    FillColor = Color.FromArgb(255, 49, 151, 36),
+                    BorderColor = Color.FromArgb(255, 49, 151, 36),
+                    BorderLineWidth = 0.1f
+                });
+                scottPlot.Refresh();
+
+                DialogHub.Get.DismissLoadingDialog();
+            });
         }
 
         private List<double> HandleSerialPortData(string data)

@@ -27,7 +27,7 @@
                 Direction="0"
                 Opacity="0.5"
                 ShadowDepth="0"
-                Color="LightGray" />
+                Color="Blue" />
         </Border.Effect>
         <Grid>
             <Grid.RowDefinitions>
