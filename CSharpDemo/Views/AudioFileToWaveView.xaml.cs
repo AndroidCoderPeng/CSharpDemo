@@ -13,6 +13,12 @@ namespace CSharpDemo.Views
         {
             InitializeComponent();
 
+            //去掉四周坐标轴
+            ScottPlotChart.Plot.XAxis.IsVisible = false;
+            ScottPlotChart.Plot.XAxis2.IsVisible = false;
+            ScottPlotChart.Plot.YAxis.IsVisible = false;
+            ScottPlotChart.Plot.YAxis2.IsVisible = false;
+
             eventAggregator.GetEvent<WavePointEvent>().Subscribe(delegate(List<Point> list)
             {
                 var xDoubles = new List<double>();

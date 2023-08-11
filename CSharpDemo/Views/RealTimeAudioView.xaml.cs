@@ -13,6 +13,16 @@ namespace CSharpDemo.Views
         {
             InitializeComponent();
 
+            //去掉四周坐标轴
+            RedSensorScottPlotChart.Plot.XAxis.IsVisible = false;
+            RedSensorScottPlotChart.Plot.XAxis2.IsVisible = false;
+            RedSensorScottPlotChart.Plot.YAxis.IsVisible = false;
+            RedSensorScottPlotChart.Plot.YAxis2.IsVisible = false;
+
+            BlueSensorScottPlotChart.Plot.XAxis.IsVisible = false;
+            BlueSensorScottPlotChart.Plot.XAxis2.IsVisible = false;
+            BlueSensorScottPlotChart.Plot.YAxis.IsVisible = false;
+            BlueSensorScottPlotChart.Plot.YAxis2.IsVisible = false;
 
             aggregator.GetEvent<AudioWavePointEvent>().Subscribe(delegate(AudioWaveModel model)
             {
