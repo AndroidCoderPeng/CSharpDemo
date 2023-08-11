@@ -5,7 +5,6 @@ using System.Threading;
 using System.Windows;
 using CSharpDemo.Events;
 using CSharpDemo.Views;
-using LiveCharts;
 using Microsoft.Win32;
 using NAudio.Wave;
 using Prism.Commands;
@@ -42,8 +41,6 @@ namespace CSharpDemo.ViewModels
             }
         }
 
-        public ChartValues<double> WaveLineSeries { get; set; }
-
         #endregion
 
         #region DelegateCommand
@@ -62,7 +59,6 @@ namespace CSharpDemo.ViewModels
         public AudioFileToWaveViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            WaveLineSeries = new ChartValues<double>();
 
             _backgroundWorker = new BackgroundWorker();
             _backgroundWorker.WorkerReportsProgress = true;
@@ -102,8 +98,8 @@ namespace CSharpDemo.ViewModels
             var waveData = new float[bytes.Length / sizeof(float)];
             Buffer.BlockCopy(bytes, 0, waveData, 0, bytes.Length);
 
-            var actualWidth = _view.LineChart.ActualWidth;
-            var yScale = _view.LineChart.ActualHeight;
+            var actualWidth = _view.ScottPlotChart.ActualWidth;
+            var yScale = _view.ScottPlotChart.ActualHeight;
             var index = waveData.Length / (int)actualWidth;
 
             for (var i = 0; i < actualWidth; i++)
@@ -126,11 +122,6 @@ namespace CSharpDemo.ViewModels
         private void Worker_OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             _eventAggregator.GetEvent<WavePointEvent>().Publish(_lineData);
-
-            foreach (var point in _lineData)
-            {
-                WaveLineSeries.Add(point.Y);
-            }
         }
     }
 }

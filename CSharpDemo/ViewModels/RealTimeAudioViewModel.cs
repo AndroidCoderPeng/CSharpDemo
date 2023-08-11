@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using CSharpDemo.Events;
+using CSharpDemo.Model;
 using CSharpDemo.Utils;
-using CSharpDemo.Views;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 
 namespace CSharpDemo.ViewModels
@@ -14,7 +16,6 @@ namespace CSharpDemo.ViewModels
     {
         #region DelegateCommand
 
-        public DelegateCommand<RealTimeAudioView> WindowLoadedCommand { get; }
         public DelegateCommand ListenRedSensorCommand { get; }
         public DelegateCommand RedSensorMuteCommand { get; }
         public DelegateCommand ListenBlueSensorCommand { get; }
@@ -41,24 +42,27 @@ namespace CSharpDemo.ViewModels
 
         #endregion
 
-        private RealTimeAudioView _view;
         private bool _isStartRecording;
+        private bool _isRedSensor;
 
         private WaveFileWriter _waveFileWriter;
 
-        public RealTimeAudioViewModel()
+        public RealTimeAudioViewModel(IEventAggregator aggregator)
         {
             CurrentVolume = GetCurrentMicVolume();
 
-            WindowLoadedCommand = new DelegateCommand<RealTimeAudioView>(delegate(RealTimeAudioView view)
+            ListenRedSensorCommand = new DelegateCommand(delegate
             {
-                _view = view;
+                _isRedSensor = true;
+                RecordAudio();
             });
-
-            ListenRedSensorCommand = new DelegateCommand(RecordAudio);
             RedSensorMuteCommand = new DelegateCommand(SetCurrentMicVolume);
 
-            ListenBlueSensorCommand = new DelegateCommand(RecordAudio);
+            ListenBlueSensorCommand = new DelegateCommand(delegate
+            {
+                _isRedSensor = false;
+                RecordAudio();
+            });
             BlueSensorMuteCommand = new DelegateCommand(SetCurrentMicVolume);
 
             //音频监听
@@ -77,6 +81,14 @@ namespace CSharpDemo.ViewModels
                 {
                     sts[outIndex++] = BitConverter.ToInt16(buffer, i) / 32768f;
                 }
+
+                var audioWaveModel = new AudioWaveModel
+                {
+                    IsRedSensor = _isRedSensor,
+                    WavePoints = sts
+                };
+
+                aggregator.GetEvent<AudioWavePointEvent>().Publish(audioWaveModel);
             };
 
             LazyWaveIn.Value.RecordingStopped += delegate
