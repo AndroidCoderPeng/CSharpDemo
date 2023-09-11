@@ -5,8 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mk="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit"
-    d:DesignHeight="768"
-    d:DesignWidth="1366"
+    d:DesignHeight="720"
+    d:DesignWidth="1280"
     Background="White"
     mc:Ignorable="d">
 
@@ -24,8 +24,8 @@
 
             <Border
                 Grid.Column="0"
-                Width="560"
-                Height="420"
+                Width="540"
+                Height="405"
                 BorderBrush="LightGray"
                 BorderThickness="1">
                 <Image x:Name="CaptureImageView" Margin="1" />
@@ -33,8 +33,8 @@
 
             <Border
                 Grid.Column="1"
-                Width="560"
-                Height="420"
+                Width="540"
+                Height="405"
                 BorderBrush="LightGray"
                 BorderThickness="1">
                 <mk:VideoCaptureElement x:Name="DeviceCamera" Margin="1" />

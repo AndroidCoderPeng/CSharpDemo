@@ -8,11 +8,11 @@
     xmlns:prism="http://prismlibrary.com/"
     xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
     Title="CSharpDemo"
-    Width="1366"
-    Height="768"
+    Width="1280"
+    Height="720"
     d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
+    ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
-    WindowState="Maximized"
     mc:Ignorable="d">
 
     <b:Interaction.Triggers>

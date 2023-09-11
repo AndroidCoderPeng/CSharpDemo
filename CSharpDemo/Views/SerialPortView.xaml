@@ -8,14 +8,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
     d:DataContext="{d:DesignInstance Type=vm:SerialPortViewModel}"
-    d:DesignHeight="768"
-    d:DesignWidth="1366"
+    d:DesignHeight="720"
+    d:DesignWidth="1280"
     Background="White"
     mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="1" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
@@ -25,7 +25,7 @@
                 FontSize="18"
                 Text="串口调试助手" />
 
-            <StackPanel Orientation="Horizontal">
+            <DockPanel LastChildFill="True">
                 <TextBlock
                     Width="80"
                     Margin="15,0"
@@ -34,7 +34,6 @@
                     Text="端口：" />
 
                 <hc:ComboBox
-                    Width="100"
                     Height="30"
                     Margin="0,0,15,0"
                     IsEnabled="{Binding PortNameComboBoxIsEnabled}"
@@ -46,9 +45,9 @@
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
-            </StackPanel>
+            </DockPanel>
 
-            <StackPanel Orientation="Horizontal">
+            <DockPanel LastChildFill="True">
                 <TextBlock
                     Width="80"
                     Margin="15"
@@ -57,7 +56,6 @@
                     Text="波特率：" />
 
                 <hc:ComboBox
-                    Width="100"
                     Height="30"
                     Margin="0,0,15,0"
                     IsEnabled="{Binding BaudRateComboBoxIsEnabled}"
@@ -69,9 +67,9 @@
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
-            </StackPanel>
+            </DockPanel>
 
-            <StackPanel Orientation="Horizontal">
+            <DockPanel LastChildFill="True">
                 <TextBlock
                     Width="80"
                     Margin="15,0"
@@ -80,7 +78,6 @@
                     Text="数据位：" />
 
                 <hc:ComboBox
-                    Width="100"
                     Height="30"
                     Margin="0,0,15,0"
                     IsEnabled="{Binding DataBitComboBoxIsEnabled}"
@@ -92,9 +89,9 @@
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
-            </StackPanel>
+            </DockPanel>
 
-            <StackPanel Orientation="Horizontal">
+            <DockPanel LastChildFill="True">
                 <TextBlock
                     Width="80"
                     Margin="15"
@@ -103,7 +100,6 @@
                     Text="校验位：" />
 
                 <hc:ComboBox
-                    Width="100"
                     Height="30"
                     Margin="0,0,15,0"
                     IsEnabled="{Binding ParityComboBoxIsEnabled}"
@@ -115,9 +111,9 @@
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
-            </StackPanel>
+            </DockPanel>
 
-            <StackPanel Orientation="Horizontal">
+            <DockPanel LastChildFill="True">
                 <TextBlock
                     Width="80"
                     Margin="15,0"
@@ -126,7 +122,6 @@
                     Text="停止位：" />
 
                 <hc:ComboBox
-                    Width="100"
                     Height="30"
                     Margin="0,0,15,0"
                     IsEnabled="{Binding StopBitComboBoxIsEnabled}"
@@ -138,7 +133,7 @@
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
-            </StackPanel>
+            </DockPanel>
 
             <StackPanel Orientation="Horizontal">
                 <TextBlock
@@ -156,38 +151,33 @@
             </StackPanel>
 
             <Button
-                Width="195"
+                Width="185"
                 Height="35"
-                Margin="15,0,15,15"
                 Command="{Binding OpenSerialPortCommand}"
                 Content="打开串口"
                 FontSize="16"
                 Style="{StaticResource ButtonPrimary}" />
 
             <Button
-                Width="195"
+                Width="185"
                 Height="35"
-                Margin="15,0"
+                Margin="0,15"
+                HorizontalAlignment="Center"
                 Command="{Binding CloseSerialPortCommand}"
                 Content="关闭串口"
                 FontSize="16"
                 Style="{StaticResource ButtonPrimary}" />
 
             <Button
-                Width="195"
+                Width="185"
                 Height="35"
-                Margin="15"
+                HorizontalAlignment="Center"
                 Command="{Binding ClearMessageCommand}"
                 Content="清空数据"
-                FontSize="16"
-                Style="{StaticResource ButtonPrimary}" />
+                FontSize="16" />
         </StackPanel>
 
-        <hc:Divider
-            Grid.Column="1"
-            LineStroke="LightGray"
-            LineStrokeThickness="1"
-            Orientation="Vertical" />
+        <Grid Grid.Column="1" Background="LightGray" />
 
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>

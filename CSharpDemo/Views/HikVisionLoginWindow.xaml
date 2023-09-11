@@ -18,7 +18,7 @@
     mc:Ignorable="d">
 
     <Border
-        Margin="5"
+        Margin="2"
         Background="White"
         CornerRadius="10">
         <Border.Effect>

@@ -95,7 +95,7 @@ namespace CSharpDemo.ViewModels
 
                 //保存SDK日志 To save the SDK log
                 CHCNetSDK.NET_DVR_SetLogToFile(3, "E:\\SdkLog\\", true);
-                Growl.SuccessGlobal("HikVisionSdk Init Success");
+                Growl.Success("HikVisionSdk Init Success");
                 return true;
             }
             catch (DllNotFoundException)
@@ -132,12 +132,12 @@ namespace CSharpDemo.ViewModels
             var userId = CHCNetSDK.NET_DVR_Login_V40(ref structLogInfo, ref deviceInfo);
             if (userId < 0)
             {
-                Growl.ErrorGlobal($"NET_DVR_Login_V40 failed, error code= {CHCNetSDK.NET_DVR_GetLastError()}");
+                Growl.Error($"NET_DVR_Login_V40 failed, error code= {CHCNetSDK.NET_DVR_GetLastError()}");
                 return;
             }
 
             //登录成功
-            Growl.SuccessGlobal("Login Success!");
+            Growl.Success("Login Success!");
             new HikVisionWindow(userId).Show();
         }
     }

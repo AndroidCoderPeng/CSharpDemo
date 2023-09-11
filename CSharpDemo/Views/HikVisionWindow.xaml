@@ -4,10 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
     Title="HikVisionWindow"
-    Width="1366"
-    Height="768"
-    ResizeMode="NoResize"
-    WindowState="Maximized">
+    Width="1280"
+    Height="720"
+    ResizeMode="NoResize">
     <Grid>
         <WindowsFormsHost Name="RealPlayPictureBoxHost">
             <forms:PictureBox />
