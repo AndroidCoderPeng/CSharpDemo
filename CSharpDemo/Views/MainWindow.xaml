@@ -12,6 +12,7 @@
     Height="768"
     d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
     WindowStartupLocation="CenterScreen"
+    WindowState="Maximized"
     mc:Ignorable="d">
 
     <b:Interaction.Triggers>

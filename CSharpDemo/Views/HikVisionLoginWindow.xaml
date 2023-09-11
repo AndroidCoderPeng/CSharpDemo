@@ -53,7 +53,7 @@
                     x:Name="HostAddressTextBox"
                     hc:InfoElement.Placeholder="请输入设备IP"
                     hc:InfoElement.ShowClearButton="True"
-                    Text="192.168.10.101" />
+                    Text="192.168.1.65" />
             </DockPanel>
 
             <DockPanel
@@ -105,7 +105,7 @@
                     x:Name="DevicePasswordTextBox"
                     hc:InfoElement.Placeholder="请输入设备登录密码"
                     hc:InfoElement.ShowClearButton="True"
-                    Password="1234qwer" />
+                    Password="abcd123456" />
             </DockPanel>
 
             <Grid

@@ -109,19 +109,19 @@ namespace CSharpDemo.ViewModels
             var structLogInfo = new CHCNetSDK.NET_DVR_USER_LOGIN_INFO();
 
             //设备IP地址或者域名
-            var byIp = Encoding.Default.GetBytes(host);
+            var ip = Encoding.Default.GetBytes(host);
             structLogInfo.sDeviceAddress = new byte[129];
-            byIp.CopyTo(structLogInfo.sDeviceAddress, 0);
+            ip.CopyTo(structLogInfo.sDeviceAddress, 0);
 
             //设备用户名
-            var byUserName = Encoding.Default.GetBytes(name);
+            var userName = Encoding.Default.GetBytes(name);
             structLogInfo.sUserName = new byte[64];
-            byUserName.CopyTo(structLogInfo.sUserName, 0);
+            userName.CopyTo(structLogInfo.sUserName, 0);
 
             //设备密码
-            var byPassword = Encoding.Default.GetBytes(password);
+            var pwd = Encoding.Default.GetBytes(password);
             structLogInfo.sPassword = new byte[64];
-            byPassword.CopyTo(structLogInfo.sPassword, 0);
+            pwd.CopyTo(structLogInfo.sPassword, 0);
 
             structLogInfo.wPort = ushort.Parse(port); //设备服务端口号
             structLogInfo.bUseAsynLogin = false;

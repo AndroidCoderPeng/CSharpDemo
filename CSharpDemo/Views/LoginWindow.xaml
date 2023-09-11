@@ -9,6 +9,7 @@
     Height="768"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
+    WindowState="Maximized"
     WindowStyle="None"
     mc:Ignorable="d">
 

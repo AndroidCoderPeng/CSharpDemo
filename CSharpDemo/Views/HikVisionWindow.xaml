@@ -6,7 +6,8 @@
     Title="HikVisionWindow"
     Width="1366"
     Height="768"
-    ResizeMode="NoResize">
+    ResizeMode="NoResize"
+    WindowState="Maximized">
     <Grid>
         <WindowsFormsHost Name="RealPlayPictureBoxHost">
             <forms:PictureBox />
