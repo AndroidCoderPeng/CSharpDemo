@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -16,8 +15,6 @@ using Microsoft.Win32;
 using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
-using ScottPlot;
-using ScottPlot.Plottable;
 
 namespace CSharpDemo.ViewModels
 {
@@ -212,9 +209,9 @@ namespace CSharpDemo.ViewModels
         {
             Application.Current.Dispatcher.Invoke(delegate
             {
-                DialogHub.Get.ShowLoadingDialog(Window.GetWindow(_view), "样品数据计算中，请稍后...");
+                DialogHub.Get.ShowLoadingDialog(Window.GetWindow(_view), "数据计算中，请稍后...");
             });
-            Debug.WriteLine("DataAnalysisViewModel => 开始计算");
+            Console.WriteLine(@"DataAnalysisViewModel => 开始计算");
             var array = LazyCorrelator.Value.locating(11,
                 (MWNumericArray)_dataModel.LeftDeviceDataArray, (MWNumericArray)_dataModel.RightDeviceDataArray,
                 7500,
@@ -226,23 +223,33 @@ namespace CSharpDemo.ViewModels
                 1, -1,
                 -1, -1,
                 int.Parse("10"), int.Parse("300"));
-            Debug.WriteLine("DataAnalysisViewModel => 计算结束");
+            Console.WriteLine(@"DataAnalysisViewModel => 计算结束");
 
             Application.Current.Dispatcher.Invoke(delegate
             {
                 //渲染波形图
-                Debug.WriteLine("DataAnalysisView.xaml => 开始渲染波形图");
+                Console.WriteLine(@"DataAnalysisView.xaml => 开始渲染波形图");
+
+                //最大相关系数  
+                var maxCorrelationCoefficient = Convert.ToDouble(array[3].ToString());
+
                 var xDoubles = ((MWNumericArray)array[5]).GetArray();
                 var yDoubles = ((MWNumericArray)array[4]).GetArray();
-                //点如果较少，可以直接AddBar，但是超过一千个点，不能直接AddBar，否则Bar颜色会被边框覆盖从而呈现黑色
-                var scottPlot = _view.ScottPlotChart;
-                scottPlot.Plot.Add(new BarPlot(DataGen.Consecutive(xDoubles.Length), yDoubles, null, null)
-                {
-                    FillColor = Color.FromArgb(255, 49, 151, 36),
-                    BorderColor = Color.FromArgb(255, 49, 151, 36),
-                    BorderLineWidth = 0.1f
-                });
-                scottPlot.Refresh();
+
+                var timeDiff = Convert.ToDouble(array[6].ToString());
+                Console.WriteLine($@"时间差 => {timeDiff}");
+
+                var chart = _view.ScottplotView;
+                chart.Plot.SetAxisLimits(0, xDoubles.Last(), 0, maxCorrelationCoefficient);
+                chart.Plot.AddFill(
+                    xDoubles, yDoubles,
+                    color: Color.FromArgb(255, 49, 151, 36),
+                    lineWidth: 0.1f,
+                    lineColor: Color.FromArgb(255, 49, 151, 36)
+                );
+
+                chart.Plot.AxisAuto();
+                chart.Refresh();
 
                 DialogHub.Get.DismissLoadingDialog();
             });

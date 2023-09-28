@@ -22,6 +22,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="1.5*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -128,7 +129,16 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <WpfPlot x:Name="ScottPlotChart" IsEnabled="False" />
+            <WpfPlot x:Name="ScottplotView" />
         </Grid>
+
+        <CheckBox
+            x:Name="ShowCrossLineCheckBox"
+            Grid.Row="2"
+            Margin="0,10"
+            HorizontalAlignment="Center"
+            Content="显示十字标线"
+            FontSize="18"
+            IsChecked="True" />
     </Grid>
 </UserControl>
