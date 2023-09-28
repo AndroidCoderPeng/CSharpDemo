@@ -72,10 +72,7 @@
             BorderBrush="LightGray"
             BorderThickness="1"
             CornerRadius="5">
-            <WpfPlot
-                x:Name="ScottPlotChart"
-                Grid.Row="0"
-                IsEnabled="False" />
+            <WpfPlot x:Name="ScottplotView" IsEnabled="False" />
         </Border>
     </Grid>
 </UserControl>

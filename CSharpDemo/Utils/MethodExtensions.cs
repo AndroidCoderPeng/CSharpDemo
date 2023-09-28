@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Media.Imaging;
 using CSharpDemo.Tags;
 using MathWorks.MATLAB.NET.Arrays;
@@ -87,25 +88,6 @@ namespace CSharpDemo.Utils
         {
             var hex = BitConverter.ToString(bytes).Replace("-", "");
             return Convert.ToInt32(hex, 16);
-        }
-
-        private static readonly Dictionary<string, Uri> UriDictionary = new Dictionary<string, Uri>();
-
-        public static Uri CreateUri(this string xamlName)
-        {
-            if (xamlName.IsUriExist())
-            {
-                return UriDictionary[xamlName];
-            }
-
-            var uri = new Uri("/Pages/" + xamlName + ".xaml", UriKind.Relative);
-            UriDictionary[xamlName] = uri;
-            return uri;
-        }
-
-        private static bool IsUriExist(this string xamlName)
-        {
-            return UriDictionary.Any(keyValuePair => keyValuePair.Key.Equals(xamlName));
         }
 
         public static string ConvertBytes2String(this IEnumerable<byte> bytes)
@@ -267,6 +249,17 @@ namespace CSharpDemo.Utils
             }
 
             return outArray;
+        }
+
+        public static void SaveArrayToFile(this double[] array, string fileName)
+        {
+            var builder = new StringBuilder();
+            foreach (var d in array)
+            {
+                builder.Append(d).Append("\r\n");
+            }
+
+            File.AppendAllText(fileName, builder.ToString());
         }
     }
 }

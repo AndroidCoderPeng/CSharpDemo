@@ -14,10 +14,11 @@ namespace CSharpDemo.Views
             InitializeComponent();
 
             //去掉四周坐标轴
-            ScottPlotChart.Plot.XAxis.IsVisible = false;
-            ScottPlotChart.Plot.XAxis2.IsVisible = false;
-            ScottPlotChart.Plot.YAxis.IsVisible = false;
-            ScottPlotChart.Plot.YAxis2.IsVisible = false;
+            var scottPlot = ScottplotView.Plot;
+            //去掉网格线
+            scottPlot.Grid(false);
+            //去掉四周坐标轴
+            scottPlot.Frameless();
 
             eventAggregator.GetEvent<WavePointEvent>().Subscribe(delegate(List<Point> list)
             {
@@ -30,8 +31,8 @@ namespace CSharpDemo.Views
                     yDoubles.Add(wave.Y);
                 }
 
-                ScottPlotChart.Plot.AddSignalXY(xDoubles.ToArray(), yDoubles.ToArray(), Color.LimeGreen);
-                ScottPlotChart.Refresh();
+                ScottplotView.Plot.AddSignalXY(xDoubles.ToArray(), yDoubles.ToArray(), Color.LimeGreen);
+                ScottplotView.Refresh();
             });
         }
     }

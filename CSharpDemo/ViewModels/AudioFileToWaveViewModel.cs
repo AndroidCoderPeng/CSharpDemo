@@ -98,8 +98,8 @@ namespace CSharpDemo.ViewModels
             var waveData = new float[bytes.Length / sizeof(float)];
             Buffer.BlockCopy(bytes, 0, waveData, 0, bytes.Length);
 
-            var actualWidth = _view.ScottPlotChart.ActualWidth;
-            var yScale = _view.ScottPlotChart.ActualHeight;
+            var actualWidth = _view.ScottplotView.ActualWidth;
+            var yScale = _view.ScottplotView.ActualHeight;
             var index = waveData.Length / (int)actualWidth;
 
             for (var i = 0; i < actualWidth; i++)
