@@ -8,11 +8,11 @@ namespace CSharpDemo.Views
     {
         private readonly DispatcherTimer _timer = new DispatcherTimer
         {
-            Interval = new TimeSpan(0, 0, 1)
+            Interval = new TimeSpan(0, 0, 0, 0, 1)
         };
-        
-        private int _counterTime = 3;
-        
+
+        private int _counterTime = 200;
+
         public LoginWindow()
         {
             InitializeComponent();
@@ -23,6 +23,7 @@ namespace CSharpDemo.Views
             {
                 if (_counterTime > 0)
                 {
+                    LoadingProgress.Value++;
                     _counterTime--;
                 }
                 else
