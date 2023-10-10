@@ -23,6 +23,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -74,5 +75,44 @@
             CornerRadius="5">
             <WpfPlot x:Name="ScottplotView" IsEnabled="False" />
         </Border>
+
+        <Grid
+            x:Name="DrawingPanel"
+            Grid.Row="3"
+            Margin="0,10,0,0"
+            Background="Black">
+            <Path x:Name="CirclePath" Fill="Pink">
+                <Path.Data>
+                    <GeometryGroup>
+                        <PathGeometry>
+                            <PathFigure IsClosed="False" StartPoint="10,10">
+                                <PolyLineSegment>
+                                    <PolyLineSegment.Points>
+                                        <Point X="10" Y="10" />
+                                        <Point X="20" Y="10" />
+                                        <Point X="20" Y="20" />
+                                        <Point X="10" Y="20" />
+                                    </PolyLineSegment.Points>
+                                </PolyLineSegment>
+                            </PathFigure>
+                        </PathGeometry>
+                        <PathGeometry>
+                            <PathFigure IsClosed="True" StartPoint="30,10">
+                                <PolyLineSegment>
+                                    <PolyLineSegment.Points>
+                                        <Point X="30" Y="10" />
+                                        <Point X="40" Y="10" />
+                                        <Point X="40" Y="20" />
+                                        <Point X="30" Y="20" />
+                                    </PolyLineSegment.Points>
+                                </PolyLineSegment>
+                            </PathFigure>
+                        </PathGeometry>
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+            <Path x:Name="StripsPath" />
+            <Path x:Name="SampleWavePath" />
+        </Grid>
     </Grid>
 </UserControl>
