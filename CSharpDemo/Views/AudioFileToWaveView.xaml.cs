@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
@@ -61,6 +62,12 @@ namespace CSharpDemo.Views
 
             _dataTimer.Start();
             _drawingTimer.Start();
+
+            StripsWavePanel.MouseMove += delegate(object sender, MouseEventArgs args)
+            {
+                var position = args.GetPosition(StripsWavePanel);
+                Console.WriteLine($@"{position.X},{position.Y}");
+            };
         }
 
         /// <summary>
@@ -106,8 +113,8 @@ namespace CSharpDemo.Views
             DrawGradientStrips(
                 StripsPath, color1, color2,
                 _spectrumData, _spectrumData.Length,
-                StripsWavePanel.ActualWidth, 0, -StripsWavePanel.ActualHeight,
-                3, -StripsWavePanel.ActualHeight * 15
+                StripsPath.ActualWidth, 0, 144,
+                3, -StripsPath.ActualHeight * 100
             );
 
             // - 圆形波动图
@@ -115,7 +122,7 @@ namespace CSharpDemo.Views
                 _spectrumData, _capture.WaveFormat.SampleRate, 250
             );
             var bassScale = bassArea.Average() * 100;
-            var extraScale = Math.Min(StripsWavePanel.ActualHeight, StripsWavePanel.ActualHeight) / 6;
+            var extraScale = Math.Min(CircleWavePanel.ActualHeight, CircleWavePanel.ActualHeight) / 6;
             DrawCircleGradientStrips(CirclePath, color1, color2, _spectrumData, _spectrumData.Length,
                 CircleWavePanel.ActualHeight / 2, CircleWavePanel.ActualHeight / 2,
                 Math.Min(CircleWavePanel.ActualHeight, CircleWavePanel.ActualHeight) / 4 + extraScale * bassScale, 1,
@@ -135,18 +142,19 @@ namespace CSharpDemo.Views
         /// 绘制渐变的条形
         /// </summary>
         /// <param name="stripsPath">绘图目标</param>
-        /// <param name="down">下方颜色</param>
-        /// <param name="up">上方颜色</param>
+        /// <param name="bottomColor">下方颜色</param>
+        /// <param name="topColor">上方颜色</param>
         /// <param name="spectrumData">频谱数据</param>
         /// <param name="stripCount">条形的数量</param>
         /// <param name="drawingWidth">绘图的宽度</param>
         /// <param name="xOffset">绘图的起始 X 坐标</param>
         /// <param name="yOffset">绘图的起始 Y 坐标</param>
         /// <param name="spacing">条形与条形之间的间隔(像素)</param>
-        /// <param name="scale"></param>
-        private void DrawGradientStrips(Path stripsPath, Color down, Color up, double[] spectrumData, int stripCount,
-            double drawingWidth, double xOffset, double yOffset, double spacing, double scale)
+        /// <param name="scale">控制波形图波峰高度</param>
+        private void DrawGradientStrips(Path stripsPath, Color bottomColor, Color topColor, double[] spectrumData,
+            int stripCount, double drawingWidth, double xOffset, double yOffset, double spacing, double scale)
         {
+            //竖条宽度
             var stripWidth = (drawingWidth - spacing * stripCount) / stripCount;
             var points = new Point[stripCount];
 
@@ -157,8 +165,8 @@ namespace CSharpDemo.Views
                 points[i] = new Point(x, y);
             }
 
-            var upP = points.Min(v => v.Y < 0 ? yOffset + v.Y : yOffset);
-            var downP = points.Max(v => v.Y < 0 ? yOffset : yOffset + v.Y);
+            var upP = points.Min(p => p.Y < 0 ? yOffset + p.Y : yOffset);
+            var downP = points.Max(p => p.Y < 0 ? yOffset : yOffset + p.Y);
 
             if (downP < yOffset)
             {
@@ -166,7 +174,7 @@ namespace CSharpDemo.Views
             }
 
             var geometry = new GeometryGroup();
-            var brush = new LinearGradientBrush(down, up, new Point(0, downP), new Point(0, upP));
+            var brush = new LinearGradientBrush(bottomColor, topColor, new Point(0, downP), new Point(0, upP));
 
             for (var i = 0; i < stripCount; i++)
             {
@@ -180,10 +188,10 @@ namespace CSharpDemo.Views
 
                 var endPoints = new[]
                 {
-                    new Point(p.X, p.Y),
-                    new Point(p.X, p.Y + height),
-                    new Point(p.X + stripWidth, p.Y + height),
-                    new Point(p.X + stripWidth, p.Y)
+                    new Point(p.X, p.Y), //左下角
+                    new Point(p.X, p.Y + height), //左上角
+                    new Point(p.X + stripWidth, p.Y + height), //右上角
+                    new Point(p.X + stripWidth, p.Y) //右下角
                 };
 
                 var figure = new PathFigure
@@ -283,7 +291,7 @@ namespace CSharpDemo.Views
         /// <param name="drawingWidth"></param>
         /// <param name="xOffset"></param>
         /// <param name="yOffset"></param>
-        /// <param name="scale">控制波形图波峰和波谷高度和深度</param>
+        /// <param name="scale">控制波形图波峰高度和波谷深度</param>
         private void DrawCurve(Path wavePath, Brush brush, double[] spectrumData, int pointCount, double drawingWidth,
             double xOffset, double yOffset, double scale)
         {
