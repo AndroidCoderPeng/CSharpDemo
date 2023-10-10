@@ -17,6 +17,8 @@ namespace CSharpDemo.Views
             var scottPlot = ScottplotView.Plot;
             //去掉网格线
             scottPlot.Grid(false);
+            //XY轴坐标
+            scottPlot.XLabel("管段长度（m）");
             //十字准线
             var crosshair = scottPlot.AddCrosshair(0, 0);
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
-using System.Windows;
 using CSharpDemo.Events;
 using CSharpDemo.Views;
 using Microsoft.Win32;
@@ -54,7 +53,7 @@ namespace CSharpDemo.ViewModels
         private readonly IEventAggregator _eventAggregator;
         private readonly BackgroundWorker _backgroundWorker;
         private AudioFileReader _audioFileReader;
-        private readonly List<Point> _lineData = new List<Point>();
+        private readonly List<double> _lineData = new List<double>();
 
         public AudioFileToWaveViewModel(IEventAggregator eventAggregator)
         {
@@ -106,7 +105,7 @@ namespace CSharpDemo.ViewModels
             {
                 var y = yScale - waveData[i * index] * yScale;
 
-                _lineData.Add(new Point(i, y));
+                _lineData.Add(y);
 
                 var percent = (i + 1) / (float)actualWidth;
                 _backgroundWorker.ReportProgress((int)(percent * 100));

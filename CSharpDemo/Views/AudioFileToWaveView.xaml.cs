@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Windows.Controls;
 using CSharpDemo.Events;
 using Prism.Events;
-using Point = System.Windows.Point;
 
 namespace CSharpDemo.Views
 {
@@ -20,18 +19,11 @@ namespace CSharpDemo.Views
             //去掉四周坐标轴
             scottPlot.Frameless();
 
-            eventAggregator.GetEvent<WavePointEvent>().Subscribe(delegate(List<Point> list)
+            eventAggregator.GetEvent<WavePointEvent>().Subscribe(delegate(List<double> doubles)
             {
-                var xDoubles = new List<double>();
-                var yDoubles = new List<double>();
-
-                foreach (var wave in list)
-                {
-                    xDoubles.Add(wave.X);
-                    yDoubles.Add(wave.Y);
-                }
-
-                ScottplotView.Plot.AddSignalXY(xDoubles.ToArray(), yDoubles.ToArray(), Color.LimeGreen);
+                ScottplotView.Plot.AddSignal(
+                    doubles.ToArray(), color: Color.FromArgb(255, 49, 151, 36)
+                );
                 ScottplotView.Refresh();
             });
         }
