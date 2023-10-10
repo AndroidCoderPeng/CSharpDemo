@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using CSharpDemo.Events;
+using CSharpDemo.Service;
 using CSharpDemo.Utils;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
@@ -16,42 +15,48 @@ namespace CSharpDemo.Views
 {
     public partial class AudioFileToWaveView : UserControl
     {
-        public AudioFileToWaveView(IEventAggregator eventAggregator)
+        private readonly AudioVisualizer _visualizer; // 可视化
+        private readonly WasapiCapture _capture; // 音频捕获
+        private double[] _spectrumData; // 频谱数据
+        private int _colorIndex;
+        private double _rotation;
+        private readonly Color[] _allColors;
+
+        private readonly DispatcherTimer _dataTimer = new DispatcherTimer
+        {
+            Interval = new TimeSpan(0, 0, 0, 0, 30)
+        };
+
+        private readonly DispatcherTimer _drawingTimer = new DispatcherTimer
+        {
+            Interval = new TimeSpan(0, 0, 0, 0, 30)
+        };
+
+        public AudioFileToWaveView(IMainDataService dataService, IEventAggregator eventAggregator)
         {
             InitializeComponent();
 
-            //去掉四周坐标轴
-            var scottPlot = ScottplotView.Plot;
-            //去掉网格线
-            scottPlot.Grid(false);
-            //去掉四周坐标轴
-            scottPlot.Frameless();
-
-            eventAggregator.GetEvent<WavePointEvent>().Subscribe(delegate(List<double> doubles)
-            {
-                ScottplotView.Plot.AddSignal(
-                    doubles.ToArray(), color: System.Drawing.Color.FromArgb(255, 49, 151, 36)
-                );
-                ScottplotView.Refresh();
-            });
-
-            InitializeAudioVisualizer();
-        }
-
-        private void InitializeAudioVisualizer()
-        {
             _capture = new WasapiLoopbackCapture(); // 捕获电脑发出的声音
             _visualizer = new AudioVisualizer(256); // 新建一个可视化器, 并使用 256 个采样进行傅里叶变换
 
             _dataTimer.Tick += DataTimer_Tick;
             _drawingTimer.Tick += DrawingTimer_Tick;
 
-            _allColors = GetAllHsvColors(); // 获取所有的渐变颜色 (HSV 颜色)
+            _allColors = dataService.GetAllHsvColors(); // 获取所有的渐变颜色 (HSV 颜色)
 
-            _capture.WaveFormat =
-                WaveFormat.CreateIeeeFloatWaveFormat(8192, 1); // 指定捕获的格式, 单声道, 32位深度, IeeeFloat 编码, 8192采样率
-            _capture.DataAvailable += Capture_DataAvailable;
+            _capture.WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(7500, 1);
+            _capture.DataAvailable += delegate(object sender, WaveInEventArgs args)
+            {
+                var length = args.BytesRecorded / 4; // 采样的数量 (每一个采样是 4 字节)
+                var result = new double[length]; // 声明结果
 
+                for (var i = 0; i < length; i++)
+                {
+                    result[i] = BitConverter.ToSingle(args.Buffer, i * 4); // 取出采样值
+                }
+
+                _visualizer.PushSampleData(result); // 将新的采样存储到 可视化器 中
+            };
             _capture.StartRecording();
 
             _dataTimer.Start();
@@ -97,92 +102,33 @@ namespace CSharpDemo.Views
             var color1 = _allColors[_colorIndex % _allColors.Length];
             var color2 = _allColors[(_colorIndex + 200) % _allColors.Length];
 
+            // - 长条形波动图
+            DrawGradientStrips(
+                StripsPath, color1, color2,
+                _spectrumData, _spectrumData.Length,
+                StripsWavePanel.ActualWidth, 0, -StripsWavePanel.ActualHeight,
+                3, -StripsWavePanel.ActualHeight * 15
+            );
+
+            // - 圆形波动图
             var bassArea = AudioVisualizer.TakeSpectrumOfFrequency(
                 _spectrumData, _capture.WaveFormat.SampleRate, 250
             );
             var bassScale = bassArea.Average() * 100;
-            var extraScale = Math.Min(DrawingPanel.ActualHeight, DrawingPanel.ActualHeight) / 6;
-
-            // - 波形波动矩形
-            DrawGradientStrips(
-                StripsPath, color1, color2,
-                _spectrumData, _spectrumData.Length,
-                StripsPath.ActualWidth, 0, StripsPath.ActualHeight,
-                3, -StripsPath.ActualHeight * 10
-            );
-
+            var extraScale = Math.Min(StripsWavePanel.ActualHeight, StripsWavePanel.ActualHeight) / 6;
             DrawCircleGradientStrips(CirclePath, color1, color2, _spectrumData, _spectrumData.Length,
-                DrawingPanel.ActualHeight / 2, DrawingPanel.ActualHeight / 2,
-                Math.Min(DrawingPanel.ActualHeight, DrawingPanel.ActualHeight) / 4 + extraScale * bassScale, 1,
-                _rotation, DrawingPanel.ActualHeight / 6 * 10);
+                CircleWavePanel.ActualHeight / 2, CircleWavePanel.ActualHeight / 2,
+                Math.Min(CircleWavePanel.ActualHeight, CircleWavePanel.ActualHeight) / 4 + extraScale * bassScale, 1,
+                _rotation, CircleWavePanel.ActualHeight / 6 * 10);
 
             //Done - 波形曲线
             var curveBrush = new SolidColorBrush(color1);
             DrawCurve(
                 SampleWavePath, curveBrush,
                 _visualizer.SampleData, _visualizer.SampleData.Length,
-                DrawingPanel.ActualWidth, 0, DrawingPanel.ActualHeight / 2,
-                Math.Min(DrawingPanel.ActualHeight / 10, 100)
+                SampleWavePanel.ActualWidth, 0, SampleWavePanel.ActualHeight / 2,
+                Math.Min(SampleWavePanel.ActualHeight / 2, 200)
             );
-        }
-
-        /// <summary>
-        /// 获取 HSV 中所有的基础颜色 (饱和度和明度均为最大值)
-        /// </summary>
-        /// <returns>所有的 HSV 基础颜色(共 256 * 6 个, 并且随着索引增加, 颜色也会渐变)</returns>
-        private Color[] GetAllHsvColors()
-        {
-            var result = new Color[256 * 6];
-
-            for (var i = 0; i <= 255; i++)
-            {
-                result[i] = Color.FromArgb(255, 255, (byte)i, 0);
-            }
-
-            for (var i = 0; i <= 255; i++)
-            {
-                result[256 + i] = Color.FromArgb(255, (byte)(255 - i), 255, 0);
-            }
-
-            for (var i = 0; i <= 255; i++)
-            {
-                result[512 + i] = Color.FromArgb(255, 0, 255, (byte)i);
-            }
-
-            for (var i = 0; i <= 255; i++)
-            {
-                result[768 + i] = Color.FromArgb(255, 0, (byte)(255 - i), 255);
-            }
-
-            for (var i = 0; i <= 255; i++)
-            {
-                result[1024 + i] = Color.FromArgb(255, (byte)i, 0, 255);
-            }
-
-            for (var i = 0; i <= 255; i++)
-            {
-                result[1280 + i] = Color.FromArgb(255, 255, 0, (byte)(255 - i));
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Capture_DataAvailable(object sender, WaveInEventArgs e)
-        {
-            var length = e.BytesRecorded / 4; // 采样的数量 (每一个采样是 4 字节)
-            var result = new double[length]; // 声明结果
-
-            for (var i = 0; i < length; i++)
-            {
-                result[i] = BitConverter.ToSingle(e.Buffer, i * 4); // 取出采样值
-            }
-
-            _visualizer.PushSampleData(result); // 将新的采样存储到 可视化器 中
         }
 
         /// <summary>
@@ -337,7 +283,7 @@ namespace CSharpDemo.Views
         /// <param name="drawingWidth"></param>
         /// <param name="xOffset"></param>
         /// <param name="yOffset"></param>
-        /// <param name="scale"></param>
+        /// <param name="scale">控制波形图波峰和波谷高度和深度</param>
         private void DrawCurve(Path wavePath, Brush brush, double[] spectrumData, int pointCount, double drawingWidth,
             double xOffset, double yOffset, double scale)
         {
@@ -355,22 +301,5 @@ namespace CSharpDemo.Views
             wavePath.Data = new PathGeometry { Figures = { figure } };
             wavePath.Stroke = brush;
         }
-
-        private AudioVisualizer _visualizer; // 可视化
-        private WasapiCapture _capture; // 音频捕获
-        private double[] _spectrumData; // 频谱数据
-        private int _colorIndex;
-        private double _rotation;
-        private Color[] _allColors;
-
-        private readonly DispatcherTimer _dataTimer = new DispatcherTimer
-        {
-            Interval = new TimeSpan(0, 0, 0, 0, 30)
-        };
-
-        private readonly DispatcherTimer _drawingTimer = new DispatcherTimer
-        {
-            Interval = new TimeSpan(0, 0, 0, 0, 30)
-        };
     }
 }

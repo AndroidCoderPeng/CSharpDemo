@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading;
-using CSharpDemo.Events;
-using CSharpDemo.Views;
-using Microsoft.Win32;
-using NAudio.Wave;
+﻿using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -28,49 +21,16 @@ namespace CSharpDemo.ViewModels
             }
         }
 
-        private int _progressBarValue;
-
-        public int ProgressBarValue
-        {
-            get => _progressBarValue;
-            set
-            {
-                _progressBarValue = value;
-                RaisePropertyChanged();
-            }
-        }
-
         #endregion
 
         #region DelegateCommand
 
-        public DelegateCommand<AudioFileToWaveView> WindowLoadedCommand { get; }
         public DelegateCommand ImportAudioFileCommand { get; }
 
         #endregion
 
-        private AudioFileToWaveView _view;
-        private readonly IEventAggregator _eventAggregator;
-        private readonly BackgroundWorker _backgroundWorker;
-        private AudioFileReader _audioFileReader;
-        private readonly List<double> _lineData = new List<double>();
-
         public AudioFileToWaveViewModel(IEventAggregator eventAggregator)
         {
-            _eventAggregator = eventAggregator;
-
-            _backgroundWorker = new BackgroundWorker();
-            _backgroundWorker.WorkerReportsProgress = true;
-            _backgroundWorker.WorkerSupportsCancellation = true;
-            _backgroundWorker.DoWork += Worker_OnDoWork;
-            _backgroundWorker.ProgressChanged += Worker_OnProgressChanged;
-            _backgroundWorker.RunWorkerCompleted += Worker_OnRunWorkerCompleted;
-
-            WindowLoadedCommand = new DelegateCommand<AudioFileToWaveView>(delegate(AudioFileToWaveView view)
-            {
-                _view = view;
-            });
-
             ImportAudioFileCommand = new DelegateCommand(delegate
             {
                 var fileDialog = new OpenFileDialog
@@ -83,44 +43,9 @@ namespace CSharpDemo.ViewModels
                 {
                     AudioFilePath = fileDialog.FileName;
 
-                    //开始处理数据
-                    _backgroundWorker.RunWorkerAsync();
+                    //开始播放音频
                 }
             });
-        }
-
-        private void Worker_OnDoWork(object sender, DoWorkEventArgs e)
-        {
-            _audioFileReader = new AudioFileReader(_audioFilePath);
-            var bytes = new byte[_audioFileReader.Length];
-            _audioFileReader.Read(bytes, 0, bytes.Length);
-            var waveData = new float[bytes.Length / sizeof(float)];
-            Buffer.BlockCopy(bytes, 0, waveData, 0, bytes.Length);
-
-            var actualWidth = _view.ScottplotView.ActualWidth;
-            var yScale = _view.ScottplotView.ActualHeight;
-            var index = waveData.Length / (int)actualWidth;
-
-            for (var i = 0; i < actualWidth; i++)
-            {
-                var y = yScale - waveData[i * index] * yScale;
-
-                _lineData.Add(y);
-
-                var percent = (i + 1) / (float)actualWidth;
-                _backgroundWorker.ReportProgress((int)(percent * 100));
-                Thread.Sleep(1);
-            }
-        }
-
-        private void Worker_OnProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            ProgressBarValue = e.ProgressPercentage;
-        }
-
-        private void Worker_OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            _eventAggregator.GetEvent<WavePointEvent>().Publish(_lineData);
         }
     }
 }

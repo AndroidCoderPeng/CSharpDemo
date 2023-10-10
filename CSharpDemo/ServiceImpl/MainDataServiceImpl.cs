@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Media;
 using CSharpDemo.Service;
 
 namespace CSharpDemo.ServiceImpl
@@ -17,6 +18,43 @@ namespace CSharpDemo.ServiceImpl
             }
 
             return itemModels;
+        }
+
+        public Color[] GetAllHsvColors()
+        {
+            var result = new Color[256 * 6];
+
+            for (var i = 0; i <= 255; i++)
+            {
+                result[i] = Color.FromArgb(255, 255, (byte)i, 0);
+            }
+
+            for (var i = 0; i <= 255; i++)
+            {
+                result[256 + i] = Color.FromArgb(255, (byte)(255 - i), 255, 0);
+            }
+
+            for (var i = 0; i <= 255; i++)
+            {
+                result[512 + i] = Color.FromArgb(255, 0, 255, (byte)i);
+            }
+
+            for (var i = 0; i <= 255; i++)
+            {
+                result[768 + i] = Color.FromArgb(255, 0, (byte)(255 - i), 255);
+            }
+
+            for (var i = 0; i <= 255; i++)
+            {
+                result[1024 + i] = Color.FromArgb(255, (byte)i, 0, 255);
+            }
+
+            for (var i = 0; i <= 255; i++)
+            {
+                result[1280 + i] = Color.FromArgb(255, 255, 0, (byte)(255 - i));
+            }
+
+            return result;
         }
     }
 }

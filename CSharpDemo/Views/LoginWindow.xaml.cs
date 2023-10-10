@@ -11,7 +11,7 @@ namespace CSharpDemo.Views
             Interval = new TimeSpan(0, 0, 0, 0, 1)
         };
 
-        private int _counterTime = 200;
+        private int _counterTime = 100;
 
         public LoginWindow()
         {
