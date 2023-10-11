@@ -130,7 +130,8 @@ namespace CSharpDemo.Views
                 _spectrumData, _spectrumData.Length,
                 CirclePath.ActualWidth / 2, CirclePath.ActualHeight / 2,
                 Math.Min(CirclePath.ActualWidth, CirclePath.ActualHeight) / 3 + extraScale * bassScale,
-                1, _rotation, CirclePath.ActualHeight * 3);
+                1, _rotation, CirclePath.ActualHeight * 3
+            );
 
             //波形曲线
             var curveBrush = new SolidColorBrush(color1);
@@ -142,9 +143,11 @@ namespace CSharpDemo.Views
             );
 
             //四周边框
-            DrawGradientBorder(TopBorder, BottomBorder, LeftBorder, RightBorder,
+            DrawGradientBorder(
+                TopBorder, BottomBorder, LeftBorder, RightBorder,
                 Color.FromArgb(0, color1.R, color1.G, color1.B), color2,
-                SampleWavePanel.ActualWidth / 3, bassScale);
+                SampleWavePanel.ActualWidth / 3, bassScale
+            );
         }
 
         /// <summary>
@@ -160,8 +163,10 @@ namespace CSharpDemo.Views
         /// <param name="yOffset">绘图的起始 Y 坐标</param>
         /// <param name="spacing">条形与条形之间的间隔(像素)</param>
         /// <param name="scale">控制波形图波峰高度</param>
-        private void DrawGradientStrips(Path stripsPath, Color bottomColor, Color topColor, double[] spectrumData,
-            int stripCount, double drawingWidth, double xOffset, double yOffset, double spacing, double scale)
+        private void DrawGradientStrips(
+            Path stripsPath, Color bottomColor, Color topColor, double[] spectrumData,
+            int stripCount, double drawingWidth, double xOffset, double yOffset, double spacing, double scale
+        )
         {
             //竖条宽度
             var stripWidth = (drawingWidth - spacing * stripCount) / stripCount;
@@ -307,8 +312,10 @@ namespace CSharpDemo.Views
         /// <param name="xOffset"></param>
         /// <param name="yOffset"></param>
         /// <param name="scale">控制波形图波峰高度和波谷深度</param>
-        private void DrawCurve(Path wavePath, Brush brush, double[] spectrumData, int pointCount, double drawingWidth,
-            double xOffset, double yOffset, double scale)
+        private void DrawCurve(
+            Path wavePath, Brush brush, double[] spectrumData, int pointCount, double drawingWidth,
+            double xOffset, double yOffset, double scale
+        )
         {
             var pointArray = new Point[pointCount];
             for (var i = 0; i < pointCount; i++)
@@ -340,8 +347,10 @@ namespace CSharpDemo.Views
         /// <param name="outer"></param>
         /// <param name="width">画图宽度</param>
         /// <param name="bassScale">高低音转化比例</param>
-        private void DrawGradientBorder(Rectangle topBorder, Rectangle bottomBorder, Rectangle leftBorder,
-            Rectangle rightBorder, Color inner, Color outer, double width, double bassScale)
+        private void DrawGradientBorder(
+            Rectangle topBorder, Rectangle bottomBorder, Rectangle leftBorder,
+            Rectangle rightBorder, Color inner, Color outer, double width, double bassScale
+        )
         {
             //边框粗细根据音频高低音变化
             var thickness = (int)(width * bassScale);
