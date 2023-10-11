@@ -63,7 +63,7 @@ namespace CSharpDemo.ViewModels
                         region.RequestNavigate("DataAnalysisView");
                         break;
                     case 4:
-                        region.RequestNavigate("AudioFileToWaveView");
+                        region.RequestNavigate("AudioWaveView");
                         break;
                     case 5:
                         //初始化海康网络摄像头

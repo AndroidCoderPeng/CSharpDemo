@@ -9,11 +9,10 @@ using CSharpDemo.Service;
 using CSharpDemo.Utils;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
-using Prism.Events;
 
 namespace CSharpDemo.Views
 {
-    public partial class AudioFileToWaveView : UserControl
+    public partial class AudioWaveView : UserControl
     {
         private readonly AudioVisualizer _visualizer; // 可视化
         private readonly WasapiCapture _capture; // 音频捕获
@@ -32,20 +31,17 @@ namespace CSharpDemo.Views
             Interval = new TimeSpan(0, 0, 0, 0, 30)
         };
 
-        public AudioFileToWaveView(IMainDataService dataService, IEventAggregator eventAggregator)
+        public AudioWaveView(IMainDataService dataService)
         {
             InitializeComponent();
 
             _capture = new WasapiLoopbackCapture(); // 捕获电脑发出的声音
             _visualizer = new AudioVisualizer(128);
 
-            _dataTimer.Tick += DataTimer_Tick;
-            _drawingTimer.Tick += DrawingTimer_Tick;
-
             _allColors = dataService.GetAllHsvColors(); // 获取所有的渐变颜色 (HSV 颜色)
 
             _capture.WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(7500, 1);
-            _capture.DataAvailable += delegate(object sender, WaveInEventArgs args)
+            _capture.DataAvailable += delegate(object o, WaveInEventArgs args)
             {
                 var length = args.BytesRecorded / 4; // 采样的数量 (每一个采样是 4 字节)
                 var result = new double[length]; // 声明结果
@@ -57,10 +53,23 @@ namespace CSharpDemo.Views
 
                 _visualizer.PushSampleData(result); // 将新的采样存储到 可视化器 中
             };
-            _capture.StartRecording();
 
+            _dataTimer.Tick += DataTimer_Tick;
+            _drawingTimer.Tick += DrawingTimer_Tick;
+        }
+
+        private void AudioWaveView_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            _capture.StartRecording();
             _dataTimer.Start();
             _drawingTimer.Start();
+        }
+
+        private void AudioWaveView_OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            _drawingTimer.Stop();
+            _dataTimer.Stop();
+            _capture.StopRecording();
         }
 
         /// <summary>
