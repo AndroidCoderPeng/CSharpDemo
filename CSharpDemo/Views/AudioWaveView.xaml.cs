@@ -123,12 +123,14 @@ namespace CSharpDemo.Views
             var bassArea = AudioVisualizer.TakeSpectrumOfFrequency(
                 _spectrumData, _capture.WaveFormat.SampleRate, 250
             );
-            var bassScale = bassArea.Average() * 100;
-            var extraScale = Math.Min(CircleWavePanel.ActualHeight, CircleWavePanel.ActualHeight) / 6;
-            DrawCircleGradientStrips(CirclePath, color1, color2, _spectrumData, _spectrumData.Length,
-                CircleWavePanel.ActualHeight / 2, CircleWavePanel.ActualHeight / 2,
-                Math.Min(CircleWavePanel.ActualHeight, CircleWavePanel.ActualHeight) / 4 + extraScale * bassScale, 1,
-                _rotation, CircleWavePanel.ActualHeight / 6 * 10);
+            var bassScale = bassArea.Average() * 100; //低音区
+            var extraScale = Math.Min(CircleWavePanel.ActualWidth, CircleWavePanel.ActualHeight) / 6; //高音区
+            DrawCircleGradientStrips(
+                CirclePath, color1, color2,
+                _spectrumData, _spectrumData.Length,
+                CircleWavePanel.ActualWidth / 2, CircleWavePanel.ActualHeight / 2,
+                Math.Min(CircleWavePanel.ActualWidth, CircleWavePanel.ActualHeight) / 3 + extraScale * bassScale,
+                1, _rotation, CircleWavePanel.ActualHeight / 5 * 10);
 
             //Done - 波形曲线
             var curveBrush = new SolidColorBrush(color1);
@@ -222,46 +224,50 @@ namespace CSharpDemo.Views
         /// <param name="stripCount"></param>
         /// <param name="xOffset"></param>
         /// <param name="yOffset"></param>
-        /// <param name="radius"></param>
-        /// <param name="spacing"></param>
-        /// <param name="rotation"></param>
-        /// <param name="scale"></param>
+        /// <param name="radius">圆环半径</param>
+        /// <param name="spacing">圆环上面小竖条间距</param>
+        /// <param name="rotation">圆环旋转角度</param>
+        /// <param name="scale">控制圆环上面小竖条高度</param>
         private void DrawCircleGradientStrips(
             Path wavePath, Color inner, Color outer, double[] spectrumData, int stripCount,
             double xOffset, double yOffset, double radius, double spacing, double rotation, double scale
         )
         {
-            var rotationAngle = Math.PI / 180 * rotation;
-            var blockWidth = Math.PI * 2 / stripCount; // angle
-            var stripWidth = blockWidth - Math.PI / 180 * spacing; // angle
-            var points = new Point[stripCount];
+            //旋转角度转弧度
+            var rotationRadian = Math.PI / 180 * rotation;
+
+            //等分圆周，每个（竖条+空白）对应的弧度
+            var blockRadian = Math.PI * 2 / stripCount;
+
+            //每个竖条宽度对应的弧度
+            var stripRadian = blockRadian - Math.PI / 180 * spacing;
+
+            var pointArray = new Point[stripCount];
 
             for (var i = 0; i < stripCount; i++)
             {
-                var x = blockWidth * i + rotationAngle; // angle
+                var x = blockRadian * i + rotationRadian; // angle
                 var y = spectrumData[i * spectrumData.Length / stripCount] * scale; // height
-                points[i] = new Point(x, y);
+                pointArray[i] = new Point(x, y);
             }
 
-            var maxHeight = points.Max(v => v.Y);
-            var outerRadius = radius + maxHeight;
+            var maxHeight = pointArray.Max(point => point.Y);
 
             var geometry = new PathGeometry();
 
-            for (var i = 0; i < stripCount; i++)
+            foreach (var point in pointArray)
             {
-                var p = points[i];
-                var sinStart = Math.Sin(p.X);
-                var sinEnd = Math.Sin(p.X + stripWidth);
-                var cosStart = Math.Cos(p.X);
-                var cosEnd = Math.Cos(p.X + stripWidth);
+                var sinStart = Math.Sin(point.X);
+                var sinEnd = Math.Sin(point.X + stripRadian);
+                var cosStart = Math.Cos(point.X);
+                var cosEnd = Math.Cos(point.X + stripRadian);
 
                 var polygon = new[]
                 {
                     new Point(cosStart * radius + xOffset, sinStart * radius + yOffset),
                     new Point(cosEnd * radius + xOffset, sinEnd * radius + yOffset),
-                    new Point(cosEnd * (radius + p.Y) + xOffset, sinEnd * (radius + p.Y) + yOffset),
-                    new Point(cosStart * (radius + p.Y) + xOffset, sinStart * (radius + p.Y) + yOffset)
+                    new Point(cosEnd * (radius + point.Y) + xOffset, sinEnd * (radius + point.Y) + yOffset),
+                    new Point(cosStart * (radius + point.Y) + xOffset, sinStart * (radius + point.Y) + yOffset)
                 };
 
                 var figure = new PathFigure
@@ -273,16 +279,18 @@ namespace CSharpDemo.Views
                 geometry.Figures.Add(figure);
             }
 
+            wavePath.Data = geometry;
+
             var brush = new LinearGradientBrush(new GradientStopCollection
                 {
                     new GradientStop(Colors.Transparent, 0),
                     new GradientStop(inner, radius / (radius + maxHeight)),
                     new GradientStop(outer, 1)
                 },
-                new Point(xOffset, yOffset),
-                new Point(xOffset, yOffset + radius + maxHeight)
+                new Point(xOffset, 0),
+                new Point(xOffset, 1)
             );
-            wavePath.Data = geometry;
+
             wavePath.Fill = brush;
         }
 
@@ -316,7 +324,7 @@ namespace CSharpDemo.Views
         }
 
         /// <summary>
-        /// h话四周渐变边框
+        /// 画四周渐变边框
         /// </summary>
         /// <param name="topBorder"></param>
         /// <param name="bottomBorder"></param>

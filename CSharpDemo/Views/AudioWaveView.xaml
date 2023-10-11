@@ -5,9 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="768"
-    Unloaded="AudioWaveView_OnUnloaded"
-    Loaded="AudioWaveView_OnLoaded"
     d:DesignWidth="1366"
+    Loaded="AudioWaveView_OnLoaded"
+    Unloaded="AudioWaveView_OnUnloaded"
     mc:Ignorable="d">
 
     <Grid Margin="10">
@@ -20,36 +20,7 @@
             x:Name="CircleWavePanel"
             Grid.Row="0"
             Background="Black">
-            <Path x:Name="CirclePath" Fill="Pink">
-                <Path.Data>
-                    <GeometryGroup>
-                        <PathGeometry>
-                            <PathFigure IsClosed="False" StartPoint="10,10">
-                                <PolyLineSegment>
-                                    <PolyLineSegment.Points>
-                                        <Point X="10" Y="10" />
-                                        <Point X="20" Y="10" />
-                                        <Point X="20" Y="20" />
-                                        <Point X="10" Y="20" />
-                                    </PolyLineSegment.Points>
-                                </PolyLineSegment>
-                            </PathFigure>
-                        </PathGeometry>
-                        <PathGeometry>
-                            <PathFigure IsClosed="True" StartPoint="30,10">
-                                <PolyLineSegment>
-                                    <PolyLineSegment.Points>
-                                        <Point X="30" Y="10" />
-                                        <Point X="40" Y="10" />
-                                        <Point X="40" Y="20" />
-                                        <Point X="30" Y="20" />
-                                    </PolyLineSegment.Points>
-                                </PolyLineSegment>
-                            </PathFigure>
-                        </PathGeometry>
-                    </GeometryGroup>
-                </Path.Data>
-            </Path>
+            <Path x:Name="CirclePath" />
         </Grid>
 
         <UniformGrid
