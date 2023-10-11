@@ -111,40 +111,40 @@ namespace CSharpDemo.Views
             var color1 = _allColors[_colorIndex % _allColors.Length];
             var color2 = _allColors[(_colorIndex + 200) % _allColors.Length];
 
-            //Done - 长条形波动图
+            //长条形波动图
             DrawGradientStrips(
                 StripsPath, color1, color2,
                 _spectrumData, _spectrumData.Length,
                 StripsPath.ActualWidth, 0, StripsPath.ActualHeight,
-                2, -StripsPath.ActualHeight * 20
+                2, -StripsPath.ActualHeight * 25
             );
 
-            // - 圆形波动图
+            //圆形波动图
             var bassArea = AudioVisualizer.TakeSpectrumOfFrequency(
                 _spectrumData, _capture.WaveFormat.SampleRate, 250
             );
             var bassScale = bassArea.Average() * 100; //低音区
-            var extraScale = Math.Min(CircleWavePanel.ActualWidth, CircleWavePanel.ActualHeight) / 6; //高音区
+            var extraScale = Math.Min(CirclePath.ActualWidth, CirclePath.ActualHeight) / 6; //高音区
             DrawCircleGradientStrips(
                 CirclePath, color1, color2,
                 _spectrumData, _spectrumData.Length,
-                CircleWavePanel.ActualWidth / 2, CircleWavePanel.ActualHeight / 2,
-                Math.Min(CircleWavePanel.ActualWidth, CircleWavePanel.ActualHeight) / 3 + extraScale * bassScale,
-                1, _rotation, CircleWavePanel.ActualHeight / 5 * 10);
+                CirclePath.ActualWidth / 2, CirclePath.ActualHeight / 2,
+                Math.Min(CirclePath.ActualWidth, CirclePath.ActualHeight) / 3 + extraScale * bassScale,
+                1, _rotation, CirclePath.ActualHeight * 3);
 
-            //Done - 波形曲线
+            //波形曲线
             var curveBrush = new SolidColorBrush(color1);
             DrawCurve(
                 SampleWavePath, curveBrush,
                 _visualizer.SampleData, _visualizer.SampleData.Length,
                 SampleWavePanel.ActualWidth, 0, SampleWavePanel.ActualHeight / 2,
-                Math.Min(SampleWavePanel.ActualHeight / 2, 200)
+                Math.Min(SampleWavePanel.ActualHeight / 2, 50)
             );
 
-            //Done - 四周边框
+            //四周边框
             DrawGradientBorder(TopBorder, BottomBorder, LeftBorder, RightBorder,
                 Color.FromArgb(0, color1.R, color1.G, color1.B), color2,
-                SampleWavePanel.ActualWidth / 2, bassScale);
+                SampleWavePanel.ActualWidth / 3, bassScale);
         }
 
         /// <summary>
@@ -239,8 +239,11 @@ namespace CSharpDemo.Views
             //等分圆周，每个（竖条+空白）对应的弧度
             var blockRadian = Math.PI * 2 / stripCount;
 
-            //每个竖条宽度对应的弧度
-            var stripRadian = blockRadian - Math.PI / 180 * spacing;
+            //每个空隙对应的弧度
+            var spacingRadian = Math.PI / 180 * spacing;
+
+            //每个竖条对应的弧度
+            var stripRadian = blockRadian - spacingRadian;
 
             var pointArray = new Point[stripCount];
 
@@ -251,10 +254,7 @@ namespace CSharpDemo.Views
                 pointArray[i] = new Point(x, y);
             }
 
-            var maxHeight = pointArray.Max(point => point.Y);
-
             var geometry = new PathGeometry();
-
             foreach (var point in pointArray)
             {
                 var sinStart = Math.Sin(point.X);
@@ -272,6 +272,7 @@ namespace CSharpDemo.Views
 
                 var figure = new PathFigure
                 {
+                    StartPoint = polygon[0],
                     IsFilled = true
                 };
 
@@ -281,6 +282,7 @@ namespace CSharpDemo.Views
 
             wavePath.Data = geometry;
 
+            var maxHeight = pointArray.Max(point => point.Y);
             var brush = new LinearGradientBrush(new GradientStopCollection
                 {
                     new GradientStop(Colors.Transparent, 0),
@@ -308,18 +310,22 @@ namespace CSharpDemo.Views
         private void DrawCurve(Path wavePath, Brush brush, double[] spectrumData, int pointCount, double drawingWidth,
             double xOffset, double yOffset, double scale)
         {
-            var points = new Point[pointCount];
+            var pointArray = new Point[pointCount];
             for (var i = 0; i < pointCount; i++)
             {
                 var x = i * drawingWidth / pointCount + xOffset;
                 var y = spectrumData[i * spectrumData.Length / pointCount] * scale + yOffset;
-                points[i] = new Point(x, y);
+                pointArray[i] = new Point(x, y);
             }
 
-            var figure = new PathFigure();
-            figure.Segments.Add(new PolyLineSegment(points, true));
+            var figure = new PathFigure
+            {
+                StartPoint = pointArray[0]
+            };
+            figure.Segments.Add(new PolyLineSegment(pointArray, true));
 
             wavePath.Data = new PathGeometry { Figures = { figure } };
+            wavePath.StrokeThickness = 2;
             wavePath.Stroke = brush;
         }
 

@@ -16,10 +16,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid
-            x:Name="CircleWavePanel"
-            Grid.Row="0"
-            Background="Black">
+        <Grid Grid.Row="0" Background="Black">
             <Path x:Name="CirclePath" />
         </Grid>
 
