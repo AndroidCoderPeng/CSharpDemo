@@ -237,7 +237,7 @@ namespace CSharpDemo.Views
             var maxHeight = points.Max(v => v.Y);
             var outerRadius = radius + maxHeight;
 
-            var geo = new PathGeometry();
+            var geometry = new PathGeometry();
 
             for (var i = 0; i < stripCount; i++)
             {
@@ -249,31 +249,31 @@ namespace CSharpDemo.Views
 
                 var polygon = new[]
                 {
-                    new Point((cosStart * radius + xOffset), (sinStart * radius + yOffset)),
-                    new Point((cosEnd * radius + xOffset), (sinEnd * radius + yOffset)),
-                    new Point((cosEnd * (radius + p.Y) + xOffset), (sinEnd * (radius + p.Y) + yOffset)),
-                    new Point((cosStart * (radius + p.Y) + xOffset), (sinStart * (radius + p.Y) + yOffset))
+                    new Point(cosStart * radius + xOffset, sinStart * radius + yOffset),
+                    new Point(cosEnd * radius + xOffset, sinEnd * radius + yOffset),
+                    new Point(cosEnd * (radius + p.Y) + xOffset, sinEnd * (radius + p.Y) + yOffset),
+                    new Point(cosStart * (radius + p.Y) + xOffset, sinStart * (radius + p.Y) + yOffset)
                 };
 
-                var fig = new PathFigure
+                var figure = new PathFigure
                 {
                     IsFilled = true
                 };
 
-                fig.Segments.Add(new PolyLineSegment(polygon, false));
-                geo.Figures.Add(fig);
+                figure.Segments.Add(new PolyLineSegment(polygon, false));
+                geometry.Figures.Add(figure);
             }
 
-            var brush = new LinearGradientBrush(
-                new GradientStopCollection
+            var brush = new LinearGradientBrush(new GradientStopCollection
                 {
                     new GradientStop(Colors.Transparent, 0),
                     new GradientStop(inner, radius / (radius + maxHeight)),
                     new GradientStop(outer, 1)
                 },
                 new Point(xOffset, yOffset),
-                new Point(xOffset, yOffset + radius + maxHeight));
-            wavePath.Data = geo;
+                new Point(xOffset, yOffset + radius + maxHeight)
+            );
+            wavePath.Data = geometry;
             wavePath.Fill = brush;
         }
 

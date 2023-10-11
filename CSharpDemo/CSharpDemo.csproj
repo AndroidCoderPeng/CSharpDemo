@@ -176,7 +176,6 @@
     <Compile Include="Utils\DialogHub.cs" />
     <Compile Include="Utils\DirectoryManager.cs" />
     <Compile Include="ViewModels\AudioFileToWaveViewModel.cs" />
-    <Compile Include="ViewModels\RealTimeAudioViewModel.cs" />
     <Compile Include="Views\AudioFileToWaveView.xaml.cs">
       <DependentUpon>AudioFileToWaveView.xaml</DependentUpon>
     </Compile>
@@ -193,9 +192,6 @@
     </Compile>
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\RealTimeAudioView.xaml.cs">
-      <DependentUpon>RealTimeAudioView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SerialPortView.xaml.cs">
       <DependentUpon>SerialPortView.xaml</DependentUpon>
@@ -274,7 +270,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\LoginWindow.xaml" />
-    <Page Include="Views\RealTimeAudioView.xaml" />
     <Page Include="Views\SerialPortView.xaml">
       <SubType>Designer</SubType>
     </Page>
