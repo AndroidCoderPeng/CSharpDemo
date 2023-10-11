@@ -38,7 +38,7 @@ namespace CSharpDemo.Views
             InitializeComponent();
 
             _capture = new WasapiLoopbackCapture(); // 捕获电脑发出的声音
-            _visualizer = new AudioVisualizer(256);
+            _visualizer = new AudioVisualizer(128);
 
             _dataTimer.Tick += DataTimer_Tick;
             _drawingTimer.Tick += DrawingTimer_Tick;
@@ -161,29 +161,21 @@ namespace CSharpDemo.Views
         {
             //竖条宽度
             var stripWidth = (drawingWidth - spacing * stripCount) / stripCount;
-            var points = new Point[stripCount];
+            var pointArray = new Point[stripCount];
 
             for (var i = 0; i < stripCount; i++)
             {
                 var x = stripWidth * i + spacing * i + xOffset;
                 var y = spectrumData[i * spectrumData.Length / stripCount] * scale; // height
-                points[i] = new Point(x, y);
+                //给所有频谱位置赋值
+                pointArray[i] = new Point(x, y);
             }
 
-            var upP = points.Min(p => p.Y < 0 ? yOffset + p.Y : yOffset);
-            var downP = points.Max(p => p.Y < 0 ? yOffset : yOffset + p.Y);
-
-            if (downP < yOffset)
-            {
-                downP = yOffset;
-            }
-
+            //生成一系列频谱竖条
             var geometry = new GeometryGroup();
-            var brush = new LinearGradientBrush(bottomColor, topColor, new Point(0, downP), new Point(0, upP));
-
             for (var i = 0; i < stripCount; i++)
             {
-                var p = points[i];
+                var p = pointArray[i];
                 var height = p.Y;
 
                 if (height < 0)
@@ -209,7 +201,12 @@ namespace CSharpDemo.Views
             }
 
             stripsPath.Data = geometry;
-            stripsPath.Fill = brush;
+
+            //设置频谱竖条的渐变色
+            var linearGradientBrush = new LinearGradientBrush(
+                bottomColor, topColor, new Point(0, 0), new Point(0, 1)
+            );
+            stripsPath.Fill = linearGradientBrush;
         }
 
         /// <summary>
