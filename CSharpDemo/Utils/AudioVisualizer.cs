@@ -12,6 +12,11 @@ namespace CSharpDemo.Utils
         /// </summary>
         public double[] SampleData { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="waveDataSize">控制频谱数量，数量越多，界面显示波动的频谱越多，建议256就好</param>
+        /// <exception cref="ArgumentException"></exception>
         public AudioVisualizer(int waveDataSize)
         {
             if (!Get2Flag(waveDataSize))

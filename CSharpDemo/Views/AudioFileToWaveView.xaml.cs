@@ -38,7 +38,7 @@ namespace CSharpDemo.Views
             InitializeComponent();
 
             _capture = new WasapiLoopbackCapture(); // 捕获电脑发出的声音
-            _visualizer = new AudioVisualizer(256); // 新建一个可视化器, 并使用 256 个采样进行傅里叶变换
+            _visualizer = new AudioVisualizer(256);
 
             _dataTimer.Tick += DataTimer_Tick;
             _drawingTimer.Tick += DrawingTimer_Tick;
@@ -113,8 +113,8 @@ namespace CSharpDemo.Views
             DrawGradientStrips(
                 StripsPath, color1, color2,
                 _spectrumData, _spectrumData.Length,
-                StripsPath.ActualWidth, 0, 144,
-                3, -StripsPath.ActualHeight * 100
+                StripsPath.ActualWidth, 0, StripsPath.ActualHeight,
+                2, -StripsPath.ActualHeight * 30
             );
 
             // - 圆形波动图
@@ -136,6 +136,11 @@ namespace CSharpDemo.Views
                 SampleWavePanel.ActualWidth, 0, SampleWavePanel.ActualHeight / 2,
                 Math.Min(SampleWavePanel.ActualHeight / 2, 200)
             );
+
+            //Done - 四周边框
+            DrawGradientBorder(TopBorder, BottomBorder, LeftBorder, RightBorder,
+                Color.FromArgb(0, color1.R, color1.G, color1.B), color2,
+                SampleWavePanel.ActualWidth / 3, bassScale);
         }
 
         /// <summary>
@@ -308,6 +313,34 @@ namespace CSharpDemo.Views
 
             wavePath.Data = new PathGeometry { Figures = { figure } };
             wavePath.Stroke = brush;
+        }
+
+        /// <summary>
+        /// h话四周渐变边框
+        /// </summary>
+        /// <param name="topBorder"></param>
+        /// <param name="bottomBorder"></param>
+        /// <param name="leftBorder"></param>
+        /// <param name="rightBorder"></param>
+        /// <param name="inner"></param>
+        /// <param name="outer"></param>
+        /// <param name="width">画图宽度</param>
+        /// <param name="bassScale">高低音转化比例</param>
+        private void DrawGradientBorder(Rectangle topBorder, Rectangle bottomBorder, Rectangle leftBorder,
+            Rectangle rightBorder, Color inner, Color outer, double width, double bassScale)
+        {
+            //边框粗细根据音频高低音变化
+            var thickness = (int)(width * bassScale);
+
+            topBorder.Height = thickness;
+            bottomBorder.Height = thickness;
+            leftBorder.Width = thickness;
+            rightBorder.Width = thickness;
+
+            topBorder.Fill = new LinearGradientBrush(outer, inner, 90);
+            bottomBorder.Fill = new LinearGradientBrush(inner, outer, 90);
+            leftBorder.Fill = new LinearGradientBrush(outer, inner, 0);
+            rightBorder.Fill = new LinearGradientBrush(inner, outer, 0);
         }
     }
 }
