@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
@@ -62,12 +61,6 @@ namespace CSharpDemo.Views
 
             _dataTimer.Start();
             _drawingTimer.Start();
-
-            StripsWavePanel.MouseMove += delegate(object sender, MouseEventArgs args)
-            {
-                var position = args.GetPosition(StripsWavePanel);
-                Console.WriteLine($@"{position.X},{position.Y}");
-            };
         }
 
         /// <summary>
@@ -109,12 +102,12 @@ namespace CSharpDemo.Views
             var color1 = _allColors[_colorIndex % _allColors.Length];
             var color2 = _allColors[(_colorIndex + 200) % _allColors.Length];
 
-            // - 长条形波动图
+            //Done - 长条形波动图
             DrawGradientStrips(
                 StripsPath, color1, color2,
                 _spectrumData, _spectrumData.Length,
                 StripsPath.ActualWidth, 0, StripsPath.ActualHeight,
-                2, -StripsPath.ActualHeight * 30
+                2, -StripsPath.ActualHeight * 20
             );
 
             // - 圆形波动图
@@ -140,7 +133,7 @@ namespace CSharpDemo.Views
             //Done - 四周边框
             DrawGradientBorder(TopBorder, BottomBorder, LeftBorder, RightBorder,
                 Color.FromArgb(0, color1.R, color1.G, color1.B), color2,
-                SampleWavePanel.ActualWidth / 3, bassScale);
+                SampleWavePanel.ActualWidth / 2, bassScale);
         }
 
         /// <summary>
@@ -183,12 +176,13 @@ namespace CSharpDemo.Views
                     height = -height;
                 }
 
+                //每根竖条的四个角坐标
                 var endPoints = new[]
                 {
-                    new Point(p.X, p.Y), //左下角
-                    new Point(p.X, p.Y + height), //左上角
-                    new Point(p.X + stripWidth, p.Y + height), //右上角
-                    new Point(p.X + stripWidth, p.Y) //右下角
+                    new Point(p.X, p.Y + yOffset), //左下角
+                    new Point(p.X, p.Y + height + yOffset), //左上角
+                    new Point(p.X + stripWidth, p.Y + height + yOffset), //右上角
+                    new Point(p.X + stripWidth, p.Y + yOffset) //右下角
                 };
 
                 var figure = new PathFigure
