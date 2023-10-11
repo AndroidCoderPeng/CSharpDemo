@@ -2,6 +2,7 @@
 using System.Linq;
 using FftSharp;
 using FftSharp.Windows;
+using Complex = System.Numerics.Complex;
 
 namespace CSharpDemo.Utils
 {
@@ -69,7 +70,7 @@ namespace CSharpDemo.Utils
                 data[i] = new Complex(SampleData[i], 0);
             }
 
-            Transform.FFT(data);
+            FFT.Forward(data);
 
             var halfLen = len / 2;
             var result = new double[halfLen]; // 傅里叶变换结果左右对称, 只需要取一半
