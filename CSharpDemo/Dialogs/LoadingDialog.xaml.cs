@@ -23,7 +23,7 @@ namespace CSharpDemo.Dialogs
                 _runningSeconds++;
                 Application.Current.Dispatcher.Invoke(delegate
                 {
-                    MessageTextBlock.Text = message + $"{_runningSeconds}s";
+                    LoadingView.LoadingText = message + $"{_runningSeconds}s";
                 });
             };
             _runningTimer.Start();
