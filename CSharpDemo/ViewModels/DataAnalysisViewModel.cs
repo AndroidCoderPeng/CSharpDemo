@@ -12,7 +12,6 @@ using CSharpDemo.Utils;
 using CSharpDemo.Views;
 using MathWorks.MATLAB.NET.Arrays;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -42,42 +41,6 @@ namespace CSharpDemo.ViewModels
             set
             {
                 _blueDataPath = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private string _redHandledData;
-
-        public string RedHandledData
-        {
-            get => _redHandledData;
-            set
-            {
-                _redHandledData = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private string _blueHandledData;
-
-        public string BlueHandledData
-        {
-            get => _blueHandledData;
-            set
-            {
-                _blueHandledData = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private int _progressBarValue;
-
-        public int ProgressBarValue
-        {
-            get => _progressBarValue;
-            set
-            {
-                _progressBarValue = value;
                 RaisePropertyChanged();
             }
         }
@@ -175,24 +138,18 @@ namespace CSharpDemo.ViewModels
                 _dataModel.DevCode = "211700082201";
                 _dataModel.LeftReceiveDataTime = DateTime.Now;
                 _dataModel.LeftDeviceDataArray = resultArray;
-
-                RedHandledData = "数据渲染中...";
-                RedHandledData = JsonConvert.SerializeObject(resultArray);
             }
             else
             {
                 _dataModel.DevCode = "211700082202";
                 _dataModel.RightReceiveDataTime = DateTime.Now;
                 _dataModel.RightDeviceDataArray = resultArray;
-
-                BlueHandledData = "数据渲染中...";
-                BlueHandledData = JsonConvert.SerializeObject(resultArray);
             }
         }
 
         private void Worker_OnProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            ProgressBarValue = e.ProgressPercentage;
+            
         }
 
         private void Worker_OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

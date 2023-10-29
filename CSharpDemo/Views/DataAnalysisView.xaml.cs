@@ -21,7 +21,8 @@ namespace CSharpDemo.Views
             scottPlot.XLabel("管段长度（m）");
             //十字准线
             var crosshair = scottPlot.AddCrosshair(0, 0);
-
+            ScottplotView.Refresh();
+            
             ShowCrossLineCheckBox.Checked += delegate
             {
                 crosshair.IsVisible = true;

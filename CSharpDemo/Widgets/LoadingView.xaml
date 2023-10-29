@@ -76,6 +76,7 @@
         </Grid>
 
         <TextBlock
+            Padding="0,5"
             FontSize="20"
             Foreground="RoyalBlue"
             Text="{Binding LoadingText}"
