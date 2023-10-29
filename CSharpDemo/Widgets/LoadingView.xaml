@@ -13,7 +13,6 @@
         HorizontalAlignment="Center"
         VerticalAlignment="Center"
         Orientation="Vertical">
-
         <Path HorizontalAlignment="Center" Fill="RoyalBlue">
             <Path.Data>
                 <RectangleGeometry Rect="0,0,50,10" />
@@ -78,8 +77,38 @@
         <TextBlock
             Padding="0,5"
             FontSize="20"
-            Foreground="RoyalBlue"
             Text="{Binding LoadingText}"
-            TextAlignment="Center" />
+            TextAlignment="Center">
+            <TextBlock.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard RepeatBehavior="Forever">
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="(TextBlock.Foreground).(Brush.RelativeTransform).(TransformGroup.Children)[0].(TranslateTransform.X)"
+                                From="-1"
+                                To="1"
+                                Duration="0:0:5" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </TextBlock.Triggers>
+
+            <TextBlock.Foreground>
+                <LinearGradientBrush>
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <TranslateTransform X="-0.5" />
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStopCollection>
+                            <GradientStop Offset="0" Color="Lime" />
+                            <GradientStop Offset="0.5" Color="Yellow" />
+                            <GradientStop Offset="1" Color="RoyalBlue" />
+                        </GradientStopCollection>
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </TextBlock.Foreground>
+        </TextBlock>
     </StackPanel>
 </UserControl>

@@ -9,7 +9,6 @@
     Height="300"
     AllowsTransparency="True"
     Background="Transparent"
-    Closed="LoadingDialog_OnClosed"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
     WindowStartupLocation="CenterOwner"

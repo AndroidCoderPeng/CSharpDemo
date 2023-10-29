@@ -13,6 +13,7 @@
     d:DesignWidth="1280"
     Background="White"
     mc:Ignorable="d">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -56,6 +57,90 @@
                 Text="{Binding EventValue}" />
         </DockPanel>
 
-        <wgt:LoadingView Grid.Row="2" LoadingText="数据计算中，请稍后..." />
+        <UniformGrid Grid.Row="2" Columns="2">
+            <wgt:LoadingView LoadingText="数据计算中，请稍后..." />
+
+            <Grid Background="Black">
+                <TextBlock
+                    x:Name="TextView"
+                    Width="220"
+                    Height="55"
+                    FontFamily="宋体"
+                    FontSize="40"
+                    FontWeight="Black"
+                    Text="CoderPeng"
+                    TextAlignment="Center">
+                    <TextBlock.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation
+                                        Storyboard.TargetName="TextView"
+                                        Storyboard.TargetProperty="(TextBlock.Foreground).(Brush.RelativeTransform).(TransformGroup.Children)[0].(TranslateTransform.X)"
+                                        From="-2"
+                                        To="2"
+                                        Duration="0:0:3" />
+                                    <DoubleAnimation
+                                        BeginTime="0:0:3"
+                                        Storyboard.TargetName="TextView"
+                                        Storyboard.TargetProperty="(TextBlock.Foreground).(Brush.RelativeTransform).(TransformGroup.Children)[0].(TranslateTransform.X)"
+                                        From="2"
+                                        To="-2"
+                                        Duration="0:0:3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </TextBlock.Triggers>
+
+                    <TextBlock.Foreground>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0.001">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TransformGroup>
+                                    <TranslateTransform X="-0.5" />
+                                </TransformGroup>
+                            </LinearGradientBrush.RelativeTransform>
+                            <LinearGradientBrush.GradientStops>
+                                <GradientStopCollection>
+                                    <GradientStop Offset="0.0" Color="White" />
+                                    <GradientStop Offset="0" Color="LightBlue" />
+                                    <GradientStop Offset="1" Color="#11374c" />
+                                </GradientStopCollection>
+                            </LinearGradientBrush.GradientStops>
+                        </LinearGradientBrush>
+                    </TextBlock.Foreground>
+                </TextBlock>
+
+                <Border
+                    x:Name="TextBorder"
+                    Width="220"
+                    Height="60"
+                    BorderThickness="2"
+                    CornerRadius="5">
+                    <Border.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TextBorder" Storyboard.TargetProperty="(Border.BorderBrush).(Brush.RelativeTransform).(TransformGroup.Children)[0].(RotateTransform.Angle)">
+                                        <EasingDoubleKeyFrame KeyTime="0:0:2" Value="360" />
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Border.Triggers>
+
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="0" CenterX="0.5" CenterY="0.5" />
+                                </TransformGroup>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Offset="0.2" Color="#11374c" />
+                            <GradientStop Offset="4" Color="White" />
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                </Border>
+            </Grid>
+        </UniformGrid>
     </Grid>
 </UserControl>
