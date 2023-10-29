@@ -1,316 +1,317 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{07A1EE8F-8E3F-46F6-8E80-6A43883AB0FF}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>CSharpDemo</RootNamespace>
-    <AssemblyName>CSharpDemo</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Image\favicon.ico</ApplicationIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="CorrelatorCSharp">
-      <HintPath>..\..\..\..\dll\CorrelatorCSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="CorrelatorSingle">
-      <HintPath>..\..\..\..\dll\CorrelatorSingle.dll</HintPath>
-    </Reference>
-    <Reference Include="DryIoc, Version=4.7.7.0, Culture=neutral, PublicKeyToken=dfbf2bd50fcf7768, processorArchitecture=MSIL">
-      <HintPath>..\packages\DryIoc.dll.4.7.7\lib\net45\DryIoc.dll</HintPath>
-    </Reference>
-    <Reference Include="FftSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FftSharp.2.1.0\lib\netstandard2.0\FftSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="HandyControl, Version=3.4.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, processorArchitecture=MSIL">
-      <HintPath>..\packages\HandyControl.3.4.0\lib\net48\HandyControl.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Win32.Registry, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Win32.Registry.4.7.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.31\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
-    </Reference>
-    <Reference Include="mscorlib" />
-    <Reference Include="MWArray">
-      <HintPath>..\..\..\..\dll\MWArray.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.2.1.0\lib\net472\NAudio.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio.Asio, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.Asio.2.1.0\lib\netstandard2.0\NAudio.Asio.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio.Core, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.Core.2.1.0\lib\netstandard2.0\NAudio.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio.Midi, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.Midi.2.1.0\lib\netstandard2.0\NAudio.Midi.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio.Wasapi, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.Wasapi.2.1.0\lib\netstandard2.0\NAudio.Wasapi.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio.WinForms, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.WinForms.2.1.0\lib\net472\NAudio.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio.WinMM, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.WinMM.2.1.0\lib\netstandard2.0\NAudio.WinMM.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="playWaveNamespace">
-      <HintPath>..\..\..\..\dll\playWaveNamespace.dll</HintPath>
-    </Reference>
-    <Reference Include="Prism, Version=8.1.97.5141, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Core.8.1.97\lib\net47\Prism.dll</HintPath>
-    </Reference>
-    <Reference Include="Prism.DryIoc.Wpf, Version=8.1.97.5141, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.DryIoc.8.1.97\lib\net47\Prism.DryIoc.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="Prism.Wpf, Version=8.1.97.5141, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Wpf.8.1.97\lib\net47\Prism.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="ScottPlot, Version=4.1.65.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
-      <HintPath>..\packages\ScottPlot.4.1.65\lib\net462\ScottPlot.dll</HintPath>
-    </Reference>
-    <Reference Include="ScottPlot.WPF, Version=4.1.65.0, Culture=neutral, PublicKeyToken=e53b06131e34a3aa, processorArchitecture=MSIL">
-      <HintPath>..\packages\ScottPlot.WPF.4.1.65\lib\net48\ScottPlot.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Common, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Drawing.Common.7.0.0\lib\net462\System.Drawing.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.InteropServices.RuntimeInformation" />
-    <Reference Include="System.Security.AccessControl, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.AccessControl.4.7.0\lib\net461\System.Security.AccessControl.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Principal.Windows, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Principal.Windows.4.7.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Presentation" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="WPFMediaKit, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WPFMediaKit.2.2.0\lib\WPFMediaKit.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="Converters\ButtonImageConverter.cs" />
-    <Compile Include="Dialogs\DelegateValueDialog.xaml.cs">
-      <DependentUpon>DelegateValueDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\EventValueDialog.xaml.cs">
-      <DependentUpon>EventValueDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\LoadingDialog.xaml.cs">
-      <DependentUpon>LoadingDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\AudioWaveModel.cs"/>
-    <Compile Include="Model\CorrelatorDataModel.cs" />
-    <Compile Include="Utils\AudioVisualizer.cs"/>
-    <Compile Include="Utils\DialogHub.cs" />
-    <Compile Include="Utils\DirectoryManager.cs" />
-    <Compile Include="ViewModels\AudioWaveViewModel.cs"/>
-    <Compile Include="Views\AudioWaveView.xaml.cs">
-      <DependentUpon>AudioWaveView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\HikVisionLoginWindow.xaml.cs">
-      <DependentUpon>HikVisionLoginWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\ReginModel.cs" />
-    <Compile Include="ViewModels\DataAnalysisViewModel.cs" />
-    <Compile Include="Views\CameraView.xaml.cs">
-      <DependentUpon>CameraView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\DataAnalysisView.xaml.cs">
-      <DependentUpon>DataAnalysisView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\LoginWindow.xaml.cs">
-      <DependentUpon>LoginWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SerialPortView.xaml.cs">
-      <DependentUpon>SerialPortView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TransmitValueView.xaml.cs">
-      <DependentUpon>TransmitValueView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ServiceImpl\MainDataServiceImpl.cs" />
-    <Compile Include="Service\IMainDataService.cs" />
-    <Compile Include="Tags\CellTag.cs" />
-    <Compile Include="Tags\NormalTag.cs" />
-    <Compile Include="Tags\SensorExceptionTag.cs" />
-    <Compile Include="Tags\Tag.cs" />
-    <Compile Include="Tags\TagOid.cs" />
-    <Compile Include="Tags\TimeTag.cs" />
-    <Compile Include="Tags\UploadTag.cs" />
-    <Compile Include="Utils\CHCNetSDK.cs" />
-    <Compile Include="Utils\MethodExtensions.cs" />
-    <Compile Include="Utils\SerialPortManager.cs" />
-    <Compile Include="Utils\SystemHelper.cs" />
-    <Compile Include="Utils\TagFactory.cs" />
-    <Compile Include="ViewModels\SerialPortViewModel.cs" />
-    <Compile Include="ViewModels\TransmitValueViewModel.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\HikVisionWindow.xaml.cs">
-      <DependentUpon>HikVisionWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="Config\log4net.config" />
-    <None Include="Config\log4net.unix.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Dialogs\DelegateValueDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\EventValueDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\LoadingDialog.xaml" />
-    <Page Include="Views\AudioWaveView.xaml"/>
-    <Page Include="Views\HikVisionLoginWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CameraView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\DataAnalysisView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\LoginWindow.xaml" />
-    <Page Include="Views\SerialPortView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\TransmitValueView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\HikVisionWindow.xaml" />
-    <Page Include="Views\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Image\favicon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Image\gl_icon11.png" />
-    <Resource Include="Image\gl_icon6.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Image\return_g.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Image\start_background.png" />
-    <Resource Include="Image\start_icon2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Image\background_03.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Image\tyl_icon7.png" />
-    <Resource Include="Image\tyr_icon7.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Image\t_icon3.png" />
-    <Resource Include="Image\t_icon6.png" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets" Condition="Exists('..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
     <PropertyGroup>
-      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{07A1EE8F-8E3F-46F6-8E80-6A43883AB0FF}</ProjectGuid>
+        <OutputType>WinExe</OutputType>
+        <RootNamespace>CSharpDemo</RootNamespace>
+        <AssemblyName>CSharpDemo</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+        <WarningLevel>4</WarningLevel>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <NuGetPackageImportStamp>
+        </NuGetPackageImportStamp>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets'))" />
-  </Target>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>x64</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup>
+        <ApplicationIcon>Image\favicon.ico</ApplicationIcon>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="CorrelatorCSharp">
+            <HintPath>..\..\..\..\dll\CorrelatorCSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="CorrelatorSingle">
+            <HintPath>..\..\..\..\dll\CorrelatorSingle.dll</HintPath>
+        </Reference>
+        <Reference Include="DryIoc, Version=4.7.7.0, Culture=neutral, PublicKeyToken=dfbf2bd50fcf7768, processorArchitecture=MSIL">
+            <HintPath>..\packages\DryIoc.dll.4.7.7\lib\net45\DryIoc.dll</HintPath>
+        </Reference>
+        <Reference Include="FftSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <HintPath>..\packages\FftSharp.2.1.0\lib\netstandard2.0\FftSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="HandyControl, Version=3.4.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, processorArchitecture=MSIL">
+            <HintPath>..\packages\HandyControl.3.4.0\lib\net48\HandyControl.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.CSharp"/>
+        <Reference Include="Microsoft.Win32.Registry, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+            <HintPath>..\packages\Microsoft.Win32.Registry.4.7.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+            <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.31\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+        </Reference>
+        <Reference Include="mscorlib"/>
+        <Reference Include="MWArray">
+            <HintPath>..\..\..\..\dll\MWArray.dll</HintPath>
+        </Reference>
+        <Reference Include="NAudio, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+            <HintPath>..\packages\NAudio.2.1.0\lib\net472\NAudio.dll</HintPath>
+        </Reference>
+        <Reference Include="NAudio.Asio, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+            <HintPath>..\packages\NAudio.Asio.2.1.0\lib\netstandard2.0\NAudio.Asio.dll</HintPath>
+        </Reference>
+        <Reference Include="NAudio.Core, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+            <HintPath>..\packages\NAudio.Core.2.1.0\lib\netstandard2.0\NAudio.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="NAudio.Midi, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+            <HintPath>..\packages\NAudio.Midi.2.1.0\lib\netstandard2.0\NAudio.Midi.dll</HintPath>
+        </Reference>
+        <Reference Include="NAudio.Wasapi, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+            <HintPath>..\packages\NAudio.Wasapi.2.1.0\lib\netstandard2.0\NAudio.Wasapi.dll</HintPath>
+        </Reference>
+        <Reference Include="NAudio.WinForms, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+            <HintPath>..\packages\NAudio.WinForms.2.1.0\lib\net472\NAudio.WinForms.dll</HintPath>
+        </Reference>
+        <Reference Include="NAudio.WinMM, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+            <HintPath>..\packages\NAudio.WinMM.2.1.0\lib\netstandard2.0\NAudio.WinMM.dll</HintPath>
+        </Reference>
+        <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+            <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+        </Reference>
+        <Reference Include="playWaveNamespace">
+            <HintPath>..\..\..\..\dll\playWaveNamespace.dll</HintPath>
+        </Reference>
+        <Reference Include="Prism, Version=8.1.97.5141, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+            <HintPath>..\packages\Prism.Core.8.1.97\lib\net47\Prism.dll</HintPath>
+        </Reference>
+        <Reference Include="Prism.DryIoc.Wpf, Version=8.1.97.5141, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+            <HintPath>..\packages\Prism.DryIoc.8.1.97\lib\net47\Prism.DryIoc.Wpf.dll</HintPath>
+        </Reference>
+        <Reference Include="Prism.Wpf, Version=8.1.97.5141, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+            <HintPath>..\packages\Prism.Wpf.8.1.97\lib\net47\Prism.Wpf.dll</HintPath>
+        </Reference>
+        <Reference Include="ScottPlot, Version=4.1.65.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
+            <HintPath>..\packages\ScottPlot.4.1.65\lib\net462\ScottPlot.dll</HintPath>
+        </Reference>
+        <Reference Include="ScottPlot.WPF, Version=4.1.65.0, Culture=neutral, PublicKeyToken=e53b06131e34a3aa, processorArchitecture=MSIL">
+            <HintPath>..\packages\ScottPlot.WPF.4.1.65\lib\net48\ScottPlot.WPF.dll</HintPath>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Configuration"/>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Drawing"/>
+        <Reference Include="System.Drawing.Common, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Drawing.Common.7.0.0\lib\net462\System.Drawing.Common.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Numerics"/>
+        <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.InteropServices.RuntimeInformation"/>
+        <Reference Include="System.Security.AccessControl, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Security.AccessControl.4.7.0\lib\net461\System.Security.AccessControl.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Security.Principal.Windows, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+            <HintPath>..\packages\System.Security.Principal.Windows.4.7.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Web"/>
+        <Reference Include="System.Windows.Forms"/>
+        <Reference Include="System.Windows.Presentation"/>
+        <Reference Include="System.Xml"/>
+        <Reference Include="System.Xaml">
+            <RequiredTargetFramework>4.0</RequiredTargetFramework>
+        </Reference>
+        <Reference Include="WindowsBase"/>
+        <Reference Include="PresentationCore"/>
+        <Reference Include="PresentationFramework"/>
+        <Reference Include="WindowsFormsIntegration"/>
+        <Reference Include="WPFMediaKit, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <HintPath>..\packages\WPFMediaKit.2.2.0\lib\WPFMediaKit.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <ApplicationDefinition Include="App.xaml">
+            <Generator>MSBuild:Compile</Generator>
+            <SubType>Designer</SubType>
+        </ApplicationDefinition>
+        <Compile Include="Converters\ButtonImageConverter.cs"/>
+        <Compile Include="Dialogs\DelegateValueDialog.xaml.cs">
+            <DependentUpon>DelegateValueDialog.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Dialogs\EventValueDialog.xaml.cs">
+            <DependentUpon>EventValueDialog.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Dialogs\LoadingDialog.xaml.cs">
+            <DependentUpon>LoadingDialog.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Model\AudioWaveModel.cs"/>
+        <Compile Include="Model\CorrelatorDataModel.cs"/>
+        <Compile Include="Utils\AudioVisualizer.cs"/>
+        <Compile Include="Utils\DialogHub.cs"/>
+        <Compile Include="Utils\DirectoryManager.cs"/>
+        <Compile Include="ViewModels\AudioWaveViewModel.cs"/>
+        <Compile Include="Views\AudioWaveView.xaml.cs">
+            <DependentUpon>AudioWaveView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\HikVisionLoginWindow.xaml.cs">
+            <DependentUpon>HikVisionLoginWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Model\ReginModel.cs"/>
+        <Compile Include="ViewModels\DataAnalysisViewModel.cs"/>
+        <Compile Include="Views\CameraView.xaml.cs">
+            <DependentUpon>CameraView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\DataAnalysisView.xaml.cs">
+            <DependentUpon>DataAnalysisView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\LoginWindow.xaml.cs">
+            <DependentUpon>LoginWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\SerialPortView.xaml.cs">
+            <DependentUpon>SerialPortView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\TransmitValueView.xaml.cs">
+            <DependentUpon>TransmitValueView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Widgets\LoadingView.xaml.cs">
+            <DependentUpon>LoadingView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="ServiceImpl\MainDataServiceImpl.cs"/>
+        <Compile Include="Service\IMainDataService.cs"/>
+        <Compile Include="Tags\CellTag.cs"/>
+        <Compile Include="Tags\NormalTag.cs"/>
+        <Compile Include="Tags\SensorExceptionTag.cs"/>
+        <Compile Include="Tags\Tag.cs"/>
+        <Compile Include="Tags\TagOid.cs"/>
+        <Compile Include="Tags\TimeTag.cs"/>
+        <Compile Include="Tags\UploadTag.cs"/>
+        <Compile Include="Utils\CHCNetSDK.cs"/>
+        <Compile Include="Utils\MethodExtensions.cs"/>
+        <Compile Include="Utils\SerialPortManager.cs"/>
+        <Compile Include="Utils\SystemHelper.cs"/>
+        <Compile Include="Utils\TagFactory.cs"/>
+        <Compile Include="ViewModels\SerialPortViewModel.cs"/>
+        <Compile Include="ViewModels\TransmitValueViewModel.cs"/>
+        <Compile Include="ViewModels\MainWindowViewModel.cs"/>
+        <Compile Include="App.xaml.cs">
+            <DependentUpon>App.xaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Include="Views\HikVisionWindow.xaml.cs">
+            <DependentUpon>HikVisionWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\MainWindow.xaml.cs">
+            <DependentUpon>MainWindow.xaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Properties\AssemblyInfo.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Include="Properties\Resources.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+        <EmbeddedResource Include="Properties\Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="App.config"/>
+        <None Include="Config\log4net.config"/>
+        <None Include="Config\log4net.unix.config"/>
+        <None Include="packages.config"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Page Include="Dialogs\DelegateValueDialog.xaml">
+            <SubType>Designer</SubType>
+            <Generator>MSBuild:Compile</Generator>
+        </Page>
+        <Page Include="Dialogs\EventValueDialog.xaml">
+            <SubType>Designer</SubType>
+            <Generator>MSBuild:Compile</Generator>
+        </Page>
+        <Page Include="Dialogs\LoadingDialog.xaml"/>
+        <Page Include="Widgets\LoadingView.xaml"/>
+        <Page Include="Views\AudioWaveView.xaml"/>
+        <Page Include="Views\HikVisionLoginWindow.xaml">
+            <SubType>Designer</SubType>
+            <Generator>MSBuild:Compile</Generator>
+        </Page>
+        <Page Include="Views\CameraView.xaml">
+            <SubType>Designer</SubType>
+        </Page>
+        <Page Include="Views\DataAnalysisView.xaml">
+            <SubType>Designer</SubType>
+        </Page>
+        <Page Include="Views\LoginWindow.xaml"/>
+        <Page Include="Views\SerialPortView.xaml">
+            <SubType>Designer</SubType>
+        </Page>
+        <Page Include="Views\TransmitValueView.xaml">
+            <SubType>Designer</SubType>
+        </Page>
+        <Page Include="Views\HikVisionWindow.xaml"/>
+        <Page Include="Views\MainWindow.xaml">
+            <Generator>MSBuild:Compile</Generator>
+            <SubType>Designer</SubType>
+        </Page>
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Include="Image\favicon.ico"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Include="Image\gl_icon11.png"/>
+        <Resource Include="Image\gl_icon6.png"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Include="Image\return_g.png"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Include="Image\start_background.png"/>
+        <Resource Include="Image\start_icon2.png"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Include="Image\background_03.png"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Include="Image\tyl_icon7.png"/>
+        <Resource Include="Image\tyr_icon7.png"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Include="Image\t_icon3.png"/>
+        <Resource Include="Image\t_icon6.png"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <Import Project="..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets" Condition="Exists('..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets')"/>
+    <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+        <PropertyGroup>
+            <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+        </PropertyGroup>
+        <Error Condition="!Exists('..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets'))"/>
+    </Target>
 </Project>

@@ -6,18 +6,26 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
+    xmlns:wgt="clr-namespace:CSharpDemo.Widgets"
+    x:Name="TargetUserControl"
     d:DataContext="{d:DesignInstance Type=vm:TransmitValueViewModel}"
     d:DesignHeight="720"
     d:DesignWidth="1280"
     Background="White"
     mc:Ignorable="d">
-    <StackPanel Orientation="Vertical">
-        <DockPanel Margin="0,5">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,5">
             <Button
                 Height="35"
                 Margin="5,0,0,0"
                 Command="{Binding DelegateCommand}"
-                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                CommandParameter="{Binding ElementName=TargetUserControl}"
                 Content="打开Delegate传值窗口"
                 FontSize="16"
                 Style="{StaticResource ButtonPrimary}" />
@@ -30,12 +38,12 @@
                 Text="{Binding DelegateValue}" />
         </DockPanel>
 
-        <DockPanel>
+        <DockPanel Grid.Row="1">
             <Button
                 Height="35"
                 Margin="5,0,0,0"
                 Command="{Binding EventCommand}"
-                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                CommandParameter="{Binding ElementName=TargetUserControl}"
                 Content="打开Event传值窗口"
                 FontSize="16"
                 Style="{StaticResource ButtonPrimary}" />
@@ -47,5 +55,7 @@
                 FontSize="16"
                 Text="{Binding EventValue}" />
         </DockPanel>
-    </StackPanel>
+
+        <wgt:LoadingView Grid.Row="2" LoadingText="数据计算中，请稍后..." />
+    </Grid>
 </UserControl>

@@ -1,0 +1,84 @@
+﻿<UserControl
+    x:Class="CSharpDemo.Widgets.LoadingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:wgt="clr-namespace:CSharpDemo.Widgets"
+    d:DataContext="{d:DesignInstance wgt:LoadingView}"
+    mc:Ignorable="d">
+
+    <StackPanel
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Orientation="Vertical">
+
+        <Path HorizontalAlignment="Center" Fill="RoyalBlue">
+            <Path.Data>
+                <RectangleGeometry Rect="0,0,50,10" />
+            </Path.Data>
+        </Path>
+
+        <Path HorizontalAlignment="Center" Fill="RoyalBlue">
+            <Path.Data>
+                <RectangleGeometry Rect="0,0,30,10" />
+            </Path.Data>
+        </Path>
+
+        <Grid Margin="0,5">
+            <Path
+                HorizontalAlignment="Center"
+                Fill="RoyalBlue"
+                RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="45" />
+                    </TransformGroup>
+                </Path.RenderTransform>
+
+                <Path.Data>
+                    <RectangleGeometry Rect="0,-15,30,10" />
+                </Path.Data>
+            </Path>
+
+            <Ellipse
+                Width="200"
+                Height="200"
+                Stroke="RoyalBlue"
+                StrokeThickness="10" />
+
+            <hc:Arc
+                Width="170"
+                Height="170"
+                ArcThickness="85"
+                ArcThicknessUnit="Pixel"
+                Fill="RoyalBlue"
+                Stretch="None"
+                StrokeEndLineCap="Round"
+                StrokeStartLineCap="Round">
+                <hc:Arc.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    BeginTime="0:0:0"
+                                    RepeatBehavior="Forever"
+                                    Storyboard.TargetProperty="EndAngle"
+                                    From="0"
+                                    To="360"
+                                    Duration="0:0:5" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </hc:Arc.Triggers>
+            </hc:Arc>
+        </Grid>
+
+        <TextBlock
+            FontSize="20"
+            Foreground="RoyalBlue"
+            Text="{Binding LoadingText}"
+            TextAlignment="Center" />
+    </StackPanel>
+</UserControl>
