@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
-using System.Linq;
-using System.Windows;
-using MessageBox = HandyControl.Controls.MessageBox;
+using System.Threading;
 
 namespace CSharpDemo.Utils
 {
@@ -47,7 +45,6 @@ namespace CSharpDemo.Utils
         }
 
         public event Action<byte[]> DataReceivedAction;
-        public event SerialErrorReceivedEventHandler ErrorReceivedEventHandler;
         private readonly SerialPort _serialPort = new SerialPort();
 
         #endregion
@@ -143,13 +140,11 @@ namespace CSharpDemo.Utils
         private void BoundSerialPortEvents()
         {
             _serialPort.DataReceived += SerialPort_DataReceived;
-            _serialPort.ErrorReceived += SerialPort_ErrorReceived;
         }
 
         public void UnBoundSerialPortEvents()
         {
             _serialPort.DataReceived -= SerialPort_DataReceived;
-            _serialPort.ErrorReceived -= SerialPort_ErrorReceived;
         }
 
         /// <summary>
@@ -159,29 +154,49 @@ namespace CSharpDemo.Utils
         /// <param name="e"></param>
         void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            if (_serialPort.IsOpen)
+            while (_serialPort.BytesToRead < 4)
             {
-                var receivedData = new byte[_serialPort.BytesToRead];
-                _serialPort.Read(receivedData, 0, receivedData.Length);
-                if (receivedData.Any() && DataReceivedAction != null)
-                {
-                    DataReceivedAction(receivedData);
-                }
+                return;
+            }
+
+            var headerBuff = new byte[2];
+            _serialPort.Read(headerBuff, 0, 2); //读取数据
+            if (headerBuff[0] != 0xA3 || headerBuff[1] != 0x20) //符合规范
+            {
+                _serialPort.DiscardInBuffer();
             }
             else
             {
-                MessageBox.Show("串口未打开", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ReadFromSerialPort(headerBuff);
             }
         }
 
-        /// <summary>
-        /// 错误数据
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void SerialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
+        private void ReadFromSerialPort(byte[] header)
         {
-            ErrorReceivedEventHandler?.Invoke(sender, e);
+            var lengthBuffer = new byte[2];
+            _serialPort.Read(lengthBuffer, 0, 2);
+            var length = lengthBuffer.ConvertToInt();
+
+            if (length < 12)
+            {
+                _serialPort.DiscardInBuffer(); //长度数据不符合，丢弃
+            }
+            else
+            {
+                while (_serialPort.BytesToRead < length + 2) //数据不够，要等待
+                {
+                    Thread.Sleep(20);
+                }
+
+                var result = new byte[length + 6];
+                result[0] = header[0];
+                result[1] = header[1];
+                result[2] = lengthBuffer[0];
+                result[3] = lengthBuffer[1];
+                _serialPort.Read(result, 4, result.Length - 4);
+
+                DataReceivedAction?.Invoke(result);
+            }
         }
     }
 }

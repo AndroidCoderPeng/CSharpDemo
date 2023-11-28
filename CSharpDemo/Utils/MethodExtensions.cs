@@ -80,17 +80,21 @@ namespace CSharpDemo.Utils
         }
 
         /// <summary>
-        /// byte[]转int
+        /// 字节数组转Int
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
-        public static int ToInt(this byte[] bytes)
+        public static int ConvertToInt(this byte[] bytes)
         {
-            var hex = BitConverter.ToString(bytes).Replace("-", "");
-            return Convert.ToInt32(hex, 16);
+            return bytes.Aggregate(0, (current, b) => 16 * 16 * current + b);
         }
 
-        public static string ConvertBytes2String(this IEnumerable<byte> bytes)
+        /// <summary>
+        /// 字节数组转String
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        private static string ConvertToString(this byte[] bytes)
         {
             return bytes.Aggregate("", (current, t) => current + t.ToString("X2"));
         }
@@ -151,26 +155,41 @@ namespace CSharpDemo.Utils
             return result;
         }
 
-        public static List<Tag> GetTags(this byte[] strTags)
+        /// <summary>
+        /// 通过Linq查找噪声Tag
+        /// </summary>
+        /// <param name="tags"></param>
+        /// <returns></returns>
+        public static UploadTag GetUploadNoiseTag(this IEnumerable<Tag> tags)
+        {
+            return tags.Where(tag => tag is UploadTag).Cast<UploadTag>().FirstOrDefault();
+        }
+
+        public static List<Tag> GetTags(this byte[] tagBytes)
         {
             var tags = new List<Tag>();
             var i = 0;
-            while (i < strTags.Length)
+            // var n = 0;
+            while (i < tagBytes.Length)
             {
-                var oid = new byte[4];
-                var len = new byte[2];
-                Array.Copy(strTags, i, oid, 0, 4);
-                Array.Copy(strTags, i + 4, len, 0, 2);
+                // n++;
+                var oidBytes = new byte[4];
+                Array.Copy(tagBytes, i, oidBytes, 0, 4);
+                var oid = oidBytes.ConvertToString();
 
-                Array.Reverse(len);
-                int iLen = BitConverter.ToInt16(len, 0);
-                var strOid = oid.ConvertBytes2String();
+                //value域的长度
+                var tagValueBytes = new byte[2];
+                Array.Copy(tagBytes, i + 4, tagValueBytes, 0, 2);
+                Array.Reverse(tagValueBytes);
+                int tagValueLength = BitConverter.ToInt16(tagValueBytes, 0);
+                // Console.WriteLine($@"value域的长度 => {tagValueLength}");
 
-                var value = new byte[iLen];
-                Array.Copy(strTags, i + 6, value, 0, iLen);
+                var valueBytes = new byte[tagValueLength];
+                Array.Copy(tagBytes, i + 6, valueBytes, 0, tagValueLength);
+                // Console.WriteLine($@"第{n}个Tag => {BitConverter.ToString(valueBytes)}");
 
-                i = i + 6 + iLen;
-                var tag = TagFactory.Create(strOid, iLen, value);
+                i = i + 6 + tagValueLength;
+                var tag = TagFactory.Create(oid, tagValueLength, valueBytes);
                 tags.Add(tag);
             }
 

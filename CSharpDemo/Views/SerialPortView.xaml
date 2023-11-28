@@ -184,6 +184,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <TextBlock
@@ -200,7 +201,10 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
-                            <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                            <TextBlock
+                                FontSize="18"
+                                Text="{Binding}"
+                                TextWrapping="Wrap" />
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -228,6 +232,39 @@
                     Margin="0,0,15,0"
                     Command="{Binding SendMessageCommand}"
                     Content="发送数据"
+                    FontSize="16"
+                    Style="{StaticResource ButtonPrimary}" />
+            </Grid>
+
+            <Grid Grid.Row="3" Margin="15,0,15,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <ListView
+                    Grid.Column="0"
+                    Height="300"
+                    Margin="0,0,15,0"
+                    ItemsSource="{Binding LogCollection}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock
+                                    FontSize="18"
+                                    Text="{Binding}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Button
+                    Grid.Column="1"
+                    Height="35"
+                    Command="{Binding CalculateCommand}"
+                    Content="计算结果"
                     FontSize="16"
                     Style="{StaticResource ButtonPrimary}" />
             </Grid>

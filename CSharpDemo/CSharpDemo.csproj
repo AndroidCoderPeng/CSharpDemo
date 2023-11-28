@@ -170,6 +170,7 @@
         <Compile Include="Utils\AudioVisualizer.cs"/>
         <Compile Include="Utils\DialogHub.cs"/>
         <Compile Include="Utils\DirectoryManager.cs"/>
+        <Compile Include="Utils\RuntimeCache.cs"/>
         <Compile Include="ViewModels\AudioWaveViewModel.cs"/>
         <Compile Include="Views\AudioWaveView.xaml.cs">
             <DependentUpon>AudioWaveView.xaml</DependentUpon>

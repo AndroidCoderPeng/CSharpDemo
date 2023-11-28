@@ -18,24 +18,14 @@
         </Grid.Background>
 
         <StackPanel
+            Margin="0,0,0,100"
             HorizontalAlignment="Center"
-            VerticalAlignment="Center"
+            VerticalAlignment="Bottom"
             Orientation="Vertical">
-            <Image
-                Width="458"
-                Height="330"
-                Source="/CSharpDemo;component/Image/start_icon2.png" />
-            <TextBlock
-                Margin="0,20,0,0"
-                HorizontalAlignment="Center"
-                FontFamily="仿宋"
-                FontSize="38"
-                FontWeight="Bold"
-                Text="中国航天科工二院二〇三所" />
 
             <ProgressBar
                 x:Name="LoadingProgress"
-                Margin="0,10"
+                Width="500"
                 Maximum="100" />
         </StackPanel>
     </Grid>

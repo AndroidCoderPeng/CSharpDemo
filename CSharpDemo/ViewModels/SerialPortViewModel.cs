@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using CorrelatorSingle;
+using CSharpDemo.Model;
 using CSharpDemo.Utils;
 using HandyControl.Controls;
+using MathWorks.MATLAB.NET.Arrays;
 using Prism.Commands;
 using Prism.Mvvm;
 using MessageBox = HandyControl.Controls.MessageBox;
+using Tag = CSharpDemo.Tags.Tag;
 
 namespace CSharpDemo.ViewModels
 {
@@ -23,13 +28,14 @@ namespace CSharpDemo.ViewModels
         private List<Parity> _parityList;
         private List<int> _stopBitList;
         private ObservableCollection<string> _responseCollection = new ObservableCollection<string>();
+        private ObservableCollection<string> _logCollection = new ObservableCollection<string>();
         private string _portName = "COM3";
         private int _baudRate = 230400;
         private int _dataBits = 8;
         private Parity _parity = Parity.None;
         private int _stopBit = 1;
         private string _stateColorBrush = "DarkGray";
-        private string _userInputHex = string.Empty;
+        private string _userInputHex = "A3-20-00-13-00-00-00-00-00-00-01-FF-FF-0A-82-01-30-00-00-01-00-01-00-7D-87";
         private bool _portNameComboBoxIsEnabled = true;
         private bool _baudRateComboBoxIsEnabled = true;
         private bool _dataBitComboBoxIsEnabled = true;
@@ -110,6 +116,16 @@ namespace CSharpDemo.ViewModels
             set
             {
                 _responseCollection = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<string> LogCollection
+        {
+            get => _logCollection;
+            set
+            {
+                _logCollection = value;
                 RaisePropertyChanged();
             }
         }
@@ -248,12 +264,16 @@ namespace CSharpDemo.ViewModels
         public DelegateCommand CloseSerialPortCommand { get; }
         public DelegateCommand ClearMessageCommand { get; }
         public DelegateCommand SendMessageCommand { get; }
+        public DelegateCommand CalculateCommand { get; }
 
         #endregion
 
         #region 变量
 
         private readonly SerialPortManager _serialPortManager = new SerialPortManager();
+        private static readonly Lazy<Correlator> LazyCorrelator = new Lazy<Correlator>(() => new Correlator());
+        private readonly BackgroundWorker _backgroundWorker;
+        private CorrelatorDataModel _dataModel;
 
         #endregion
 
@@ -264,6 +284,13 @@ namespace CSharpDemo.ViewModels
             DataBitList = new List<int> { 5, 6, 7, 8 };
             ParityList = new List<Parity> { Parity.None, Parity.Odd, Parity.Even, Parity.Mark, Parity.Space };
             StopBitList = new List<int> { 1, 2 };
+
+            _backgroundWorker = new BackgroundWorker();
+            _backgroundWorker.WorkerReportsProgress = true;
+            _backgroundWorker.WorkerSupportsCancellation = true;
+            _backgroundWorker.DoWork += Worker_OnDoWork;
+            _backgroundWorker.ProgressChanged += Worker_OnProgressChanged;
+            _backgroundWorker.RunWorkerCompleted += Worker_OnRunWorkerCompleted;
 
             PortItemSelectedCommand = new DelegateCommand<ComboBox>(delegate(ComboBox box)
             {
@@ -324,7 +351,11 @@ namespace CSharpDemo.ViewModels
                 }
             });
 
-            ClearMessageCommand = new DelegateCommand(delegate { ResponseCollection.Clear(); });
+            ClearMessageCommand = new DelegateCommand(delegate
+            {
+                ResponseCollection.Clear();
+                LogCollection.Clear();
+            });
 
             SendMessageCommand = new DelegateCommand(delegate
             {
@@ -373,17 +404,113 @@ namespace CSharpDemo.ViewModels
                 _serialPortManager.Write(cmd);
             });
 
+            CalculateCommand = new DelegateCommand(delegate
+            {
+                LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}开始计算");
+
+                if (_dataModel == null)
+                {
+                    return;
+                }
+
+                _backgroundWorker.RunWorkerAsync();
+            });
+
             _serialPortManager.DataReceivedAction += delegate(byte[] bytes)
             {
                 Application.Current.Dispatcher.Invoke(delegate
                 {
-                    ResponseCollection.Add(BitConverter.ToString(bytes));
+                    ResponseCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}收到串口数据，长度是：{bytes.Length}");
+
+                    var deviceIdBytes = new byte[6];
+                    Array.Copy(bytes, 4, deviceIdBytes, 0, 6);
+                    var deviceId = BitConverter.ToString(deviceIdBytes).Replace("-", "");
+
+                    var tagBytes = new byte[bytes.Length - 18];
+                    Array.Copy(bytes, 16, tagBytes, 0, bytes.Length - 18);
+                    var tags = tagBytes.GetTags();
+                    switch (bytes.Length)
+                    {
+                        case 32: //设备状态、电量
+
+                            break;
+                        case 30:
+
+                            break;
+                        case 22543:
+                            HandleCorrelatorData(deviceId, tags);
+                            break;
+                        case 15024:
+
+                            break;
+                    }
                 });
             };
+        }
 
-            _serialPortManager.ErrorReceivedEventHandler += delegate(object sender, SerialErrorReceivedEventArgs args)
+        private void HandleCorrelatorData(string devCode, List<Tag> tags)
+        {
+            if (_dataModel == null)
             {
-            };
+                _dataModel = new CorrelatorDataModel();
+            }
+
+            LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}开始处理数据");
+            //处理接到的噪声数据
+            var noiseTag = tags.GetUploadNoiseTag();
+            if (noiseTag != null)
+            {
+                var num = noiseTag.Len / 3;
+                var realData = new double[num];
+                for (var i = 0; i < num; i++)
+                {
+                    var dStr = new byte[3];
+                    Array.Copy(noiseTag.DataValue, i * 3, dStr, 0, 3);
+
+                    realData[i] = dStr.HexToDouble();
+                }
+
+                _dataModel.DevCode = devCode;
+                if (devCode.Equals(RuntimeCache.Dev1))
+                {
+                    //接收到数据之后时间重新赋值
+                    _dataModel.LeftReceiveDataTime = DateTime.Now;
+                    _dataModel.LeftDeviceDataArray = realData;
+                    LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}Dev1数据处理完成");
+                }
+                else
+                {
+                    //接收到数据之后时间重新赋值
+                    _dataModel.RightReceiveDataTime = DateTime.Now;
+                    _dataModel.RightDeviceDataArray = realData;
+                    LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}Dev2数据处理完成");
+                }
+            }
+        }
+
+        private void Worker_OnDoWork(object sender, DoWorkEventArgs e)
+        {
+            var array = LazyCorrelator.Value.locating(11,
+                (MWNumericArray)_dataModel.LeftDeviceDataArray, (MWNumericArray)_dataModel.RightDeviceDataArray,
+                7500,
+                int.Parse("150"), int.Parse("1130"),
+                0, 0,
+                0, 0,
+                "",
+                int.Parse("300"), int.Parse("300"),
+                1, -1,
+                -1, -1,
+                int.Parse("100"), int.Parse("3000"));
+        }
+
+        private void Worker_OnProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+        }
+
+        private void Worker_OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}结束计算");
+            _dataModel = null;
         }
     }
 }
