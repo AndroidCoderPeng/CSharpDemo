@@ -1,11 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Windows.Media;
 
 namespace CSharpDemo.Service
 {
     public interface IAppDataService
     {
-        ObservableCollection<string> GetItemModels();
+        List<string> GetItemModels();
 
         /// <summary>
         /// 获取 HSV 中所有的基础颜色 (饱和度和明度均为最大值)

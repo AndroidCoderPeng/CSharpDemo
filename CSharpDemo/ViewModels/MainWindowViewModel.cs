@@ -1,5 +1,5 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,7 +18,7 @@ namespace CSharpDemo.ViewModels
     {
         #region VM
 
-        public ObservableCollection<string> ItemModels { get; }
+        public List<string> ItemModels { get; }
 
         #endregion
 

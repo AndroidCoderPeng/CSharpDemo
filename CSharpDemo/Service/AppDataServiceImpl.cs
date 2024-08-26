@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
 
 namespace CSharpDemo.Service
@@ -7,16 +8,9 @@ namespace CSharpDemo.Service
     {
         private readonly string[] _itemTitles = { "摄像头", "界面传值", "串口通信", "水听器数据解析", "音频转波形图", "海康摄像头" };
 
-        public ObservableCollection<string> GetItemModels()
+        public List<string> GetItemModels()
         {
-            var itemModels = new ObservableCollection<string>();
-
-            foreach (var function in _itemTitles)
-            {
-                itemModels.Add(function);
-            }
-
-            return itemModels;
+            return _itemTitles.ToList();
         }
 
         public Color[] GetAllHsvColors()
