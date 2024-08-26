@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace CSharpDemo.Service
 {
-    public interface IMainDataService
+    public interface IAppDataService
     {
         ObservableCollection<string> GetItemModels();
 

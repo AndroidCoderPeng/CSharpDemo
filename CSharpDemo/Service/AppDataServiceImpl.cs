@@ -1,10 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Media;
-using CSharpDemo.Service;
 
-namespace CSharpDemo.ServiceImpl
+namespace CSharpDemo.Service
 {
-    public class MainDataServiceImpl : IMainDataService
+    public class AppDataServiceImpl : IAppDataService
     {
         private readonly string[] _itemTitles = { "摄像头", "界面传值", "串口通信", "水听器数据解析", "音频转波形图", "海康摄像头" };
 

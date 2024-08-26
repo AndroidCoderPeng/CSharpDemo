@@ -31,7 +31,7 @@ namespace CSharpDemo.Views
             Interval = new TimeSpan(0, 0, 0, 0, 30)
         };
 
-        public AudioWaveView(IMainDataService dataService)
+        public AudioWaveView(IAppDataService dataService)
         {
             InitializeComponent();
 

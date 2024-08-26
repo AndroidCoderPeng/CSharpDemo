@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using CSharpDemo.Service;
-using CSharpDemo.ServiceImpl;
 using CSharpDemo.Views;
 using Prism.DryIoc;
 using Prism.Ioc;
+using Prism.Regions;
 
 namespace CSharpDemo
 {
@@ -14,32 +14,13 @@ namespace CSharpDemo
     {
         protected override Window CreateShell()
         {
-            return Container.Resolve<MainWindow>();
-        }
-
-        /// <summary>
-        /// 初始化Shell（主窗口）会执行这个方法
-        /// </summary>
-        /// <param name="shell"></param>
-        protected override void InitializeShell(Window shell)
-        {
-            //可以实现登录
-            var loginWindow = Container.Resolve<LoginWindow>();
-            var loginResult = loginWindow.ShowDialog();
-            if (loginResult == null)
+            var mainWindow = Container.Resolve<MainWindow>();
+            mainWindow.Loaded += delegate
             {
-                Current.Shutdown();
-                return;
-            }
-
-            if (loginResult.Value)
-            {
-                base.OnInitialized();
-            }
-            else
-            {
-                Current.Shutdown();
-            }
+                var regionManager = Container.Resolve<IRegionManager>();
+                regionManager.RequestNavigate("ContentRegion", "CameraView");
+            };
+            return mainWindow;
         }
 
         /// <summary>
@@ -49,7 +30,7 @@ namespace CSharpDemo
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             //Data
-            containerRegistry.Register<IMainDataService, MainDataServiceImpl>();
+            containerRegistry.Register<IAppDataService, AppDataServiceImpl>();
 
             //Navigation
             containerRegistry.RegisterForNavigation<CameraView>();

@@ -8,11 +8,9 @@ using CSharpDemo.Views;
 using HandyControl.Controls;
 using HikVisionPreview;
 using Prism.Commands;
-using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
-using MessageBox = HandyControl.Controls.MessageBox;
-using Window = System.Windows.Window;
+using MessageBox = System.Windows.MessageBox;
 
 namespace CSharpDemo.ViewModels
 {
@@ -26,24 +24,13 @@ namespace CSharpDemo.ViewModels
 
         #region DelegateCommand
 
-        public DelegateCommand<Window> WindowLoadedCommand { set; get; }
         public DelegateCommand<ListBox> ItemSelectedCommand { set; get; }
 
         #endregion
 
-        private Window _window;
-
-        public MainWindowViewModel(IRegionManager regionManager, IContainerProvider container,
-            IMainDataService dataService)
+        public MainWindowViewModel(IRegionManager regionManager, IAppDataService dataService)
         {
             ItemModels = dataService.GetItemModels();
-
-            WindowLoadedCommand = new DelegateCommand<Window>(delegate(Window window)
-            {
-                _window = window;
-                //显示默认View
-                regionManager.AddToRegion("ContentRegion", container.Resolve<CameraView>());
-            });
 
             ItemSelectedCommand = new DelegateCommand<ListBox>(delegate(ListBox box)
             {
@@ -69,7 +56,7 @@ namespace CSharpDemo.ViewModels
                         //初始化海康网络摄像头
                         if (InitHikVisionSdk())
                         {
-                            new HikVisionLoginWindow(GetLoginParam) { Owner = _window }.ShowDialog();
+                            new HikVisionLoginWindow(GetLoginParam).ShowDialog();
                         }
                         else
                         {

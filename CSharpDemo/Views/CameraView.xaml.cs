@@ -7,6 +7,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using Newtonsoft.Json;
 using WPFMediaKit.DirectShow.Controls;
 using MessageBox = HandyControl.Controls.MessageBox;
 
@@ -55,6 +56,7 @@ namespace CSharpDemo.Views
             }
 
             var videoInputNames = MultimediaUtil.VideoInputNames;
+            Console.WriteLine(JsonConvert.SerializeObject(videoInputNames));
             if (videoInputNames.Length > 0)
             {
                 //默认选择第一个

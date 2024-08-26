@@ -39,9 +39,6 @@
         <ApplicationIcon>Image\favicon.ico</ApplicationIcon>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="CorrelatorCSharp">
-            <HintPath>..\..\..\..\dll\CorrelatorCSharp.dll</HintPath>
-        </Reference>
         <Reference Include="CorrelatorSingle">
             <HintPath>..\..\..\..\dll\CorrelatorSingle.dll</HintPath>
         </Reference>
@@ -53,6 +50,9 @@
         </Reference>
         <Reference Include="HandyControl, Version=3.4.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, processorArchitecture=MSIL">
             <HintPath>..\packages\HandyControl.3.4.0\lib\net48\HandyControl.dll</HintPath>
+        </Reference>
+        <Reference Include="main_location">
+            <HintPath>C:\Users\Administrator\Desktop\main_location.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.CSharp"/>
         <Reference Include="Microsoft.Win32.Registry, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -167,6 +167,7 @@
         </Compile>
         <Compile Include="Model\AudioWaveModel.cs"/>
         <Compile Include="Model\CorrelatorDataModel.cs"/>
+        <Compile Include="Service\AppDataServiceImpl.cs"/>
         <Compile Include="Utils\AudioVisualizer.cs"/>
         <Compile Include="Utils\DialogHub.cs"/>
         <Compile Include="Utils\DirectoryManager.cs"/>
@@ -198,8 +199,7 @@
         <Compile Include="Widgets\LoadingView.xaml.cs">
             <DependentUpon>LoadingView.xaml</DependentUpon>
         </Compile>
-        <Compile Include="ServiceImpl\MainDataServiceImpl.cs"/>
-        <Compile Include="Service\IMainDataService.cs"/>
+        <Compile Include="Service\IAppDataService.cs"/>
         <Compile Include="Tags\CellTag.cs"/>
         <Compile Include="Tags\NormalTag.cs"/>
         <Compile Include="Tags\SensorExceptionTag.cs"/>
