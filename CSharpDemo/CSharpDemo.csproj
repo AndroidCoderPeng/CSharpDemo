@@ -52,6 +52,10 @@
         <Reference Include="HandyControl, Version=3.4.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, processorArchitecture=MSIL">
             <HintPath>..\packages\HandyControl.3.4.0\lib\net48\HandyControl.dll</HintPath>
         </Reference>
+        <Reference Include="Leak_location, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>bin\Leak_location.dll</HintPath>
+        </Reference>
         <Reference Include="main_location">
             <HintPath>C:\Users\Administrator\Desktop\main_location.dll</HintPath>
         </Reference>
@@ -180,8 +184,12 @@
         <Compile Include="Utils\DialogHub.cs"/>
         <Compile Include="Utils\DirectoryManager.cs"/>
         <Compile Include="Utils\RuntimeCache.cs"/>
+        <Compile Include="ViewModels\AlgorithmTestViewModel.cs"/>
         <Compile Include="ViewModels\AudioWaveViewModel.cs"/>
         <Compile Include="ViewModels\CameraViewModel.cs"/>
+        <Compile Include="Views\AlgorithmTestView.xaml.cs">
+            <DependentUpon>AlgorithmTestView.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Views\AudioWaveView.xaml.cs">
             <DependentUpon>AudioWaveView.xaml</DependentUpon>
         </Compile>
@@ -201,9 +209,6 @@
         </Compile>
         <Compile Include="Views\TransmitValueView.xaml.cs">
             <DependentUpon>TransmitValueView.xaml</DependentUpon>
-        </Compile>
-        <Compile Include="Widgets\LoadingView.xaml.cs">
-            <DependentUpon>LoadingView.xaml</DependentUpon>
         </Compile>
         <Compile Include="Service\IAppDataService.cs"/>
         <Compile Include="Tags\CellTag.cs"/>
@@ -263,7 +268,7 @@
             <Generator>MSBuild:Compile</Generator>
         </Page>
         <Page Include="Dialogs\LoadingDialog.xaml"/>
-        <Page Include="Widgets\LoadingView.xaml"/>
+        <Page Include="Views\AlgorithmTestView.xaml"/>
         <Page Include="Views\AudioWaveView.xaml"/>
         <Page Include="Views\HikVisionLoginWindow.xaml">
             <SubType>Designer</SubType>

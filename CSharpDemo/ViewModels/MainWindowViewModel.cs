@@ -64,6 +64,9 @@ namespace CSharpDemo.ViewModels
                         }
 
                         break;
+                    case 6:
+                        region.RequestNavigate("AlgorithmTestView");
+                        break;
                 }
             });
         }

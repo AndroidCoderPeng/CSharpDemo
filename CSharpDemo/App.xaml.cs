@@ -39,6 +39,7 @@ namespace CSharpDemo
             containerRegistry.RegisterForNavigation<SerialPortView, SerialPortViewModel>();
             containerRegistry.RegisterForNavigation<DataAnalysisView, DataAnalysisViewModel>();
             containerRegistry.RegisterForNavigation<AudioWaveView, AudioWaveViewModel>();
+            containerRegistry.RegisterForNavigation<AlgorithmTestView, AlgorithmTestViewModel>();
         }
     }
 }

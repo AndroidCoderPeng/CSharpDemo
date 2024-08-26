@@ -8,7 +8,7 @@ namespace CSharpDemo.Dialogs
         {
             InitializeComponent();
 
-            LoadingView.LoadingText = message;
+            MessageTextBlock.Text = message;
         }
     }
 }
