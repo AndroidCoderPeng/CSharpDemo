@@ -8,8 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
     d:DataContext="{d:DesignInstance Type=vm:DataAnalysisViewModel}"
-    d:DesignHeight="768"
-    d:DesignWidth="1366"
+    d:DesignHeight="720"
+    d:DesignWidth="1080"
     mc:Ignorable="d">
 
     <b:Interaction.Triggers>

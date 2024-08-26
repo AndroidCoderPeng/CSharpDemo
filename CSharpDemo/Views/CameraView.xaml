@@ -4,9 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:mk="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit"
+    xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
+    d:DataContext="{d:DesignInstance Type=vm:CameraViewModel}"
     d:DesignHeight="720"
-    d:DesignWidth="1280"
+    d:DesignWidth="1080"
     Background="White"
     mc:Ignorable="d">
 
@@ -24,20 +25,20 @@
 
             <Border
                 Grid.Column="0"
-                Width="540"
-                Height="405"
+                Width="500"
+                Height="375"
                 BorderBrush="LightGray"
                 BorderThickness="1">
-                <Image x:Name="CaptureImageView" Margin="1" />
+                <Image Source="{Binding CaptureImageSource}" />
             </Border>
 
             <Border
                 Grid.Column="1"
-                Width="540"
-                Height="405"
+                Width="500"
+                Height="375"
                 BorderBrush="LightGray"
                 BorderThickness="1">
-                <mk:VideoCaptureElement x:Name="DeviceCamera" Margin="1" />
+                <Image Source="{Binding ImagePreviewSource}" />
             </Border>
         </Grid>
 
@@ -51,7 +52,7 @@
             <Button
                 Grid.Column="0"
                 Height="35"
-                Click="OpenCameraButton_OnClick"
+                Command="{Binding OpenCameraCommand}"
                 Content="打开摄像头"
                 FontSize="16"
                 Style="{StaticResource ButtonPrimary}" />
@@ -59,7 +60,7 @@
             <Button
                 Grid.Column="1"
                 Height="35"
-                Click="CaptureImageButton_OnClick"
+                Command="{Binding CaptureImageCommand}"
                 Content="拍照"
                 FontSize="16"
                 Style="{StaticResource ButtonPrimary}" />
@@ -67,7 +68,7 @@
             <Button
                 Grid.Column="2"
                 Height="35"
-                Click="CloseCameraButton_OnClick"
+                Command="{Binding CloseCameraCommand}"
                 Content="关闭摄像头"
                 FontSize="16"
                 Style="{StaticResource ButtonPrimary}" />

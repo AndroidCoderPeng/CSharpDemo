@@ -9,7 +9,7 @@
     xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
     d:DataContext="{d:DesignInstance Type=vm:SerialPortViewModel}"
     d:DesignHeight="720"
-    d:DesignWidth="1280"
+    d:DesignWidth="1080"
     Background="White"
     mc:Ignorable="d">
     <Grid>

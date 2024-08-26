@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using CSharpDemo.Service;
+using CSharpDemo.ViewModels;
 using CSharpDemo.Views;
 using Prism.DryIoc;
 using Prism.Ioc;
@@ -33,11 +34,11 @@ namespace CSharpDemo
             containerRegistry.Register<IAppDataService, AppDataServiceImpl>();
 
             //Navigation
-            containerRegistry.RegisterForNavigation<CameraView>();
-            containerRegistry.RegisterForNavigation<TransmitValueView>();
-            containerRegistry.RegisterForNavigation<SerialPortView>();
-            containerRegistry.RegisterForNavigation<DataAnalysisView>();
-            containerRegistry.RegisterForNavigation<AudioWaveView>();
+            containerRegistry.RegisterForNavigation<CameraView, CameraViewModel>();
+            containerRegistry.RegisterForNavigation<TransmitValueView, TransmitValueViewModel>();
+            containerRegistry.RegisterForNavigation<SerialPortView, SerialPortViewModel>();
+            containerRegistry.RegisterForNavigation<DataAnalysisView, DataAnalysisViewModel>();
+            containerRegistry.RegisterForNavigation<AudioWaveView, AudioWaveViewModel>();
         }
     }
 }

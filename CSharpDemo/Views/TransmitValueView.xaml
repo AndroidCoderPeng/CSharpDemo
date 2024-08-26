@@ -10,7 +10,7 @@
     x:Name="TargetUserControl"
     d:DataContext="{d:DesignInstance Type=vm:TransmitValueViewModel}"
     d:DesignHeight="720"
-    d:DesignWidth="1280"
+    d:DesignWidth="1080"
     Background="White"
     mc:Ignorable="d">
 
