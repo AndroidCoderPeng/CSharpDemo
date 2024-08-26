@@ -8,132 +8,116 @@
     Title="海康摄像头登录"
     Width="400"
     Height="300"
-    AllowsTransparency="True"
-    Background="Transparent"
-    Loaded="HikVisionLoginWindow_OnLoaded"
+    Background="White"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
-    WindowStartupLocation="CenterOwner"
-    WindowStyle="None"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
-    <Border
-        Margin="2"
-        Background="White"
-        CornerRadius="10">
-        <Border.Effect>
-            <DropShadowEffect
-                BlurRadius="5"
-                Direction="0"
-                Opacity="0.5"
-                ShadowDepth="0"
-                Color="Blue" />
-        </Border.Effect>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
-            <DockPanel
-                Grid.Row="0"
-                Margin="10,0"
+        <DockPanel
+            Grid.Row="0"
+            Margin="10,0"
+            VerticalAlignment="Center"
+            LastChildFill="True">
+            <TextBlock
+                Width="150"
                 VerticalAlignment="Center"
-                LastChildFill="True">
-                <TextBlock
-                    Width="150"
-                    VerticalAlignment="Center"
-                    FontSize="16"
-                    Text="Device Address" />
+                FontSize="16"
+                Text="Device Address" />
 
-                <hc:TextBox
-                    x:Name="HostAddressTextBox"
-                    hc:InfoElement.Placeholder="请输入设备IP"
-                    hc:InfoElement.ShowClearButton="True"
-                    Text="192.168.1.65" />
-            </DockPanel>
+            <hc:TextBox
+                x:Name="HostAddressTextBox"
+                hc:InfoElement.Placeholder="请输入设备IP"
+                hc:InfoElement.ShowClearButton="True"
+                Text="192.168.1.65" />
+        </DockPanel>
 
-            <DockPanel
-                Grid.Row="1"
-                Margin="10,0"
+        <DockPanel
+            Grid.Row="1"
+            Margin="10,0"
+            VerticalAlignment="Center"
+            LastChildFill="True">
+            <TextBlock
+                Width="150"
                 VerticalAlignment="Center"
-                LastChildFill="True">
-                <TextBlock
-                    Width="150"
-                    VerticalAlignment="Center"
-                    FontSize="16"
-                    Text="User Name" />
+                FontSize="16"
+                Text="User Name" />
 
-                <hc:TextBox
-                    x:Name="UserNameTextBox"
-                    hc:InfoElement.Placeholder="请输入用户名"
-                    hc:InfoElement.ShowClearButton="True"
-                    Text="admin" />
-            </DockPanel>
+            <hc:TextBox
+                x:Name="UserNameTextBox"
+                hc:InfoElement.Placeholder="请输入用户名"
+                hc:InfoElement.ShowClearButton="True"
+                Text="admin" />
+        </DockPanel>
 
-            <DockPanel
-                Grid.Row="2"
-                Margin="10,0"
-                VerticalAlignment="Center"
-                LastChildFill="True">
-                <TextBlock
-                    Width="150"
-                    FontSize="16"
-                    Text="Port" />
+        <DockPanel
+            Grid.Row="2"
+            Margin="10,0"
+            VerticalAlignment="Center"
+            LastChildFill="True">
+            <TextBlock
+                Width="150"
+                FontSize="16"
+                Text="Port" />
 
-                <hc:TextBox
-                    x:Name="HostPortTextBox"
-                    hc:InfoElement.Placeholder="请输入设备Port"
-                    hc:InfoElement.ShowClearButton="True"
-                    Text="8000" />
-            </DockPanel>
+            <hc:TextBox
+                x:Name="HostPortTextBox"
+                hc:InfoElement.Placeholder="请输入设备Port"
+                hc:InfoElement.ShowClearButton="True"
+                Text="8000" />
+        </DockPanel>
 
-            <DockPanel
-                Grid.Row="3"
-                Margin="10,0"
-                VerticalAlignment="Center"
-                LastChildFill="True">
-                <TextBlock
-                    Width="150"
-                    FontSize="16"
-                    Text="Password" />
+        <DockPanel
+            Grid.Row="3"
+            Margin="10,0"
+            VerticalAlignment="Center"
+            LastChildFill="True">
+            <TextBlock
+                Width="150"
+                FontSize="16"
+                Text="Password" />
 
-                <hc:PasswordBox
-                    x:Name="DevicePasswordTextBox"
-                    hc:InfoElement.Placeholder="请输入设备登录密码"
-                    hc:InfoElement.ShowClearButton="True"
-                    Password="abcd123456" />
-            </DockPanel>
+            <hc:PasswordBox
+                x:Name="DevicePasswordTextBox"
+                hc:InfoElement.Placeholder="请输入设备登录密码"
+                hc:InfoElement.ShowClearButton="True"
+                Password="abcd123456" />
+        </DockPanel>
 
-            <Grid
-                Grid.Row="4"
-                Width="370"
-                Height="35">
+        <Grid
+            Grid.Row="4"
+            Width="370"
+            Height="35">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
-                <Button
-                    x:Name="CancelButton"
-                    Grid.Column="0"
-                    Width="180"
-                    HorizontalAlignment="Left"
-                    Content="Cancel"
-                    Style="{StaticResource ButtonDefault}" />
+            <Button
+                x:Name="CancelButton"
+                Grid.Column="0"
+                Width="180"
+                HorizontalAlignment="Left"
+                Content="Cancel"
+                Style="{StaticResource ButtonDefault}" />
 
-                <Button
-                    x:Name="LoginButton"
-                    Grid.Column="1"
-                    Width="180"
-                    HorizontalAlignment="Right"
-                    Content="Login"
-                    Style="{StaticResource ButtonPrimary}" />
-            </Grid>
+            <Button
+                x:Name="LoginButton"
+                Grid.Column="1"
+                Width="180"
+                HorizontalAlignment="Right"
+                Content="Login"
+                Style="{StaticResource ButtonPrimary}" />
         </Grid>
-    </Border>
+    </Grid>
 </Window>

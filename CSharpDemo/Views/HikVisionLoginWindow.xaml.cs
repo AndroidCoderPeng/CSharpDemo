@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using MessageBox = HandyControl.Controls.MessageBox;
 
 namespace CSharpDemo.Views
 {
@@ -33,11 +32,6 @@ namespace CSharpDemo.Views
                 );
                 Close();
             };
-        }
-
-        private void HikVisionLoginWindow_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            MouseDown += delegate { DragMove(); };
         }
     }
 }

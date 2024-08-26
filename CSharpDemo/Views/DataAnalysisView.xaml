@@ -7,14 +7,16 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
+    x:Name="TargetUserControl"
     d:DataContext="{d:DesignInstance Type=vm:DataAnalysisViewModel}"
     d:DesignHeight="720"
     d:DesignWidth="1080"
+    Background="White"
     mc:Ignorable="d">
 
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
-            <b:InvokeCommandAction Command="{Binding WindowLoadedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
+            <b:InvokeCommandAction Command="{Binding WindowLoadedCommand}" CommandParameter="{Binding ElementName=TargetUserControl}" />
         </b:EventTrigger>
     </b:Interaction.Triggers>
 
