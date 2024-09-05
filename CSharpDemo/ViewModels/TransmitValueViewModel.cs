@@ -50,24 +50,27 @@ namespace CSharpDemo.ViewModels
         /// </summary>
         public TransmitValueViewModel()
         {
-            DelegateCommand = new DelegateCommand<UserControl>(delegate(UserControl control)
-            {
-                var dialog = new DelegateValueDialog(ShowDelegateValue)
-                {
-                    Owner = Window.GetWindow(control)
-                };
-                dialog.ShowDialog();
-            });
+            DelegateCommand = new DelegateCommand<UserControl>(HandleDelegate);
+            EventCommand = new DelegateCommand<UserControl>(HandleEvent);
+        }
 
-            EventCommand = new DelegateCommand<UserControl>(delegate(UserControl control)
+        private void HandleDelegate(UserControl control)
+        {
+            var dialog = new DelegateValueDialog(ShowDelegateValue)
             {
-                var dialog = new EventValueDialog
-                {
-                    Owner = Window.GetWindow(control)
-                };
-                dialog.ValueChangedEventHandler += Dialog_TextChangedEventHandler;
-                dialog.ShowDialog();
-            });
+                Owner = Window.GetWindow(control)
+            };
+            dialog.ShowDialog();
+        }
+
+        private void HandleEvent(UserControl control)
+        {
+            var dialog = new EventValueDialog
+            {
+                Owner = Window.GetWindow(control)
+            };
+            dialog.ValueChangedEventHandler += Dialog_TextChangedEventHandler;
+            dialog.ShowDialog();
         }
 
         private void ShowDelegateValue(string value)

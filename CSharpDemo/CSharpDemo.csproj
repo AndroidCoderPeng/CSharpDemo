@@ -56,6 +56,9 @@
             <SpecificVersion>False</SpecificVersion>
             <HintPath>bin\Leak_location.dll</HintPath>
         </Reference>
+        <Reference Include="log4net, Version=2.0.17.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+            <HintPath>..\packages\log4net.2.0.17\lib\net45\log4net.dll</HintPath>
+        </Reference>
         <Reference Include="main_location">
             <HintPath>C:\Users\Administrator\Desktop\main_location.dll</HintPath>
         </Reference>

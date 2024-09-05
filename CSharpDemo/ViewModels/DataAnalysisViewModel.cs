@@ -77,41 +77,44 @@ namespace CSharpDemo.ViewModels
                 _view = view;
             });
 
-            ImportRedDataCommand = new DelegateCommand(delegate
+            ImportRedDataCommand = new DelegateCommand(ImportRedData);
+            ImportBlueDataCommand = new DelegateCommand(ImportBlueData);
+        }
+
+        private void ImportRedData()
+        {
+            _isRedSensor = true;
+            var fileDialog = new OpenFileDialog
             {
-                _isRedSensor = true;
-                var fileDialog = new OpenFileDialog
-                {
-                    // 设置默认格式
-                    DefaultExt = ".txt",
-                    Filter = "水听器数据文件(*.txt)|*.txt"
-                };
-                if (fileDialog.ShowDialog() == true)
-                {
-                    RedDataPath = fileDialog.FileName;
-
-                    //开始处理数据
-                    _backgroundWorker.RunWorkerAsync();
-                }
-            });
-
-            ImportBlueDataCommand = new DelegateCommand(delegate
+                // 设置默认格式
+                DefaultExt = ".txt",
+                Filter = "水听器数据文件(*.txt)|*.txt"
+            };
+            if (fileDialog.ShowDialog() == true)
             {
-                _isRedSensor = false;
-                var fileDialog = new OpenFileDialog
-                {
-                    // 设置默认格式
-                    DefaultExt = ".txt",
-                    Filter = "水听器数据文件(*.txt)|*.txt"
-                };
-                if (fileDialog.ShowDialog() == true)
-                {
-                    BlueDataPath = fileDialog.FileName;
+                RedDataPath = fileDialog.FileName;
 
-                    //开始处理数据
-                    _backgroundWorker.RunWorkerAsync();
-                }
-            });
+                //开始处理数据
+                _backgroundWorker.RunWorkerAsync();
+            }
+        }
+
+        private void ImportBlueData()
+        {
+            _isRedSensor = false;
+            var fileDialog = new OpenFileDialog
+            {
+                // 设置默认格式
+                DefaultExt = ".txt",
+                Filter = "水听器数据文件(*.txt)|*.txt"
+            };
+            if (fileDialog.ShowDialog() == true)
+            {
+                BlueDataPath = fileDialog.FileName;
+
+                //开始处理数据
+                _backgroundWorker.RunWorkerAsync();
+            }
         }
 
         private void Worker_OnDoWork(object sender, DoWorkEventArgs e)
@@ -149,7 +152,6 @@ namespace CSharpDemo.ViewModels
 
         private void Worker_OnProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            
         }
 
         private void Worker_OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -179,7 +181,8 @@ namespace CSharpDemo.ViewModels
                 int.Parse("300"), int.Parse("300"),
                 1, -1,
                 -1, -1,
-                int.Parse("10"), int.Parse("300"));
+                int.Parse("10"), int.Parse("300"),
+                1);
             Console.WriteLine(@"DataAnalysisViewModel => 计算结束");
 
             Application.Current.Dispatcher.Invoke(delegate

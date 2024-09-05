@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Drawing;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using CSharpDemo.Utils;
 using CSharpDemo.Views;
 using MathWorks.MATLAB.NET.Arrays;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -64,35 +61,37 @@ namespace CSharpDemo.ViewModels
                 _view = view;
             });
 
-            ImportRedDataCommand = new DelegateCommand(delegate
-            {
-                var fileDialog = new OpenFileDialog
-                {
-                    // 设置默认格式
-                    DefaultExt = ".txt",
-                    Filter = "水听器数据文件(*.txt)|*.txt"
-                };
-                if (fileDialog.ShowDialog() == true)
-                {
-                    RedDataPath = fileDialog.FileName;
-                }
-            });
-
-            ImportBlueDataCommand = new DelegateCommand(delegate
-            {
-                var fileDialog = new OpenFileDialog
-                {
-                    // 设置默认格式
-                    DefaultExt = ".txt",
-                    Filter = "水听器数据文件(*.txt)|*.txt"
-                };
-                if (fileDialog.ShowDialog() == true)
-                {
-                    BlueDataPath = fileDialog.FileName;
-                }
-            });
-
+            ImportRedDataCommand = new DelegateCommand(ImportRedData);
+            ImportBlueDataCommand = new DelegateCommand(ImportBlueData);
             StartCalculateCommand = new DelegateCommand(CalculateData);
+        }
+
+        private void ImportRedData()
+        {
+            var fileDialog = new OpenFileDialog
+            {
+                // 设置默认格式
+                DefaultExt = ".txt",
+                Filter = "水听器数据文件(*.txt)|*.txt"
+            };
+            if (fileDialog.ShowDialog() == true)
+            {
+                RedDataPath = fileDialog.FileName;
+            }
+        }
+
+        private void ImportBlueData()
+        {
+            var fileDialog = new OpenFileDialog
+            {
+                // 设置默认格式
+                DefaultExt = ".txt",
+                Filter = "水听器数据文件(*.txt)|*.txt"
+            };
+            if (fileDialog.ShowDialog() == true)
+            {
+                BlueDataPath = fileDialog.FileName;
+            }
         }
 
         /// <summary>
@@ -105,30 +104,24 @@ namespace CSharpDemo.ViewModels
                 LazyLeak.Value.mainFunction(_redDataPath, _blueDataPath, 7500)
             );
 
-            Console.WriteLine(JsonConvert.SerializeObject(result));
+            Console.WriteLine(result.ToString());
 
-            //最大相关系数  
-            var maxCorrelationCoefficient = Convert.ToDouble(result[3].ToString());
-
-            var xDoubles = ((MWNumericArray)result[5]).GetArray();
-            var yDoubles = ((MWNumericArray)result[4]).GetArray();
-
-            var timeDiff = Convert.ToDouble(result[6].ToString());
-            Console.WriteLine($@"时间差 => {timeDiff}");
-
-            var chart = _view.ScottplotView;
-            chart.Plot.SetAxisLimits(0, xDoubles.Last(), 0, maxCorrelationCoefficient);
-            chart.Plot.AddFill(
-                xDoubles, yDoubles,
-                color: Color.FromArgb(255, 49, 151, 36),
-                lineWidth: 0.1f,
-                lineColor: Color.FromArgb(255, 49, 151, 36)
-            );
-
-            chart.Plot.AxisAuto();
-            chart.Refresh();
-
-            DialogHub.Get.DismissLoadingDialog();
+            // var maxCorrelationCoefficient = Convert.ToDouble(result[3].ToString());
+            // var xDoubles = ((MWNumericArray)result[5]).GetArray();
+            // var yDoubles = ((MWNumericArray)result[4]).GetArray();
+            // var timeDiff = Convert.ToDouble(result[6].ToString());
+            // Console.WriteLine($@"时间差 => {timeDiff}");
+            // var chart = _view.ScottplotView;
+            // chart.Plot.SetAxisLimits(0, xDoubles.Last(), 0, maxCorrelationCoefficient);
+            // chart.Plot.AddFill(
+            //     xDoubles, yDoubles,
+            //     color: Color.FromArgb(255, 49, 151, 36),
+            //     lineWidth: 0.1f,
+            //     lineColor: Color.FromArgb(255, 49, 151, 36)
+            // );
+            // chart.Plot.AxisAuto();
+            // chart.Refresh();
+            // DialogHub.Get.DismissLoadingDialog();
         }
     }
 }

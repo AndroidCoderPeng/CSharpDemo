@@ -28,47 +28,53 @@ namespace CSharpDemo.ViewModels
 
         #endregion
 
+        private readonly IRegionManager _regionManager;
+
         public MainWindowViewModel(IRegionManager regionManager, IAppDataService dataService)
         {
+            _regionManager = regionManager;
+
             ItemModels = dataService.GetItemModels();
 
-            ItemSelectedCommand = new DelegateCommand<ListBox>(delegate(ListBox box)
-            {
-                var region = regionManager.Regions["ContentRegion"];
-                switch (box.SelectedIndex)
-                {
-                    case 0:
-                        region.RequestNavigate("CameraView");
-                        break;
-                    case 1:
-                        region.RequestNavigate("TransmitValueView");
-                        break;
-                    case 2:
-                        region.RequestNavigate("SerialPortView");
-                        break;
-                    case 3:
-                        region.RequestNavigate("DataAnalysisView");
-                        break;
-                    case 4:
-                        region.RequestNavigate("AudioWaveView");
-                        break;
-                    case 5:
-                        //初始化海康网络摄像头
-                        if (InitHikVisionSdk())
-                        {
-                            new HikVisionLoginWindow(GetLoginParam).ShowDialog();
-                        }
-                        else
-                        {
-                            MessageBox.Show("NET_DVR_Init error!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
+            ItemSelectedCommand = new DelegateCommand<ListBox>(OnListItemSelected);
+        }
 
-                        break;
-                    case 6:
-                        region.RequestNavigate("AlgorithmTestView");
-                        break;
-                }
-            });
+        private void OnListItemSelected(ListBox box)
+        {
+            var region = _regionManager.Regions["ContentRegion"];
+            switch (box.SelectedIndex)
+            {
+                case 0:
+                    region.RequestNavigate("CameraView");
+                    break;
+                case 1:
+                    region.RequestNavigate("TransmitValueView");
+                    break;
+                case 2:
+                    region.RequestNavigate("SerialPortView");
+                    break;
+                case 3:
+                    region.RequestNavigate("DataAnalysisView");
+                    break;
+                case 4:
+                    region.RequestNavigate("AudioWaveView");
+                    break;
+                case 5:
+                    //初始化海康网络摄像头
+                    if (InitHikVisionSdk())
+                    {
+                        new HikVisionLoginWindow(GetLoginParam).ShowDialog();
+                    }
+                    else
+                    {
+                        MessageBox.Show("NET_DVR_Init error!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+
+                    break;
+                case 6:
+                    region.RequestNavigate("AlgorithmTestView");
+                    break;
+            }
         }
 
         private bool InitHikVisionSdk()
