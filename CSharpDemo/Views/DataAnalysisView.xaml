@@ -11,7 +11,6 @@
     d:DataContext="{d:DesignInstance Type=vm:DataAnalysisViewModel}"
     d:DesignHeight="720"
     d:DesignWidth="1080"
-    Background="White"
     mc:Ignorable="d">
 
     <b:Interaction.Triggers>
@@ -43,6 +42,7 @@
                     Grid.Column="0"
                     hc:InfoElement.Placeholder="请选择水听器数据文件"
                     hc:InfoElement.ShowClearButton="True"
+                    Background="{DynamicResource BackgroundBrush}"
                     FontSize="16"
                     Foreground="Red"
                     Text="{Binding RedDataPath}" />
@@ -67,6 +67,7 @@
                     Grid.Column="0"
                     hc:InfoElement.Placeholder="请选择水听器数据文件"
                     hc:InfoElement.ShowClearButton="True"
+                    Background="{DynamicResource BackgroundBrush}"
                     FontSize="16"
                     Foreground="Blue"
                     Text="{Binding BlueDataPath}" />
@@ -89,6 +90,7 @@
             HorizontalAlignment="Center"
             Content="显示十字标线"
             FontSize="18"
+            Foreground="{DynamicResource ForegroundBrush}"
             IsChecked="True" />
 
         <Grid Grid.Row="2">

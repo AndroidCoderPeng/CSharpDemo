@@ -68,15 +68,13 @@
 
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="ItemContainerBorder" Property="Background" Value="#F8F8F8" />
-                                                <Setter Property="TextBlock.Foreground" Value="#00E3C7" />
+                                                <Setter TargetName="ItemContainerBorder" Property="Background" Value="{DynamicResource SubBackgroundBrush}" />
                                             </Trigger>
 
                                             <Trigger Property="IsSelected" Value="True">
-                                                <Setter TargetName="ItemContainerBorder" Property="BorderBrush" Value="#00E3C7" />
+                                                <Setter TargetName="ItemContainerBorder" Property="BorderBrush" Value="{DynamicResource DangerBrush}" />
                                                 <Setter TargetName="ItemContainerBorder" Property="BorderThickness" Value="5,0,0,0" />
-                                                <Setter TargetName="ItemContainerBorder" Property="Background" Value="#F8F8F8" />
-                                                <Setter Property="TextBlock.Foreground" Value="#00E3C7" />
+                                                <Setter TargetName="ItemContainerBorder" Property="Background" Value="{DynamicResource PrimaryBrush}" />
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -112,7 +110,7 @@
                 </Grid>
             </Grid>
 
-            <Grid Grid.Column="1" Background="LightGray" />
+            <Grid Grid.Column="1" Background="{DynamicResource SubBackgroundBrush}" />
 
             <ContentControl Grid.Column="2" prism:RegionManager.RegionName="ContentRegion" />
         </Grid>
