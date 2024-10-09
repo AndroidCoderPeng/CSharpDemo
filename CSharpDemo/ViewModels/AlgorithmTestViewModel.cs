@@ -52,8 +52,8 @@ namespace CSharpDemo.ViewModels
 
         #endregion
 
-        private static readonly Lazy<Leak_location.Leak_location> LazyLeak =
-            new Lazy<Leak_location.Leak_location>(() => new Leak_location.Leak_location());
+        // private static readonly Lazy<Leak_location.Leak_location> LazyLeak =
+        //     new Lazy<Leak_location.Leak_location>(() => new Leak_location.Leak_location());
 
         private AlgorithmTestView _view;
 
@@ -100,35 +100,35 @@ namespace CSharpDemo.ViewModels
         /// </summary>
         private async void CalculateData()
         {
-            DialogHub.Get.ShowLoadingDialog(Window.GetWindow(_view), "数据计算中，请稍后...");
-            var result = await new TaskFactory<MWArray>().StartNew(() =>
-                LazyLeak.Value.mainFunction(_redDataPath, _blueDataPath, 7500)
-            );
-
-            Console.WriteLine(JsonConvert.SerializeObject(result));
-
-            //最大相关系数  
-            var maxCorrelationCoefficient = Convert.ToDouble(result[3].ToString());
-
-            var xDoubles = ((MWNumericArray)result[5]).GetArray();
-            var yDoubles = ((MWNumericArray)result[4]).GetArray();
-
-            var timeDiff = Convert.ToDouble(result[6].ToString());
-            Console.WriteLine($@"时间差 => {timeDiff}");
-
-            var chart = _view.ScottplotView;
-            chart.Plot.SetAxisLimits(0, xDoubles.Last(), 0, maxCorrelationCoefficient);
-            chart.Plot.AddFill(
-                xDoubles, yDoubles,
-                color: Color.FromArgb(255, 49, 151, 36),
-                lineWidth: 0.1f,
-                lineColor: Color.FromArgb(255, 49, 151, 36)
-            );
-
-            chart.Plot.AxisAuto();
-            chart.Refresh();
-
-            DialogHub.Get.DismissLoadingDialog();
+            // DialogHub.Get.ShowLoadingDialog(Window.GetWindow(_view), "数据计算中，请稍后...");
+            // var result = await new TaskFactory<MWArray>().StartNew(() =>
+            //     LazyLeak.Value.mainFunction(_redDataPath, _blueDataPath, 7500)
+            // );
+            //
+            // Console.WriteLine(JsonConvert.SerializeObject(result));
+            //
+            // //最大相关系数  
+            // var maxCorrelationCoefficient = Convert.ToDouble(result[3].ToString());
+            //
+            // var xDoubles = ((MWNumericArray)result[5]).GetArray();
+            // var yDoubles = ((MWNumericArray)result[4]).GetArray();
+            //
+            // var timeDiff = Convert.ToDouble(result[6].ToString());
+            // Console.WriteLine($@"时间差 => {timeDiff}");
+            //
+            // var chart = _view.ScottplotView;
+            // chart.Plot.SetAxisLimits(0, xDoubles.Last(), 0, maxCorrelationCoefficient);
+            // chart.Plot.AddFill(
+            //     xDoubles, yDoubles,
+            //     color: Color.FromArgb(255, 49, 151, 36),
+            //     lineWidth: 0.1f,
+            //     lineColor: Color.FromArgb(255, 49, 151, 36)
+            // );
+            //
+            // chart.Plot.AxisAuto();
+            // chart.Refresh();
+            //
+            // DialogHub.Get.DismissLoadingDialog();
         }
     }
 }

@@ -12,6 +12,7 @@
     Height="720"
     d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
     ResizeMode="NoResize"
+    Topmost="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
@@ -23,59 +24,88 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <ListBox
-                x:Name="MenuListBox"
-                Grid.Column="0"
-                HorizontalAlignment="Stretch"
-                BorderThickness="0"
-                ItemsSource="{Binding ItemModels}"
-                SelectedIndex="0">
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                <b:Interaction.Triggers>
-                    <b:EventTrigger EventName="SelectionChanged">
-                        <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding ElementName=MenuListBox}" />
-                    </b:EventTrigger>
-                </b:Interaction.Triggers>
+                <ListBox
+                    x:Name="MenuListBox"
+                    Grid.Row="0"
+                    HorizontalAlignment="Stretch"
+                    BorderThickness="0"
+                    ItemsSource="{Binding ItemModels}"
+                    SelectedIndex="0">
 
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock
-                            Padding="15"
-                            VerticalAlignment="Center"
-                            FontSize="16"
-                            Text="{Binding}" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="SelectionChanged">
+                            <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding ElementName=MenuListBox}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
 
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Margin" Value="0,0,0,2" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <Border x:Name="ItemContainerBorder">
-                                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
-                                    </Border>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Padding="15"
+                                VerticalAlignment="Center"
+                                FontSize="16"
+                                Text="{Binding}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
 
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="ItemContainerBorder" Property="Background" Value="#F8F8F8" />
-                                            <Setter Property="TextBlock.Foreground" Value="#00E3C7" />
-                                        </Trigger>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Margin" Value="0,0,0,2" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <Border x:Name="ItemContainerBorder">
+                                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                                        </Border>
 
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="ItemContainerBorder" Property="BorderBrush" Value="#00E3C7" />
-                                            <Setter TargetName="ItemContainerBorder" Property="BorderThickness" Value="5,0,0,0" />
-                                            <Setter TargetName="ItemContainerBorder" Property="Background" Value="#F8F8F8" />
-                                            <Setter Property="TextBlock.Foreground" Value="#00E3C7" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-            </ListBox>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="ItemContainerBorder" Property="Background" Value="#F8F8F8" />
+                                                <Setter Property="TextBlock.Foreground" Value="#00E3C7" />
+                                            </Trigger>
+
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="ItemContainerBorder" Property="BorderBrush" Value="#00E3C7" />
+                                                <Setter TargetName="ItemContainerBorder" Property="BorderThickness" Value="5,0,0,0" />
+                                                <Setter TargetName="ItemContainerBorder" Property="Background" Value="#F8F8F8" />
+                                                <Setter Property="TextBlock.Foreground" Value="#00E3C7" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+
+                <Grid
+                    Grid.Row="1"
+                    Margin="0,10"
+                    HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        Text="主题切换" />
+
+                    <ToggleButton
+                        Grid.Column="2"
+                        HorizontalAlignment="Left"
+                        Style="{StaticResource ToggleButtonSwitch}" />
+                </Grid>
+            </Grid>
 
             <Grid Grid.Column="1" Background="LightGray" />
 
