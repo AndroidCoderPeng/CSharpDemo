@@ -49,15 +49,15 @@
         <Reference Include="FftSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
             <HintPath>..\packages\FftSharp.2.1.0\lib\netstandard2.0\FftSharp.dll</HintPath>
         </Reference>
-        <Reference Include="HandyControl, Version=3.4.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, processorArchitecture=MSIL">
-            <HintPath>..\packages\HandyControl.3.4.0\lib\net48\HandyControl.dll</HintPath>
+        <Reference Include="HandyControl, Version=3.5.1.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, processorArchitecture=MSIL">
+          <HintPath>..\packages\HandyControl.3.5.1\lib\net48\HandyControl.dll</HintPath>
         </Reference>
         <Reference Include="Leak_location, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
             <HintPath>bin\Leak_location.dll</HintPath>
         </Reference>
-        <Reference Include="log4net, Version=2.0.17.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-            <HintPath>..\packages\log4net.2.0.17\lib\net45\log4net.dll</HintPath>
+        <Reference Include="log4net, Version=3.0.1.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+          <HintPath>..\packages\log4net.3.0.1\lib\net462\log4net.dll</HintPath>
         </Reference>
         <Reference Include="main_location">
             <HintPath>C:\Users\Administrator\Desktop\main_location.dll</HintPath>
@@ -271,6 +271,8 @@
             <Generator>MSBuild:Compile</Generator>
         </Page>
         <Page Include="Dialogs\LoadingDialog.xaml"/>
+        <Page Include="Themes\DarkTheme.xaml" />
+        <Page Include="Themes\LightTheme.xaml" />
         <Page Include="Views\AlgorithmTestView.xaml"/>
         <Page Include="Views\AudioWaveView.xaml"/>
         <Page Include="Views\HikVisionLoginWindow.xaml">

@@ -10,7 +10,6 @@
     d:DataContext="{d:DesignInstance Type=vm:TransmitValueViewModel}"
     d:DesignHeight="720"
     d:DesignWidth="1080"
-    Background="White"
     mc:Ignorable="d">
 
     <Grid>
@@ -34,7 +33,9 @@
                 Height="35"
                 Margin="5,0"
                 hc:InfoElement.ShowClearButton="True"
+                Background="{DynamicResource BackgroundBrush}"
                 FontSize="16"
+                Foreground="{DynamicResource ForegroundBrush}"
                 Text="{Binding DelegateValue}" />
         </DockPanel>
 
@@ -52,7 +53,9 @@
                 Height="35"
                 Margin="5,0"
                 hc:InfoElement.ShowClearButton="True"
+                Background="{DynamicResource BackgroundBrush}"
                 FontSize="16"
+                Foreground="{DynamicResource ForegroundBrush}"
                 Text="{Binding EventValue}" />
         </DockPanel>
 

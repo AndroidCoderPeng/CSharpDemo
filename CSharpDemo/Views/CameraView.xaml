@@ -8,7 +8,6 @@
     d:DataContext="{d:DesignInstance Type=vm:CameraViewModel}"
     d:DesignHeight="720"
     d:DesignWidth="1080"
-    Background="White"
     mc:Ignorable="d">
 
     <Grid>
