@@ -188,9 +188,11 @@
                 Width="185"
                 Height="35"
                 HorizontalAlignment="Center"
+                Background="{DynamicResource BackgroundBrush}"
                 Command="{Binding ClearMessageCommand}"
                 Content="清空数据"
-                FontSize="16" />
+                FontSize="16"
+                Foreground="{DynamicResource ForegroundBrush}" />
         </StackPanel>
 
         <Grid Grid.Column="1" Background="{DynamicResource SubBackgroundBrush}" />

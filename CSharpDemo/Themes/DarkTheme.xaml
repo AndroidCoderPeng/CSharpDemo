@@ -2,4 +2,8 @@
     <SolidColorBrush x:Key="BackgroundBrush" Color="#282828" />
     <SolidColorBrush x:Key="SubBackgroundBrush" Color="#686868" />
     <SolidColorBrush x:Key="ForegroundBrush" Color="White" />
+
+    <!--  HandyControl 默认颜色 ComboBox下拉背景色和下拉项颜色  -->
+    <SolidColorBrush x:Key="RegionBrush" Color="#282828" />
+    <SolidColorBrush x:Key="SecondaryRegionBrush" Color="#686868" />
 </ResourceDictionary>

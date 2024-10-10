@@ -8,6 +8,7 @@
     Title="海康摄像头登录"
     Width="400"
     Height="300"
+    Background="{DynamicResource BackgroundBrush}"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
     WindowStartupLocation="CenterScreen"
@@ -31,12 +32,15 @@
                 Width="150"
                 VerticalAlignment="Center"
                 FontSize="16"
+                Foreground="{DynamicResource ForegroundBrush}"
                 Text="Device Address" />
 
             <hc:TextBox
                 x:Name="HostAddressTextBox"
                 hc:InfoElement.Placeholder="请输入设备IP"
                 hc:InfoElement.ShowClearButton="True"
+                Background="{DynamicResource BackgroundBrush}"
+                Foreground="{DynamicResource ForegroundBrush}"
                 Text="192.168.1.65" />
         </DockPanel>
 
@@ -49,12 +53,15 @@
                 Width="150"
                 VerticalAlignment="Center"
                 FontSize="16"
+                Foreground="{DynamicResource ForegroundBrush}"
                 Text="User Name" />
 
             <hc:TextBox
                 x:Name="UserNameTextBox"
                 hc:InfoElement.Placeholder="请输入用户名"
                 hc:InfoElement.ShowClearButton="True"
+                Background="{DynamicResource BackgroundBrush}"
+                Foreground="{DynamicResource ForegroundBrush}"
                 Text="admin" />
         </DockPanel>
 
@@ -66,12 +73,15 @@
             <TextBlock
                 Width="150"
                 FontSize="16"
+                Foreground="{DynamicResource ForegroundBrush}"
                 Text="Port" />
 
             <hc:TextBox
                 x:Name="HostPortTextBox"
                 hc:InfoElement.Placeholder="请输入设备Port"
                 hc:InfoElement.ShowClearButton="True"
+                Background="{DynamicResource BackgroundBrush}"
+                Foreground="{DynamicResource ForegroundBrush}"
                 Text="8000" />
         </DockPanel>
 
@@ -83,12 +93,15 @@
             <TextBlock
                 Width="150"
                 FontSize="16"
+                Foreground="{DynamicResource ForegroundBrush}"
                 Text="Password" />
 
             <hc:PasswordBox
                 x:Name="DevicePasswordTextBox"
                 hc:InfoElement.Placeholder="请输入设备登录密码"
                 hc:InfoElement.ShowClearButton="True"
+                Background="{DynamicResource BackgroundBrush}"
+                Foreground="{DynamicResource ForegroundBrush}"
                 Password="abcd123456" />
         </DockPanel>
 
@@ -108,6 +121,7 @@
                 Width="180"
                 HorizontalAlignment="Left"
                 Content="Cancel"
+                Foreground="{DynamicResource ForegroundBrush}"
                 Style="{StaticResource ButtonDefault}" />
 
             <Button

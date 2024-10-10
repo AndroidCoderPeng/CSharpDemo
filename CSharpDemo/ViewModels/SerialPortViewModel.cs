@@ -13,7 +13,7 @@ using HandyControl.Controls;
 using MathWorks.MATLAB.NET.Arrays;
 using Prism.Commands;
 using Prism.Mvvm;
-using MessageBox = HandyControl.Controls.MessageBox;
+using MessageBox = System.Windows.MessageBox;
 using Tag = CSharpDemo.Tags.Tag;
 
 namespace CSharpDemo.ViewModels

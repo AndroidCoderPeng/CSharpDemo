@@ -11,8 +11,7 @@
     Width="1280"
     Height="720"
     d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
-    ResizeMode="NoResize"
-    Topmost="True"
+    ResizeMode="CanMinimize"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
