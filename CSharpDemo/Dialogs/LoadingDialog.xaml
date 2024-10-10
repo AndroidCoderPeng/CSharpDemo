@@ -15,7 +15,7 @@
 
     <Border
         Margin="3"
-        Background="White"
+        Background="{DynamicResource FirstBgBrush}"
         CornerRadius="5">
         <Border.Effect>
             <DropShadowEffect
@@ -37,6 +37,7 @@
                 Width="120"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
+                Foreground="{DynamicResource ForegroundBrush}"
                 Text="TextBlockTextBlockTextBlockTextBlock"
                 TextWrapping="Wrap" />
         </Grid>

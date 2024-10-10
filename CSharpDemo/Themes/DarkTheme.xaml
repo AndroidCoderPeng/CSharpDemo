@@ -1,9 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key="BackgroundBrush" Color="#282828" />
-    <SolidColorBrush x:Key="SubBackgroundBrush" Color="#686868" />
+    <SolidColorBrush x:Key="FirstBgBrush" Color="#1D1F33" />
+    <SolidColorBrush x:Key="SecondBgBrush" Color="#24253E" />
+    <SolidColorBrush x:Key="ThirdBgBrush" Color="#24253E" />
     <SolidColorBrush x:Key="ForegroundBrush" Color="White" />
 
     <!--  HandyControl 默认颜色 ComboBox下拉背景色和下拉项颜色  -->
-    <SolidColorBrush x:Key="RegionBrush" Color="#282828" />
-    <SolidColorBrush x:Key="SecondaryRegionBrush" Color="#686868" />
+    <SolidColorBrush x:Key="RegionBrush" Color="#24253E" />
+    <SolidColorBrush x:Key="SecondaryRegionBrush" Color="#1D1F33" />
 </ResourceDictionary>

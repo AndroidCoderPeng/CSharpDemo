@@ -25,6 +25,9 @@ namespace CSharpDemo.ViewModels
         #region DelegateCommand
 
         public DelegateCommand<ListBox> ItemSelectedCommand { set; get; }
+        public DelegateCommand<MainWindow> MiniSizeCommand { set; get; }
+        public DelegateCommand<MainWindow> MaxSizeCommand { set; get; }
+        public DelegateCommand<MainWindow> CloseWindowCommand { set; get; }
 
         #endregion
 
@@ -37,6 +40,9 @@ namespace CSharpDemo.ViewModels
             ItemModels = dataService.GetItemModels();
 
             ItemSelectedCommand = new DelegateCommand<ListBox>(OnListItemSelected);
+            MiniSizeCommand = new DelegateCommand<MainWindow>(MiniSizeWindow);
+            MaxSizeCommand = new DelegateCommand<MainWindow>(MaxSizeWindow);
+            CloseWindowCommand = new DelegateCommand<MainWindow>(CloseWindow);
         }
 
         private void OnListItemSelected(ListBox box)
@@ -75,6 +81,23 @@ namespace CSharpDemo.ViewModels
                     region.RequestNavigate("AlgorithmTestView");
                     break;
             }
+        }
+
+        private void MiniSizeWindow(MainWindow window)
+        {
+            window.WindowState = WindowState.Minimized;
+        }
+
+        private void MaxSizeWindow(MainWindow window)
+        {
+            window.WindowState = window.WindowState == WindowState.Maximized
+                ? WindowState.Normal
+                : WindowState.Maximized;
+        }
+
+        private void CloseWindow(MainWindow window)
+        {
+            window.Close();
         }
 
         private bool InitHikVisionSdk()

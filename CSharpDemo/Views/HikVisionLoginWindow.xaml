@@ -8,7 +8,7 @@
     Title="海康摄像头登录"
     Width="400"
     Height="300"
-    Background="{DynamicResource BackgroundBrush}"
+    Background="{DynamicResource FirstBgBrush}"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
     WindowStartupLocation="CenterScreen"
@@ -39,7 +39,7 @@
                 x:Name="HostAddressTextBox"
                 hc:InfoElement.Placeholder="请输入设备IP"
                 hc:InfoElement.ShowClearButton="True"
-                Background="{DynamicResource BackgroundBrush}"
+                Background="{DynamicResource ThirdBgBrush}"
                 Foreground="{DynamicResource ForegroundBrush}"
                 Text="192.168.1.65" />
         </DockPanel>
@@ -60,7 +60,7 @@
                 x:Name="UserNameTextBox"
                 hc:InfoElement.Placeholder="请输入用户名"
                 hc:InfoElement.ShowClearButton="True"
-                Background="{DynamicResource BackgroundBrush}"
+                Background="{DynamicResource ThirdBgBrush}"
                 Foreground="{DynamicResource ForegroundBrush}"
                 Text="admin" />
         </DockPanel>
@@ -80,7 +80,7 @@
                 x:Name="HostPortTextBox"
                 hc:InfoElement.Placeholder="请输入设备Port"
                 hc:InfoElement.ShowClearButton="True"
-                Background="{DynamicResource BackgroundBrush}"
+                Background="{DynamicResource ThirdBgBrush}"
                 Foreground="{DynamicResource ForegroundBrush}"
                 Text="8000" />
         </DockPanel>
@@ -100,7 +100,7 @@
                 x:Name="DevicePasswordTextBox"
                 hc:InfoElement.Placeholder="请输入设备登录密码"
                 hc:InfoElement.ShowClearButton="True"
-                Background="{DynamicResource BackgroundBrush}"
+                Background="{DynamicResource ThirdBgBrush}"
                 Foreground="{DynamicResource ForegroundBrush}"
                 Password="abcd123456" />
         </DockPanel>
@@ -120,6 +120,7 @@
                 Grid.Column="0"
                 Width="180"
                 HorizontalAlignment="Left"
+                Background="{DynamicResource ThirdBgBrush}"
                 Content="Cancel"
                 Foreground="{DynamicResource ForegroundBrush}"
                 Style="{StaticResource ButtonDefault}" />

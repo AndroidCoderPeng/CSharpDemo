@@ -10,6 +10,7 @@
     d:DataContext="{d:DesignInstance Type=vm:SerialPortViewModel}"
     d:DesignHeight="720"
     d:DesignWidth="1080"
+    Background="{DynamicResource FirstBgBrush}"
     mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -37,7 +38,7 @@
                 <hc:ComboBox
                     Height="30"
                     Margin="0,0,15,0"
-                    Background="{DynamicResource BackgroundBrush}"
+                    Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
                     IsEnabled="{Binding PortNameComboBoxIsEnabled}"
                     ItemsSource="{Binding PortArray}"
@@ -62,7 +63,7 @@
                 <hc:ComboBox
                     Height="30"
                     Margin="0,0,15,0"
-                    Background="{DynamicResource BackgroundBrush}"
+                    Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
                     IsEnabled="{Binding BaudRateComboBoxIsEnabled}"
                     ItemsSource="{Binding BaudRateList}"
@@ -87,7 +88,7 @@
                 <hc:ComboBox
                     Height="30"
                     Margin="0,0,15,0"
-                    Background="{DynamicResource BackgroundBrush}"
+                    Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
                     IsEnabled="{Binding DataBitComboBoxIsEnabled}"
                     ItemsSource="{Binding DataBitList}"
@@ -112,7 +113,7 @@
                 <hc:ComboBox
                     Height="30"
                     Margin="0,0,15,0"
-                    Background="{DynamicResource BackgroundBrush}"
+                    Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
                     IsEnabled="{Binding ParityComboBoxIsEnabled}"
                     ItemsSource="{Binding ParityList}"
@@ -137,7 +138,7 @@
                 <hc:ComboBox
                     Height="30"
                     Margin="0,0,15,0"
-                    Background="{DynamicResource BackgroundBrush}"
+                    Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
                     IsEnabled="{Binding StopBitComboBoxIsEnabled}"
                     ItemsSource="{Binding StopBitList}"
@@ -188,7 +189,7 @@
                 Width="185"
                 Height="35"
                 HorizontalAlignment="Center"
-                Background="{DynamicResource BackgroundBrush}"
+                Background="{DynamicResource ThirdBgBrush}"
                 Command="{Binding ClearMessageCommand}"
                 Content="清空数据"
                 FontSize="16"
@@ -215,7 +216,7 @@
             <ListView
                 Grid.Row="1"
                 Margin="15,0"
-                Background="{DynamicResource SubBackgroundBrush}"
+                Background="{DynamicResource ThirdBgBrush}"
                 BorderBrush="{DynamicResource BackgroundBrush}"
                 ItemsSource="{Binding ResponseCollection}"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -244,7 +245,7 @@
                     VerticalContentAlignment="Center"
                     hc:InfoElement.Placeholder="请要发送的数据"
                     hc:InfoElement.ShowClearButton="True"
-                    Background="{DynamicResource BackgroundBrush}"
+                    Background="{DynamicResource ThirdBgBrush}"
                     FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
                     Text="{Binding UserInputHex}" />
@@ -269,7 +270,7 @@
                     Grid.Column="0"
                     Height="300"
                     Margin="0,0,15,0"
-                    Background="{DynamicResource SubBackgroundBrush}"
+                    Background="{DynamicResource ThirdBgBrush}"
                     BorderBrush="{DynamicResource BackgroundBrush}"
                     ItemsSource="{Binding LogCollection}"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">

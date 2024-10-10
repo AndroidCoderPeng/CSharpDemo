@@ -39,5 +39,10 @@ namespace CSharpDemo.Views
             var newTheme = new ResourceDictionary { Source = new Uri("Themes/LightTheme.xaml", UriKind.Relative) };
             mergedDictionaries.Add(newTheme);
         }
+
+        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
     }
 }
