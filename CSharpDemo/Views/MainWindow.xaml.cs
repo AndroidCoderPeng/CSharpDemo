@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 
 namespace CSharpDemo.Views
 {
@@ -39,11 +38,6 @@ namespace CSharpDemo.Views
             // 添加新主题  
             var newTheme = new ResourceDictionary { Source = new Uri("Themes/LightTheme.xaml", UriKind.Relative) };
             mergedDictionaries.Add(newTheme);
-        }
-
-        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
         }
     }
 }

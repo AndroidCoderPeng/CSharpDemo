@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
@@ -13,97 +12,67 @@
     Width="1280"
     Height="720"
     d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
-    AllowsTransparency="True"
     ResizeMode="CanMinimize"
     WindowStartupLocation="CenterScreen"
-    WindowStyle="None"
     mc:Ignorable="d">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
 
-        <Grid
-            Grid.Row="0"
-            Background="{DynamicResource SecondBgBrush}"
-            MouseLeftButtonDown="Border_MouseLeftButtonDown">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Background="{DynamicResource SecondBgBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <Image
-                Grid.Column="0"
-                Width="20"
-                Height="20"
-                Margin="7,0,0,0"
-                Source="/CSharpDemo;component/Image/favicon.ico" />
-
-            <TextBlock
-                Grid.Column="1"
-                Margin="10,0"
-                VerticalAlignment="Center"
-                Foreground="{DynamicResource ForegroundBrush}"
-                Text="CSharpDemo" />
-
-            <Button
-                Grid.Column="3"
-                Width="43"
-                Height="30"
-                hc:BackgroundSwitchElement.MouseHoverBackground="{DynamicResource FirstBgBrush}"
-                hc:BorderElement.CornerRadius="0"
+            <ListBox
+                x:Name="MenuListBox"
+                Grid.Row="0"
+                HorizontalAlignment="Stretch"
                 Background="Transparent"
                 BorderThickness="0"
-                Command="{Binding MiniSizeCommand}"
-                CommandParameter="{Binding ElementName=TargetWindow}"
-                Content="&#xe65a;"
-                FontFamily="/CSharpDemo;component/IconFont/#iconfont"
                 Foreground="{DynamicResource ForegroundBrush}"
-                Style="{StaticResource ButtonCustom}" />
+                ItemsSource="{Binding ItemModels}"
+                SelectedIndex="0">
 
-            <Button
-                Grid.Column="4"
-                Width="43"
-                Height="30"
-                Margin="3,0"
-                hc:BorderElement.CornerRadius="0"
-                Background="Transparent"
-                BorderThickness="0"
-                Command="{Binding MaxSizeCommand}"
-                CommandParameter="{Binding ElementName=TargetWindow}"
-                Content="&#xe65d;"
-                FontFamily="/CSharpDemo;component/IconFont/#iconfont"
-                Foreground="{DynamicResource ForegroundBrush}"
-                IsEnabled="False" />
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="SelectionChanged">
+                        <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding ElementName=MenuListBox}" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
 
-            <Button
-                Grid.Column="5"
-                Width="43"
-                Height="30"
-                hc:BorderElement.CornerRadius="0"
-                BorderThickness="0"
-                Command="{Binding CloseWindowCommand}"
-                CommandParameter="{Binding ElementName=TargetWindow}"
-                Content="&#xe660;"
-                FontFamily="/CSharpDemo;component/IconFont/#iconfont">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock
+                            Padding="15"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            Text="{Binding}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Margin" Value="0,0,0,1" />
                         <Setter Property="Template">
                             <Setter.Value>
-                                <ControlTemplate TargetType="Button">
-                                    <Border x:Name="ButtonContainerBorder">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Border x:Name="ItemContainerBorder">
+                                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                                     </Border>
+
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="ButtonContainerBorder" Property="Background" Value="Red" />
+                                            <Setter TargetName="ItemContainerBorder" Property="Background" Value="{DynamicResource FirstBgBrush}" />
+                                        </Trigger>
+
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="ItemContainerBorder" Property="BorderBrush" Value="Red" />
+                                            <Setter TargetName="ItemContainerBorder" Property="BorderThickness" Value="5,0,0,0" />
+                                            <Setter TargetName="ItemContainerBorder" Property="Background" Value="{DynamicResource PrimaryBrush}" />
                                             <Setter Property="TextBlock.Foreground" Value="White" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
@@ -111,104 +80,35 @@
                             </Setter.Value>
                         </Setter>
                     </Style>
-                </Button.Style>
-            </Button>
-        </Grid>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="180" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+            <Grid
+                Grid.Row="1"
+                Margin="0,10"
+                HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0" Background="{DynamicResource SecondBgBrush}">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <ListBox
-                    x:Name="MenuListBox"
-                    Grid.Row="0"
-                    HorizontalAlignment="Stretch"
-                    Background="Transparent"
-                    BorderThickness="0"
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
-                    ItemsSource="{Binding ItemModels}"
-                    SelectedIndex="0">
+                    Text="主题切换" />
 
-                    <b:Interaction.Triggers>
-                        <b:EventTrigger EventName="SelectionChanged">
-                            <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding ElementName=MenuListBox}" />
-                        </b:EventTrigger>
-                    </b:Interaction.Triggers>
-
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Padding="15"
-                                VerticalAlignment="Center"
-                                FontSize="16"
-                                Text="{Binding}" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="Margin" Value="0,0,0,1" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <Border x:Name="ItemContainerBorder">
-                                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
-                                        </Border>
-
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="ItemContainerBorder" Property="Background" Value="{DynamicResource FirstBgBrush}" />
-                                            </Trigger>
-
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter TargetName="ItemContainerBorder" Property="BorderBrush" Value="Red" />
-                                                <Setter TargetName="ItemContainerBorder" Property="BorderThickness" Value="5,0,0,0" />
-                                                <Setter TargetName="ItemContainerBorder" Property="Background" Value="{DynamicResource PrimaryBrush}" />
-                                                <Setter Property="TextBlock.Foreground" Value="White" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                </ListBox>
-
-                <Grid
-                    Grid.Row="1"
-                    Margin="0,10"
-                    HorizontalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="10" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock
-                        Grid.Column="0"
-                        VerticalAlignment="Center"
-                        FontSize="16"
-                        Foreground="{DynamicResource ForegroundBrush}"
-                        Text="主题切换" />
-
-                    <ToggleButton
-                        Grid.Column="2"
-                        HorizontalAlignment="Left"
-                        Checked="ToggleButton_OnChecked"
-                        Style="{StaticResource ToggleButtonSwitch}"
-                        Unchecked="ToggleButton_OnUnchecked" />
-                </Grid>
+                <ToggleButton
+                    Grid.Column="2"
+                    HorizontalAlignment="Left"
+                    Checked="ToggleButton_OnChecked"
+                    Style="{StaticResource ToggleButtonSwitch}"
+                    Unchecked="ToggleButton_OnUnchecked" />
             </Grid>
-
-            <ContentControl Grid.Column="1" prism:RegionManager.RegionName="ContentRegion" />
         </Grid>
+
+        <ContentControl Grid.Column="1" prism:RegionManager.RegionName="ContentRegion" />
     </Grid>
 </Window>
