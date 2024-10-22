@@ -17,6 +17,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -67,5 +70,47 @@
                 Content="打开Event传值窗口"
                 Style="{StaticResource ButtonPrimary}" />
         </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <hc:TextBox
+                x:Name="WavFileTextBox"
+                Grid.Column="0"
+                Margin="5"
+                VerticalAlignment="Center"
+                hc:InfoElement.ShowClearButton="True"
+                Background="{DynamicResource ThirdBgBrush}"
+                FontSize="16"
+                Foreground="{DynamicResource ForegroundBrush}"
+                Text="C:\Users\pengx\Desktop\相关仪测试数据目录\Audio\2024-10-18\听音_红_20241018_173335.wav" />
+
+            <Button
+                Grid.Column="1"
+                Margin="0,0,5,0"
+                Command="{Binding SelectWavFileCommand}"
+                CommandParameter="{Binding ElementName=WavFileTextBox, Path=Text}"
+                Content="选择音频"
+                Style="{StaticResource ButtonPrimary}" />
+        </Grid>
+
+        <UniformGrid
+            Grid.Row="3"
+            Margin="5,0,5,5"
+            Columns="2">
+            <Grid Margin="0,0,2.5,0" Background="Black">
+                <Path x:Name="StripsPath" />
+            </Grid>
+
+            <Grid
+                x:Name="SampleWavePanel"
+                Margin="2.5,0,0,0"
+                Background="Black">
+                <Path x:Name="SampleWavePath" />
+            </Grid>
+        </UniformGrid>
     </Grid>
 </UserControl>
