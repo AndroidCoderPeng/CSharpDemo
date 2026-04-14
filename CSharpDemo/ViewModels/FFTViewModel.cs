@@ -2,6 +2,7 @@
 using System.Linq;
 using MathNet.Numerics;
 using MathNet.Numerics.IntegralTransforms;
+using Microsoft.Win32;
 using NAudio.Wave;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -10,9 +11,25 @@ namespace CSharpDemo.ViewModels
 {
     public class FFTViewModel : BindableBase
     {
+        #region VM
+
+        private string _wavFilePath;
+
+        public string WavFilePath
+        {
+            get => _wavFilePath;
+            set
+            {
+                _wavFilePath = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region DelegateCommand
 
-        public DelegateCommand<object> SelectWavFileCommand { get; }
+        public DelegateCommand SelectWavFileCommand { get; }
 
         #endregion
 
@@ -23,112 +40,123 @@ namespace CSharpDemo.ViewModels
         /// </summary>
         public FFTViewModel()
         {
-            SelectWavFileCommand = new DelegateCommand<object>(SelectWavFile);
+            SelectWavFileCommand = new DelegateCommand(SelectWavFile);
         }
 
-        private void SelectWavFile(object filePath)
+        private void SelectWavFile()
         {
-            using (var reader = new WaveFileReader((string)filePath))
+            var fileDialog = new OpenFileDialog
             {
-                var waveFormat = reader.WaveFormat;
-                //常见的位数有8位、16位、24位和32位
-                var bitsPerSample = waveFormat.BitsPerSample;
-                if (bitsPerSample == 8 && waveFormat.Channels == 1)
+                // 设置默认格式
+                DefaultExt = ".wav",
+                Filter = "音频文件(*.wav)|*.wav"
+            };
+            if (fileDialog.ShowDialog() == true)
+            {
+                WavFilePath = fileDialog.FileName;
+
+                using (var reader = new WaveFileReader(_wavFilePath))
                 {
-                    if (waveFormat.Channels != 1)
+                    var waveFormat = reader.WaveFormat;
+                    //常见的位数有8位、16位、24位和32位
+                    var bitsPerSample = waveFormat.BitsPerSample;
+                    if (bitsPerSample == 8 && waveFormat.Channels == 1)
                     {
-                        throw new InvalidOperationException("This example only supports 8-bit PCM mono WAV files.");
-                    }
+                        if (waveFormat.Channels != 1)
+                        {
+                            throw new InvalidOperationException("This example only supports 8-bit PCM mono WAV files.");
+                        }
 
-                    //8位PCM，每个采样点1个字节
-                    var byteBuffer = new byte[reader.Length];
-                    var bytesRead = reader.Read(byteBuffer, 0, byteBuffer.Length);
-                    if (bytesRead != byteBuffer.Length)
+                        //8位PCM，每个采样点1个字节
+                        var byteBuffer = new byte[reader.Length];
+                        var bytesRead = reader.Read(byteBuffer, 0, byteBuffer.Length);
+                        if (bytesRead != byteBuffer.Length)
+                        {
+                            throw new InvalidOperationException("Failed to read the expected number of samples.");
+                        }
+
+                        if (byteBuffer.Length % 4 != 0)
+                        {
+                            throw new ArgumentException();
+                        }
+
+                        var sampleBytes = new int[byteBuffer.Length / 4];
+                        for (var i = 0; i < sampleBytes.Length; i++)
+                        {
+                            sampleBytes[i] = BitConverter.ToInt32(byteBuffer, i * 4);
+                        }
+
+                        FastFourierTransform(sampleBytes, waveFormat);
+                    }
+                    else if (bitsPerSample == 16)
                     {
-                        throw new InvalidOperationException("Failed to read the expected number of samples.");
-                    }
+                        // 计算总样本数（每个样本2个字节）  
+                        var totalBytes = reader.Length;
+                        var totalSamples = (int)(totalBytes / 2);
 
-                    if (byteBuffer.Length % 4 != 0)
+                        // 为采样数据分配byte数组  
+                        var byteBuffer = new byte[totalBytes];
+                        var bytesRead = reader.Read(byteBuffer, 0, byteBuffer.Length);
+                        if (bytesRead != byteBuffer.Length)
+                        {
+                            throw new InvalidOperationException("Failed to read the expected number of bytes.");
+                        }
+
+                        var sampleBytes = new int[totalSamples];
+                        Buffer.BlockCopy(byteBuffer, 0, sampleBytes, 0, byteBuffer.Length);
+
+                        FastFourierTransform(sampleBytes, waveFormat);
+                    }
+                    else if (bitsPerSample == 24)
                     {
-                        throw new ArgumentException();
-                    }
+                        //24位PCM，每个采样点3个字节
+                        var totalBytes = reader.Length;
+                        var totalSamples = (int)(totalBytes / 3);
 
-                    var sampleBytes = new int[byteBuffer.Length / 4];
-                    for (var i = 0; i < sampleBytes.Length; i++)
+                        // 为采样数据分配byte数组  
+                        var byteBuffer = new byte[totalBytes];
+                        var bytesRead = reader.Read(byteBuffer, 0, byteBuffer.Length);
+                        if (bytesRead != byteBuffer.Length)
+                        {
+                            throw new InvalidOperationException("Failed to read the expected number of bytes.");
+                        }
+
+                        var sampleBytes = new int[totalSamples];
+                        for (var i = 0; i < totalSamples; i++)
+                        {
+                            //从3个字节中提取24位值  
+                            sampleBytes[i] = (byteBuffer[i * 3] & 0xFF) |
+                                             ((byteBuffer[i * 3 + 1] & 0xFF) << 8) |
+                                             ((byteBuffer[i * 3 + 2] & 0xFF) << 16);
+                        }
+
+                        FastFourierTransform(sampleBytes, waveFormat);
+                    }
+                    else if (bitsPerSample == 32)
                     {
-                        sampleBytes[i] = BitConverter.ToInt32(byteBuffer, i * 4);
+                        //32位PCM，每个采样点4个字节
+                        var totalBytes = reader.Length;
+                        var totalSamples = (int)(totalBytes / 4);
+
+                        // 为采样数据分配byte数组  
+                        var byteBuffer = new byte[totalBytes];
+                        var bytesRead = reader.Read(byteBuffer, 0, byteBuffer.Length);
+                        if (bytesRead != byteBuffer.Length)
+                        {
+                            throw new InvalidOperationException("Failed to read the expected number of bytes.");
+                        }
+
+                        var sampleBytes = new int[totalSamples];
+                        for (var i = 0; i < totalSamples; i++)
+                        {
+                            sampleBytes[i] = (byteBuffer[i * 4] & 0xFF) |
+                                             ((byteBuffer[i * 4 + 1] & 0xFF) << 8) |
+                                             ((byteBuffer[i * 4 + 2] & 0xFF) << 16) |
+                                             ((byteBuffer[i * 4 + 3] & 0xFF) << 24);
+                        }
+
+                        FastFourierTransform(sampleBytes, waveFormat);
                     }
-
-                    FastFourierTransform(sampleBytes, waveFormat);
-                }
-                else if (bitsPerSample == 16)
-                {
-                    // 计算总样本数（每个样本2个字节）  
-                    var totalBytes = reader.Length;
-                    var totalSamples = (int)(totalBytes / 2);
-
-                    // 为采样数据分配byte数组  
-                    var byteBuffer = new byte[totalBytes];
-                    var bytesRead = reader.Read(byteBuffer, 0, byteBuffer.Length);
-                    if (bytesRead != byteBuffer.Length)
-                    {
-                        throw new InvalidOperationException("Failed to read the expected number of bytes.");
-                    }
-
-                    var sampleBytes = new int[totalSamples];
-                    Buffer.BlockCopy(byteBuffer, 0, sampleBytes, 0, byteBuffer.Length);
-
-                    FastFourierTransform(sampleBytes, waveFormat);
-                }
-                else if (bitsPerSample == 24)
-                {
-                    //24位PCM，每个采样点3个字节
-                    var totalBytes = reader.Length;
-                    var totalSamples = (int)(totalBytes / 3);
-
-                    // 为采样数据分配byte数组  
-                    var byteBuffer = new byte[totalBytes];
-                    var bytesRead = reader.Read(byteBuffer, 0, byteBuffer.Length);
-                    if (bytesRead != byteBuffer.Length)
-                    {
-                        throw new InvalidOperationException("Failed to read the expected number of bytes.");
-                    }
-
-                    var sampleBytes = new int[totalSamples];
-                    for (var i = 0; i < totalSamples; i++)
-                    {
-                        //从3个字节中提取24位值  
-                        sampleBytes[i] = (byteBuffer[i * 3] & 0xFF) |
-                                         ((byteBuffer[i * 3 + 1] & 0xFF) << 8) |
-                                         ((byteBuffer[i * 3 + 2] & 0xFF) << 16);
-                    }
-
-                    FastFourierTransform(sampleBytes, waveFormat);
-                }
-                else if (bitsPerSample == 32)
-                {
-                    //32位PCM，每个采样点4个字节
-                    var totalBytes = reader.Length;
-                    var totalSamples = (int)(totalBytes / 4);
-
-                    // 为采样数据分配byte数组  
-                    var byteBuffer = new byte[totalBytes];
-                    var bytesRead = reader.Read(byteBuffer, 0, byteBuffer.Length);
-                    if (bytesRead != byteBuffer.Length)
-                    {
-                        throw new InvalidOperationException("Failed to read the expected number of bytes.");
-                    }
-
-                    var sampleBytes = new int[totalSamples];
-                    for (var i = 0; i < totalSamples; i++)
-                    {
-                        sampleBytes[i] = (byteBuffer[i * 4] & 0xFF) |
-                                         ((byteBuffer[i * 4 + 1] & 0xFF) << 8) |
-                                         ((byteBuffer[i * 4 + 2] & 0xFF) << 16) |
-                                         ((byteBuffer[i * 4 + 3] & 0xFF) << 24);
-                    }
-
-                    FastFourierTransform(sampleBytes, waveFormat);
                 }
             }
         }
