@@ -2,9 +2,9 @@
 
 namespace CSharpDemo.Views
 {
-    public partial class TransmitValueView : UserControl
+    public partial class FFTView : UserControl
     {
-        public TransmitValueView()
+        public FFTView()
         {
             InitializeComponent();
         }

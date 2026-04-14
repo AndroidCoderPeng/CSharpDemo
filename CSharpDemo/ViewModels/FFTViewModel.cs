@@ -1,50 +1,17 @@
 ﻿using System;
 using System.Linq;
-using System.Windows.Controls;
-using CSharpDemo.Dialogs;
 using MathNet.Numerics;
 using MathNet.Numerics.IntegralTransforms;
 using NAudio.Wave;
 using Prism.Commands;
 using Prism.Mvvm;
-using Window = System.Windows.Window;
 
 namespace CSharpDemo.ViewModels
 {
-    public class TransmitValueViewModel : BindableBase
+    public class FFTViewModel : BindableBase
     {
-        #region VM
-
-        private string _delegateValue;
-
-        public string DelegateValue
-        {
-            get => _delegateValue;
-            set
-            {
-                _delegateValue = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private string _eventValue;
-
-        public string EventValue
-        {
-            get => _eventValue;
-            set
-            {
-                _eventValue = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        #endregion
-
         #region DelegateCommand
 
-        public DelegateCommand<UserControl> DelegateCommand { get; }
-        public DelegateCommand<UserControl> EventCommand { get; }
         public DelegateCommand<object> SelectWavFileCommand { get; }
 
         #endregion
@@ -54,40 +21,9 @@ namespace CSharpDemo.ViewModels
         /// 1、什么页面需要值，就在此页面定义传值函数
         /// 2、在另一个页面定义委托，把值给委托
         /// </summary>
-        public TransmitValueViewModel()
+        public FFTViewModel()
         {
-            DelegateCommand = new DelegateCommand<UserControl>(HandleDelegate);
-            EventCommand = new DelegateCommand<UserControl>(HandleEvent);
             SelectWavFileCommand = new DelegateCommand<object>(SelectWavFile);
-        }
-
-        private void HandleDelegate(UserControl control)
-        {
-            var dialog = new DelegateValueDialog(ShowDelegateValue)
-            {
-                Owner = Window.GetWindow(control)
-            };
-            dialog.ShowDialog();
-        }
-
-        private void HandleEvent(UserControl control)
-        {
-            var dialog = new EventValueDialog
-            {
-                Owner = Window.GetWindow(control)
-            };
-            dialog.ValueChangedEventHandler += Dialog_TextChangedEventHandler;
-            dialog.ShowDialog();
-        }
-
-        private void ShowDelegateValue(string value)
-        {
-            DelegateValue = value;
-        }
-
-        private void Dialog_TextChangedEventHandler(object sender, string value)
-        {
-            EventValue = value;
         }
 
         private void SelectWavFile(object filePath)
