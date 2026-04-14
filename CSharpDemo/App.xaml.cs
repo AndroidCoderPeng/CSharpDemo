@@ -19,7 +19,7 @@ namespace CSharpDemo
             mainWindow.Loaded += delegate
             {
                 var regionManager = Container.Resolve<IRegionManager>();
-                regionManager.RequestNavigate("ContentRegion", "CameraView");
+                regionManager.RequestNavigate("ContentRegion", "TransmitValueView");
             };
             return mainWindow;
         }
@@ -34,7 +34,6 @@ namespace CSharpDemo
             containerRegistry.Register<IAppDataService, AppDataServiceImpl>();
 
             //Navigation
-            containerRegistry.RegisterForNavigation<CameraView, CameraViewModel>();
             containerRegistry.RegisterForNavigation<TransmitValueView, TransmitValueViewModel>();
             containerRegistry.RegisterForNavigation<SerialPortView, SerialPortViewModel>();
             containerRegistry.RegisterForNavigation<DataAnalysisView, DataAnalysisViewModel>();
