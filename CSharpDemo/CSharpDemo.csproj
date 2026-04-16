@@ -192,12 +192,12 @@
         <Compile Include="Utils\AudioVisualizer.cs"/>
         <Compile Include="Utils\RuntimeCache.cs"/>
         <Compile Include="ViewModels\AlgorithmTestViewModel.cs"/>
-        <Compile Include="ViewModels\AudioWaveViewModel.cs"/>
+        <Compile Include="ViewModels\AudioVisualizerViewModel.cs"/>
         <Compile Include="Views\AlgorithmTestView.xaml.cs">
             <DependentUpon>AlgorithmTestView.xaml</DependentUpon>
         </Compile>
-        <Compile Include="Views\AudioWaveView.xaml.cs">
-            <DependentUpon>AudioWaveView.xaml</DependentUpon>
+        <Compile Include="Views\AudioVisualizerView.xaml.cs">
+            <DependentUpon>AudioVisualizerView.xaml</DependentUpon>
         </Compile>
         <Compile Include="Views\SerialPortView.xaml.cs">
             <DependentUpon>SerialPortView.xaml</DependentUpon>
@@ -248,7 +248,7 @@
         <Page Include="Themes\DarkTheme.xaml"/>
         <Page Include="Themes\LightTheme.xaml"/>
         <Page Include="Views\AlgorithmTestView.xaml"/>
-        <Page Include="Views\AudioWaveView.xaml"/>
+        <Page Include="Views\AudioVisualizerView.xaml"/>
         <Page Include="Views\SerialPortView.xaml">
             <SubType>Designer</SubType>
         </Page>

@@ -12,7 +12,7 @@ using NAudio.Wave;
 
 namespace CSharpDemo.Views
 {
-    public partial class AudioWaveView : UserControl
+    public partial class AudioVisualizerView : UserControl
     {
         private readonly Color[] _allColors;
         private readonly AudioVisualizer _visualizer; // 可视化
@@ -21,7 +21,7 @@ namespace CSharpDemo.Views
         private int _colorIndex;
         private double _rotation;
 
-        public AudioWaveView(IAppDataService dataService)
+        public AudioVisualizerView(IAppDataService dataService)
         {
             InitializeComponent();
 
