@@ -83,7 +83,7 @@ namespace CSharpDemo.Views
             var freqData = _visualizer.GetFrequencyDomain();
 
             // 平滑频谱数据
-            var newSpectrumData = AudioVisualizer.MakeSmooth(freqData, 2); // 平滑频谱数据
+            var newSpectrumData = _visualizer.MakeSmooth(freqData, 2); // 平滑频谱数据
 
             // 转换为分贝显示（更符合人耳感知）
             newSpectrumData.Magnitudes = newSpectrumData.Magnitudes.ToDecibels();
@@ -119,11 +119,10 @@ namespace CSharpDemo.Views
             var color1 = _allColors[_colorIndex % _allColors.Length];
             var color2 = _allColors[(_colorIndex + 200) % _allColors.Length];
 
+            // 获取低音系数
+            var bassScale = _visualizer.CalculateBassScale(_spectrumData);
+
             //圆形波动图
-            // var bassArea = AudioVisualizer.TakeSpectrumOfFrequency(
-            //     _spectrumData, _audioCapture.WaveFormat.SampleRate, 250
-            // );
-            // var bassScale = bassArea.Average() * 100; //低音区
             // var extraScale = Math.Min(CirclePath.ActualWidth, CirclePath.ActualHeight) / 6; //高音区
             // DrawCircleGradientStrips(
             //     CirclePath, color1, color2,
@@ -133,6 +132,12 @@ namespace CSharpDemo.Views
             //     1, _rotation, CirclePath.ActualHeight * 3
             // );
 
+            // 四周边框
+            bassScale.DrawGradientBorder(
+                TopBorder, BottomBorder, LeftBorder, RightBorder,
+                Color.FromArgb(0, color1.R, color1.G, color1.B), color2, 10
+            );
+
             //波形曲线
             // var curveBrush = new SolidColorBrush(color1);
             // DrawCurve(
@@ -140,13 +145,6 @@ namespace CSharpDemo.Views
             //     _visualizer.FrameBuffer, _visualizer.FrameBuffer.Length,
             //     SampleWavePanel.ActualWidth, 0, SampleWavePanel.ActualHeight / 2,
             //     Math.Min(SampleWavePanel.ActualHeight / 2, 50)
-            // );
-
-            //四周边框
-            // DrawGradientBorder(
-            //     TopBorder, BottomBorder, LeftBorder, RightBorder,
-            //     Color.FromArgb(0, color1.R, color1.G, color1.B), color2,
-            //     SampleWavePanel.ActualWidth / 3, bassScale
             // );
 
             //长条形波动图
@@ -270,36 +268,6 @@ namespace CSharpDemo.Views
             wavePath.Data = new PathGeometry { Figures = { figure } };
             wavePath.StrokeThickness = 2;
             wavePath.Stroke = brush;
-        }
-
-        /// <summary>
-        /// 画四周渐变边框
-        /// </summary>
-        /// <param name="topBorder"></param>
-        /// <param name="bottomBorder"></param>
-        /// <param name="leftBorder"></param>
-        /// <param name="rightBorder"></param>
-        /// <param name="inner"></param>
-        /// <param name="outer"></param>
-        /// <param name="width">画图宽度</param>
-        /// <param name="bassScale">高低音转化比例</param>
-        private void DrawGradientBorder(
-            Rectangle topBorder, Rectangle bottomBorder, Rectangle leftBorder,
-            Rectangle rightBorder, Color inner, Color outer, double width, double bassScale
-        )
-        {
-            //边框粗细根据音频高低音变化
-            var thickness = (int)(width * bassScale);
-
-            topBorder.Height = thickness;
-            bottomBorder.Height = thickness;
-            leftBorder.Width = thickness;
-            rightBorder.Width = thickness;
-
-            topBorder.Fill = new LinearGradientBrush(outer, inner, 90);
-            bottomBorder.Fill = new LinearGradientBrush(inner, outer, 90);
-            leftBorder.Fill = new LinearGradientBrush(outer, inner, 0);
-            rightBorder.Fill = new LinearGradientBrush(inner, outer, 0);
         }
     }
 }

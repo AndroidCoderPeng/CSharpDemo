@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using Accord.Math;
 using CSharpDemo.Model;
@@ -9,6 +10,10 @@ namespace CSharpDemo.Utils
     {
         private readonly double _sampleRate;
         private Complex[] _fftBuffer;
+        private double _minBass = double.MaxValue;
+        private double _maxBass = double.MinValue;
+        private const int HistorySize = 60;
+        private readonly Queue<double> _bassHistory = new Queue<double>();
 
         /// <summary>
         /// 界面刷新的音频帧
@@ -49,6 +54,92 @@ namespace CSharpDemo.Utils
                 Array.Copy(FrameBuffer, audioData.Length, FrameBuffer, 0, FrameBuffer.Length - audioData.Length);
                 Array.Copy(audioData, 0, FrameBuffer, FrameBuffer.Length - audioData.Length, audioData.Length);
             }
+        }
+
+        /// <summary>
+        /// 获取频谱数据，也就是音频对应的时域数据
+        /// </summary>
+        /// <returns></returns>
+        public TimeDomainData GetTimeDomain()
+        {
+            var len = FrameBuffer.Length;
+            if (len <= 1)
+            {
+                return new TimeDomainData
+                {
+                    TimeAxis = Array.Empty<double>(),
+                    Amplitude = Array.Empty<double>()
+                };
+            }
+
+            var timeAxis = new double[len];
+            var sampleInterval = 1.0 / _sampleRate;
+            for (var i = 0; i < len; i++)
+            {
+                timeAxis[i] = i * sampleInterval;
+            }
+
+            return new TimeDomainData
+            {
+                TimeAxis = timeAxis,
+                Amplitude = (double[])FrameBuffer.Clone()
+            };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="freqData"></param>
+        /// <returns></returns>
+        public double CalculateBassScale(FrequencyDomainData freqData)
+        {
+            if (freqData?.Frequencies == null || freqData.Magnitudes == null || freqData.Frequencies.Length == 0)
+            {
+                return 1.0;
+            }
+
+            const double bassThreshold = 200;
+            var count = 0;
+            double sum = 0;
+
+            for (var i = 0; i < freqData.Frequencies.Length; i++)
+            {
+                if (freqData.Frequencies[i] <= bassThreshold && freqData.Frequencies[i] >= 0)
+                {
+                    sum += Math.Abs(freqData.Magnitudes[i]);
+                    count++;
+                }
+            }
+
+            var avgBass = count > 0 ? sum / count : 0;
+
+            _bassHistory.Enqueue(avgBass);
+            if (_bassHistory.Count > HistorySize)
+            {
+                _bassHistory.Dequeue();
+            }
+
+            if (_bassHistory.Count > 10)
+            {
+                _minBass = double.MaxValue;
+                _maxBass = double.MinValue;
+                foreach (var val in _bassHistory)
+                {
+                    if (val < _minBass) _minBass = val;
+                    if (val > _maxBass) _maxBass = val;
+                }
+            }
+
+            var range = _maxBass - _minBass;
+            if (range < 0.0001)
+            {
+                return 1.0;
+            }
+
+            var normalized = (avgBass - _minBass) / range;
+            var scale = 0.8 + normalized * 0.8;
+
+            return Math.Max(0.8, Math.Min(scale, 1.6));
         }
 
         /// <summary>
@@ -99,7 +190,7 @@ namespace CSharpDemo.Utils
         /// <param name="data">数据</param>
         /// <param name="radius">模糊半径</param>
         /// <returns>结果</returns>
-        public static FrequencyDomainData MakeSmooth(FrequencyDomainData data, int radius)
+        public FrequencyDomainData MakeSmooth(FrequencyDomainData data, int radius)
         {
             if (data?.Magnitudes == null || data.Magnitudes.Length == 0)
             {
@@ -132,23 +223,6 @@ namespace CSharpDemo.Utils
                 Frequencies = data.Frequencies,
                 Magnitudes = smoothed
             };
-        }
-
-        /// <summary>
-        /// 取指定频率内的频谱数据
-        /// </summary>
-        /// <param name="spectrum">源频谱数据</param>
-        /// <param name="sampleRate">采样率</param>
-        /// <param name="frequency">目标频率</param>
-        /// <returns></returns>
-        public static double[] TakeSpectrumOfFrequency(double[] spectrum, double sampleRate, double frequency)
-        {
-            var frequencyPerSample = sampleRate / spectrum.Length;
-
-            var lengthInNeed = (int)Math.Min(frequency / frequencyPerSample, spectrum.Length);
-            var result = new double[lengthInNeed];
-            Array.Copy(spectrum, 0, result, 0, lengthInNeed);
-            return result;
         }
     }
 }

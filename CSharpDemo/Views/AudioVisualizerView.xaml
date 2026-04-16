@@ -28,15 +28,15 @@
             </Grid>
 
             <Grid
-                x:Name="SampleWavePanel"
+                x:Name="AudioWavePanel"
                 Grid.Column="1"
                 Margin="5,0,0,0"
                 Background="Black">
-                <Path x:Name="SampleWavePath" />
                 <Rectangle Name="TopBorder" VerticalAlignment="Top" />
                 <Rectangle Name="BottomBorder" VerticalAlignment="Bottom" />
                 <Rectangle Name="LeftBorder" HorizontalAlignment="Left" />
                 <Rectangle Name="RightBorder" HorizontalAlignment="Right" />
+                <Path x:Name="AudioWavePath" />
             </Grid>
         </Grid>
 
