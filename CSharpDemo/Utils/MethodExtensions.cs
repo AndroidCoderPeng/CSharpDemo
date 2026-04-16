@@ -13,32 +13,6 @@ namespace CSharpDemo.Utils
 {
     public static class MethodExtensions
     {
-        public static byte[] ToBytes(this Bitmap bitmap)
-        {
-            var ms = new MemoryStream();
-            bitmap.Save(ms, ImageFormat.Jpeg);
-            var buffer = ms.ToArray();
-            ms.Close();
-            ms.Dispose();
-            return buffer;
-        }
-
-        public static BitmapImage ToBitmapImage(this Bitmap bitmap)
-        {
-            var ms = new MemoryStream();
-            bitmap.Save(ms, ImageFormat.Png);
-            var bitImage = new BitmapImage();
-            bitImage.BeginInit();
-            bitImage.StreamSource = ms;
-            bitImage.EndInit();
-            return bitImage;
-        }
-
-        public static void ToImageFile(this Bitmap bitmap, string dirPath)
-        {
-            bitmap.Save(dirPath + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg", ImageFormat.Jpeg);
-        }
-
         /// <summary>
         /// 字节数组转Int
         /// </summary>
@@ -141,6 +115,40 @@ namespace CSharpDemo.Utils
             }
 
             return (result1 * 65536 + result2 * 256 + result3) * 5 / 83.88607 / 100000;
+        }
+
+        /// <summary>
+        /// 判断是否是2的幂
+        /// </summary>
+        public static bool IsPowerOfTwo(this int size)
+        {
+            return size > 0 && (size & (size - 1)) == 0;
+        }
+
+        public static byte[] ToBytes(this Bitmap bitmap)
+        {
+            var ms = new MemoryStream();
+            bitmap.Save(ms, ImageFormat.Jpeg);
+            var buffer = ms.ToArray();
+            ms.Close();
+            ms.Dispose();
+            return buffer;
+        }
+
+        public static BitmapImage ToBitmapImage(this Bitmap bitmap)
+        {
+            var ms = new MemoryStream();
+            bitmap.Save(ms, ImageFormat.Png);
+            var bitImage = new BitmapImage();
+            bitImage.BeginInit();
+            bitImage.StreamSource = ms;
+            bitImage.EndInit();
+            return bitImage;
+        }
+
+        public static void ToImageFile(this Bitmap bitmap, string dirPath)
+        {
+            bitmap.Save(dirPath + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg", ImageFormat.Jpeg);
         }
 
         public static List<string> ReadFromFile(this string filePath)

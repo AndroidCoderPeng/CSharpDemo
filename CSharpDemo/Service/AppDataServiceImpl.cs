@@ -16,7 +16,7 @@ namespace CSharpDemo.Service
             return _itemTitles.ToList();
         }
 
-        public Color[] GetAllHsvColors()
+        public Color[] GetHsvColors()
         {
             var result = new Color[256 * 6];
 

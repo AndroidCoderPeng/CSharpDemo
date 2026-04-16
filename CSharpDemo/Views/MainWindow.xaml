@@ -40,7 +40,8 @@
 
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="SelectionChanged">
-                        <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding ElementName=MenuListBox}" />
+                        <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}"
+                                               CommandParameter="{Binding ElementName=MenuListBox}" />
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
 
@@ -66,13 +67,16 @@
 
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="ItemContainerBorder" Property="Background" Value="{DynamicResource FirstBgBrush}" />
+                                            <Setter TargetName="ItemContainerBorder" Property="Background"
+                                                    Value="{DynamicResource FirstBgBrush}" />
                                         </Trigger>
 
                                         <Trigger Property="IsSelected" Value="True">
                                             <Setter TargetName="ItemContainerBorder" Property="BorderBrush" Value="Red" />
-                                            <Setter TargetName="ItemContainerBorder" Property="BorderThickness" Value="5,0,0,0" />
-                                            <Setter TargetName="ItemContainerBorder" Property="Background" Value="{DynamicResource PrimaryBrush}" />
+                                            <Setter TargetName="ItemContainerBorder" Property="BorderThickness"
+                                                    Value="10,0,0,0" />
+                                            <Setter TargetName="ItemContainerBorder" Property="Background"
+                                                    Value="{DynamicResource PrimaryBrush}" />
                                             <Setter Property="TextBlock.Foreground" Value="White" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>

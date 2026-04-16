@@ -15,43 +15,34 @@ namespace CSharpDemo.Utils
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="waveDataSize">控制频谱数量，数量越多，界面显示波动的频谱越多，建议256就好</param>
+        /// <param name="size">控制频谱数量，数量越多，界面显示波动的频谱越多，建议256就好</param>
         /// <exception cref="ArgumentException"></exception>
-        public AudioVisualizer(int waveDataSize)
+        public AudioVisualizer(int size = 256)
         {
-            if (!Get2Flag(waveDataSize))
+            if (!size.IsPowerOfTwo())
             {
                 throw new ArgumentException("长度必须是 2 的 n 次幂");
             }
 
-            SampleData = new double[waveDataSize];
+            SampleData = new double[size];
         }
 
         /// <summary>
-        /// 判断是否是 2 的整数次幂
+        /// 保持固定大小的数据窗口，始终显示最新的音频采样
         /// </summary>
-        /// <param name="num"></param>
-        /// <returns></returns>
-        private bool Get2Flag(int num)
+        /// <param name="audioData"></param>
+        public void PushAudioData(float[] audioData)
         {
-            if (num < 1)
+            if (audioData.Length > SampleData.Length)
             {
-                return false;
-            }
-
-            return (num & num - 1) == 0;
-        }
-
-        public void PushSampleData(double[] waveData)
-        {
-            if (waveData.Length > SampleData.Length)
-            {
-                Array.Copy(waveData, waveData.Length - SampleData.Length, SampleData, 0, SampleData.Length);
+                // 数据超长时：只保留最新的 SampleData.Length 个采样（从尾部截取）
+                Array.Copy(audioData, audioData.Length - SampleData.Length, SampleData, 0, SampleData.Length);
             }
             else
             {
-                Array.Copy(SampleData, waveData.Length, SampleData, 0, SampleData.Length - waveData.Length);
-                Array.Copy(waveData, 0, SampleData, SampleData.Length - waveData.Length, waveData.Length);
+                // 数据不足时：将旧数据左移腾出空间，新数据追加到末尾
+                Array.Copy(SampleData, audioData.Length, SampleData, 0, SampleData.Length - audioData.Length);
+                Array.Copy(audioData, 0, SampleData, SampleData.Length - audioData.Length, audioData.Length);
             }
         }
 
