@@ -18,7 +18,6 @@ namespace CSharpDemo.Utils
         /// <param name="bottomColor">下方颜色</param>
         /// <param name="topColor">上方颜色</param>
         /// <param name="xOffset">绘图的起始 X 坐标</param>
-        /// <param name="yOffset">绘图的起始 Y 坐标</param>
         /// <param name="spacing">条形与条形之间的间隔(像素)</param>
         public static void DrawGradientStrips(
             this FrequencyDomainData spectrumData, double width, double height, Path target, Color bottomColor,
@@ -58,20 +57,28 @@ namespace CSharpDemo.Utils
 
             //生成一系列频谱竖条
             var geometry = new GeometryGroup();
+
+            // 找到最小高度作为基准线
+            var minAbsY = double.MaxValue;
+            foreach (var point in stripAxisPositions)
+            {
+                var absY = Math.Abs(point.Y);
+                if (absY < minAbsY) minAbsY = absY;
+            }
+
             for (var i = 0; i < stripCount; i++)
             {
                 var point = stripAxisPositions[i];
-                Console.WriteLine($@"X = {point.X},y = {point.Y}");
+                var absY = Math.Abs(point.Y);
 
-                var stripHeight = point.Y;
-                if (stripHeight < 0)
-                {
-                    stripHeight = -stripHeight;
-                }
+                // 只绘制超出基准线的部分
+                var stripHeight = absY - minAbsY;
 
                 // Y轴翻转：WPF坐标系Y向下为正，竖条应从底部向上绘制
                 var yBase = height;
                 var stripTopY = yBase - stripHeight;
+
+                // Console.WriteLine($@"X = {point.X},y = {point.Y}, stripTopY = {stripTopY}, height = {stripHeight}");
 
                 //每根竖条的四个角坐标。圆点在视图的左上角
                 var endPoints = new[]

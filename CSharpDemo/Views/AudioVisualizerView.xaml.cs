@@ -28,7 +28,7 @@ namespace CSharpDemo.Views
             InitializeComponent();
 
             _allColors = dataService.GetHsvColors(); // 获取所有的渐变颜色 (HSV 颜色)
-            _visualizer = new AudioVisualizer(SampleRate, 512);
+            _visualizer = new AudioVisualizer(SampleRate);
 
             _audioCapture = new WasapiLoopbackCapture(); // 捕获电脑发出的声音
             _audioCapture.WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(SampleRate, 1); // 7500Hz 采样率，单声道
