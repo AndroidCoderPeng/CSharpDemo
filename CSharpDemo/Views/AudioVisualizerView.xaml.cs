@@ -52,12 +52,12 @@ namespace CSharpDemo.Views
 
         private readonly DispatcherTimer _dataTimer = new DispatcherTimer
         {
-            Interval = new TimeSpan(0, 0, 0, 0, 30)
+            Interval = new TimeSpan(0, 0, 0, 0, 25)
         };
 
         private readonly DispatcherTimer _drawingTimer = new DispatcherTimer
         {
-            Interval = new TimeSpan(0, 0, 0, 0, 30)
+            Interval = new TimeSpan(0, 0, 0, 0, 25)
         };
 
         private void AudioWaveView_OnLoaded(object sender, RoutedEventArgs e)

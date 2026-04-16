@@ -64,7 +64,7 @@ namespace CSharpDemo.Utils
             }
 
             // 波峰波谷缩放比例
-            var scale = maxAmplitude > 0 ? height / maxAmplitude : 0;
+            var scale = maxAmplitude > 0 ? (height / 2) / maxAmplitude : 0;
             
             var pointArray = new Point[pointCount];
             for (var i = 0; i < pointCount; i++)
