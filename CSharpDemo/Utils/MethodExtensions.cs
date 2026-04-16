@@ -153,22 +153,6 @@ namespace CSharpDemo.Utils
             return weights;
         }
 
-        /// <summary>
-        /// 将幅度转换为分贝(dB)，用于专业频谱显示
-        /// </summary>
-        /// <param name="magnitudes"></param>
-        /// <returns></returns>
-        public static double[] ToDecibels(this double[] magnitudes)
-        {
-            var db = new double[magnitudes.Length];
-            for (var i = 0; i < magnitudes.Length; i++)
-            {
-                db[i] = 20 * Math.Log10(Math.Max(magnitudes[i], 1e-10));
-            }
-
-            return db;
-        }
-
         public static byte[] ToBytes(this Bitmap bitmap)
         {
             var ms = new MemoryStream();

@@ -82,7 +82,6 @@ namespace CSharpDemo.Views
             // 获取频域数据
             var frequencyDomain = _visualizer.GetFrequencyDomain();
             var sFrequencyDomain = _visualizer.MakeSmooth(frequencyDomain, 2); // 平滑频谱数据
-            sFrequencyDomain.Magnitudes = sFrequencyDomain.Magnitudes.ToDecibels(); // 转换为分贝显示（更符合人耳感知）
 
             if (_frequencyDomain == null)
             {
