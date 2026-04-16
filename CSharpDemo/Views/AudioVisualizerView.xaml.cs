@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using CSharpDemo.Model;
 using CSharpDemo.Service;
@@ -22,7 +20,7 @@ namespace CSharpDemo.Views
         private FrequencyDomainData _frequencyDomain; // 频域数据
         private TimeDomainData _timeDomain; // 时域数据
         private int _colorIndex;
-        private double _rotation;
+        private double _rotation; // 旋转角度
 
         public AudioVisualizerView(IAppDataService dataService)
         {
@@ -129,24 +127,25 @@ namespace CSharpDemo.Views
                 return;
             }
 
-            _rotation += .1;
             _colorIndex++;
-
             var color1 = _allColors[_colorIndex % _allColors.Length];
             var color2 = _allColors[(_colorIndex + 200) % _allColors.Length];
 
-            // 获取低音系数
-            var bassScale = _visualizer.CalculateBassScale(_frequencyDomain);
+            var bassScale = _visualizer.CalculateBassScale(_frequencyDomain); // 获取低音系数
+            var highScale = _visualizer.CalculateHighScale(_frequencyDomain); // 获取高音系数
+            // Console.WriteLine($@"bassScale: {bassScale}, highScale: {highScale}");
 
             //圆形波动图
-            // var extraScale = Math.Min(CirclePath.ActualWidth, CirclePath.ActualHeight) / 6; //高音区
-            // DrawCircleGradientStrips(
-            //     CirclePath, color1, color2,
-            //     _spectrumData, _spectrumData.Length,
-            //     CirclePath.ActualWidth / 2, CirclePath.ActualHeight / 2,
-            //     Math.Min(CirclePath.ActualWidth, CirclePath.ActualHeight) / 3 + extraScale * bassScale,
-            //     1, _rotation, CirclePath.ActualHeight * 3
-            // );
+            _rotation += .1;
+            var baseRadius = Math.Min(CircularAudioPanel.ActualWidth, CircularAudioPanel.ActualHeight) / 3;
+            var radius = baseRadius + highScale * bassScale;
+            // Console.WriteLine($@"radius: {radius}");
+            _frequencyDomain.DrawCircularGradientStrips(
+                CircularAudioPanel.ActualHeight, CircularPath, color1, color2,
+                CircularPath.ActualWidth / 2,
+                CircularPath.ActualHeight / 2,
+                radius, 1, _rotation
+            );
 
             // 四周边框
             bassScale.DrawGradientBorder(
@@ -156,7 +155,7 @@ namespace CSharpDemo.Views
 
             //波形曲线
             var curveBrush = new SolidColorBrush(color1);
-            _timeDomain.DrawCurve(
+            _timeDomain.DrawGradientCurve(
                 AudioWavePanel.ActualWidth, AudioWavePanel.ActualHeight, AudioWavePath, curveBrush, 0
             );
 
@@ -164,88 +163,6 @@ namespace CSharpDemo.Views
             _frequencyDomain.DrawGradientStrips(
                 AudioStripPanel.ActualWidth, AudioStripPanel.ActualHeight, StripsPath, color1, color2, 0, 2
             );
-        }
-
-        /// <summary>
-        /// 画圆环条
-        /// </summary>
-        /// <param name="wavePath"></param>
-        /// <param name="inner"></param>
-        /// <param name="outer"></param>
-        /// <param name="spectrumData"></param>
-        /// <param name="stripCount"></param>
-        /// <param name="xOffset"></param>
-        /// <param name="yOffset"></param>
-        /// <param name="radius">圆环半径</param>
-        /// <param name="spacing">圆环上面小竖条间距</param>
-        /// <param name="rotation">圆环旋转角度</param>
-        /// <param name="scale">控制圆环上面小竖条高度</param>
-        private void DrawCircleGradientStrips(
-            Path wavePath, Color inner, Color outer, double[] spectrumData, int stripCount,
-            double xOffset, double yOffset, double radius, double spacing, double rotation, double scale
-        )
-        {
-            //旋转角度转弧度
-            var rotationRadian = Math.PI / 180 * rotation;
-
-            //等分圆周，每个（竖条+空白）对应的弧度
-            var blockRadian = Math.PI * 2 / stripCount;
-
-            //每个空隙对应的弧度
-            var spacingRadian = Math.PI / 180 * spacing;
-
-            //每个竖条对应的弧度
-            var stripRadian = blockRadian - spacingRadian;
-
-            var pointArray = new Point[stripCount];
-
-            for (var i = 0; i < stripCount; i++)
-            {
-                var x = blockRadian * i + rotationRadian; // angle
-                var y = spectrumData[i * spectrumData.Length / stripCount] * scale; // height
-                pointArray[i] = new Point(x, y);
-            }
-
-            var geometry = new PathGeometry();
-            foreach (var point in pointArray)
-            {
-                var sinStart = Math.Sin(point.X);
-                var sinEnd = Math.Sin(point.X + stripRadian);
-                var cosStart = Math.Cos(point.X);
-                var cosEnd = Math.Cos(point.X + stripRadian);
-
-                var polygon = new[]
-                {
-                    new Point(cosStart * radius + xOffset, sinStart * radius + yOffset),
-                    new Point(cosEnd * radius + xOffset, sinEnd * radius + yOffset),
-                    new Point(cosEnd * (radius + point.Y) + xOffset, sinEnd * (radius + point.Y) + yOffset),
-                    new Point(cosStart * (radius + point.Y) + xOffset, sinStart * (radius + point.Y) + yOffset)
-                };
-
-                var figure = new PathFigure
-                {
-                    StartPoint = polygon[0],
-                    IsFilled = true
-                };
-
-                figure.Segments.Add(new PolyLineSegment(polygon, false));
-                geometry.Figures.Add(figure);
-            }
-
-            wavePath.Data = geometry;
-
-            var maxHeight = pointArray.Max(point => point.Y);
-            var brush = new LinearGradientBrush(new GradientStopCollection
-                {
-                    new GradientStop(Colors.Transparent, 0),
-                    new GradientStop(inner, radius / (radius + maxHeight)),
-                    new GradientStop(outer, 1)
-                },
-                new Point(xOffset, 0),
-                new Point(xOffset, 1)
-            );
-
-            wavePath.Fill = brush;
         }
     }
 }

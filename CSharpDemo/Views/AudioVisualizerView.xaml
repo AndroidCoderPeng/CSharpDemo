@@ -20,8 +20,11 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Background="Black">
-            <Path x:Name="CirclePath" />
+        <Grid
+            x:Name="CircularAudioPanel"
+            Grid.Row="0"
+            Background="Black">
+            <Path x:Name="CircularPath" />
         </Grid>
 
         <Grid

@@ -17,8 +17,11 @@ namespace CSharpDemo.Utils
         private Complex[] _fftBuffer;
         private double _minBass = double.MaxValue;
         private double _maxBass = double.MinValue;
+        private double _minHigh = double.MaxValue;
+        private double _maxHigh = double.MinValue;
         private const int HistorySize = 60;
         private readonly Queue<double> _bassHistory = new Queue<double>();
+        private readonly Queue<double> _highHistory = new Queue<double>();
 
         /// <summary>
         /// 
@@ -137,6 +140,57 @@ namespace CSharpDemo.Utils
             }
 
             var normalized = (avgBass - _minBass) / range;
+            var scale = 0.8 + normalized * 0.8;
+
+            return Math.Max(0.8, Math.Min(scale, 1.6));
+        }
+
+        public double CalculateHighScale(FrequencyDomainData freqData)
+        {
+            if (freqData?.Frequencies == null || freqData.Magnitudes == null || freqData.Frequencies.Length == 0)
+            {
+                return 1.0;
+            }
+
+            const double highThreshold = 1500;
+            var count = 0;
+            double sum = 0;
+
+            for (var i = 0; i < freqData.Frequencies.Length; i++)
+            {
+                if (freqData.Frequencies[i] >= highThreshold)
+                {
+                    sum += Math.Abs(freqData.Magnitudes[i]);
+                    count++;
+                }
+            }
+
+            var avgHigh = count > 0 ? sum / count : 0;
+
+            _highHistory.Enqueue(avgHigh);
+            if (_highHistory.Count > HistorySize)
+            {
+                _highHistory.Dequeue();
+            }
+
+            if (_highHistory.Count > 10)
+            {
+                _minHigh = double.MaxValue;
+                _maxHigh = double.MinValue;
+                foreach (var val in _highHistory)
+                {
+                    if (val < _minHigh) _minHigh = val;
+                    if (val > _maxHigh) _maxHigh = val;
+                }
+            }
+
+            var range = _maxHigh - _minHigh;
+            if (range < 0.0001)
+            {
+                return 1.0;
+            }
+
+            var normalized = (avgHigh - _minHigh) / range;
             var scale = 0.8 + normalized * 0.8;
 
             return Math.Max(0.8, Math.Min(scale, 1.6));
