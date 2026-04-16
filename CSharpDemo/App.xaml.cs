@@ -19,7 +19,7 @@ namespace CSharpDemo
             mainWindow.Loaded += delegate
             {
                 var regionManager = Container.Resolve<IRegionManager>();
-                regionManager.RequestNavigate("ContentRegion", "FFTView");
+                regionManager.RequestNavigate("ContentRegion", "SerialPortView");
             };
             return mainWindow;
         }
@@ -34,7 +34,6 @@ namespace CSharpDemo
             containerRegistry.Register<IAppDataService, AppDataServiceImpl>();
 
             //Navigation
-            containerRegistry.RegisterForNavigation<FFTView, FFTViewModel>();
             containerRegistry.RegisterForNavigation<SerialPortView, SerialPortViewModel>();
             containerRegistry.RegisterForNavigation<DataAnalysisView, DataAnalysisViewModel>();
             containerRegistry.RegisterForNavigation<AudioWaveView, AudioWaveViewModel>();

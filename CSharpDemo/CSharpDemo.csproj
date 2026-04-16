@@ -190,9 +190,6 @@
         <Compile Include="Views\SerialPortView.xaml.cs">
             <DependentUpon>SerialPortView.xaml</DependentUpon>
         </Compile>
-        <Compile Include="Views\FFTView.xaml.cs">
-            <DependentUpon>FFTView.xaml</DependentUpon>
-        </Compile>
         <Compile Include="Service\IAppDataService.cs"/>
         <Compile Include="Tags\CellTag.cs"/>
         <Compile Include="Tags\NormalTag.cs"/>
@@ -206,7 +203,6 @@
         <Compile Include="Utils\SystemHelper.cs"/>
         <Compile Include="Utils\TagFactory.cs"/>
         <Compile Include="ViewModels\SerialPortViewModel.cs"/>
-        <Compile Include="ViewModels\FFTViewModel.cs"/>
         <Compile Include="ViewModels\MainWindowViewModel.cs"/>
         <Compile Include="App.xaml.cs">
             <DependentUpon>App.xaml</DependentUpon>
@@ -248,9 +244,6 @@
             <SubType>Designer</SubType>
         </Page>
         <Page Include="Views\SerialPortView.xaml">
-            <SubType>Designer</SubType>
-        </Page>
-        <Page Include="Views\FFTView.xaml">
             <SubType>Designer</SubType>
         </Page>
         <Page Include="Views\MainWindow.xaml">

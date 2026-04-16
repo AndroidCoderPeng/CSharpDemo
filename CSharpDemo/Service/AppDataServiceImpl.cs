@@ -8,7 +8,7 @@ namespace CSharpDemo.Service
     {
         private readonly string[] _itemTitles =
         {
-            "快速傅里叶变换", "串口通信", "水听器数据解析", "音频转波形图", "算法测试"
+            "串口通信", "水听器数据解析", "音频转波形图", "相关仪算法测试"
         };
 
         public List<string> GetItemModels()
