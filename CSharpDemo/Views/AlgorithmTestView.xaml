@@ -7,6 +7,7 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
+    xmlns:scottplot="http://schemas.scottplot.net/2008/xaml/presentation"
     x:Name="TargetUserControl"
     d:DataContext="{d:DesignInstance Type=vm:AlgorithmTestViewModel}"
     d:DesignHeight="720"
@@ -16,7 +17,8 @@
 
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
-            <b:InvokeCommandAction Command="{Binding ViewLoadedCommand}" CommandParameter="{Binding ElementName=TargetUserControl}" />
+            <b:InvokeCommandAction Command="{Binding ViewLoadedCommand}"
+                                   CommandParameter="{Binding ElementName=TargetUserControl}" />
         </b:EventTrigger>
     </b:Interaction.Triggers>
 
@@ -110,7 +112,7 @@
         </Grid>
 
         <Grid Grid.Row="2">
-            <WpfPlot x:Name="ScottplotView" />
+            <scottplot:WpfPlot x:Name="ScottplotView" />
         </Grid>
     </Grid>
 </UserControl>

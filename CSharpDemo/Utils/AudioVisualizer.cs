@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
-using FftSharp;
-using FftSharp.Windows;
-using Complex = System.Numerics.Complex;
+using System.Numerics;
+using Accord.Math;
 
 namespace CSharpDemo.Utils
 {
@@ -70,7 +69,7 @@ namespace CSharpDemo.Utils
                 data[i] = new Complex(SampleData[i], 0);
             }
 
-            FFT.Forward(data);
+            FourierTransform.FFT(data, FourierTransform.Direction.Forward);
 
             var halfLen = len / 2;
             var result = new double[halfLen]; // 傅里叶变换结果左右对称, 只需要取一半
@@ -79,9 +78,9 @@ namespace CSharpDemo.Utils
                 result[i] = data[i].Magnitude / len;
             }
 
-            var window = new Bartlett();
-            window.Create(halfLen);
-            window.ApplyInPlace(result);
+            // var window = new Bartlett();
+            // window.Create(halfLen);
+            // window.ApplyInPlace(result);
 
             return result;
         }
@@ -131,7 +130,7 @@ namespace CSharpDemo.Utils
                 }
 
                 ApplyWeights(buffer, weights);
-                result[i] = buffer.Sum();
+                result[i] = Enumerable.Sum(buffer);
             }
 
             for (var i = radius; i < data.Length - radius; i++)
@@ -149,7 +148,7 @@ namespace CSharpDemo.Utils
                 }
 
                 ApplyWeights(buffer, weights);
-                result[i] = buffer.Sum();
+                result[i] = Enumerable.Sum(buffer);
             }
 
             for (var i = data.Length - radius; i < data.Length; i++)
@@ -161,7 +160,7 @@ namespace CSharpDemo.Utils
                 }
 
                 ApplyWeights(buffer, weights);
-                result[i] = buffer.Sum();
+                result[i] = Enumerable.Sum(buffer);
             }
 
             return result;
@@ -186,7 +185,7 @@ namespace CSharpDemo.Utils
                 weights[i] = weights[end - i];
             }
 
-            var total = weights.Sum();
+            var total = Enumerable.Sum(weights);
             for (var i = 0; i < len; i++) // 使权重合为 0
                 weights[i] /= total;
 
