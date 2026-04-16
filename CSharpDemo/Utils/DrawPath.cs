@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -57,27 +56,30 @@ namespace CSharpDemo.Utils
                 stripAxisPositions[i] = new Point(x, y);
             }
 
-            // 获取最小的振幅高度
-            var yBase = Math.Abs(magnitudes.Min());
-
             //生成一系列频谱竖条
             var geometry = new GeometryGroup();
             for (var i = 0; i < stripCount; i++)
             {
                 var point = stripAxisPositions[i];
+                Console.WriteLine($@"X = {point.X},y = {point.Y}");
+
                 var stripHeight = point.Y;
                 if (stripHeight < 0)
                 {
                     stripHeight = -stripHeight;
                 }
 
+                // Y轴翻转：WPF坐标系Y向下为正，竖条应从底部向上绘制
+                var yBase = height;
+                var stripTopY = yBase - stripHeight;
+
                 //每根竖条的四个角坐标。圆点在视图的左上角
                 var endPoints = new[]
                 {
-                    new Point(point.X, point.Y), //左下角
-                    new Point(point.X, point.Y + stripHeight), //左上角
-                    new Point(point.X + stripWidth, point.Y + stripHeight), //右上角
-                    new Point(point.X + stripWidth, point.Y) //右下角
+                    new Point(point.X, yBase), //左下角
+                    new Point(point.X, stripTopY), //左上角
+                    new Point(point.X + stripWidth, stripTopY), //右上角
+                    new Point(point.X + stripWidth, yBase) //右下角
                 };
 
                 var figure = new PathFigure
