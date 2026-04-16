@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
 
         <Grid
-            x:Name="CircularAudioPanel"
+            x:Name="AudioCircularPanel"
             Grid.Row="0"
             Background="Black">
             <Path x:Name="CircularPath" />

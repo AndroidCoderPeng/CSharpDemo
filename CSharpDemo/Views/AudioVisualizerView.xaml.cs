@@ -136,11 +136,11 @@ namespace CSharpDemo.Views
 
             //圆形波动图
             _rotation += .1;
-            var baseRadius = Math.Min(CircularAudioPanel.ActualWidth, CircularAudioPanel.ActualHeight) / 3;
+            var baseRadius = Math.Min(AudioCircularPanel.ActualWidth, AudioCircularPanel.ActualHeight) / 3;
             var radius = baseRadius + highScale * bassScale;
             // Console.WriteLine($@"radius: {radius}");
             _frequencyDomain.DrawCircularGradientStrips(
-                CircularAudioPanel.ActualHeight, CircularPath, color1, color2,
+                AudioCircularPanel.ActualHeight, CircularPath, color1, color2,
                 CircularPath.ActualWidth / 2,
                 CircularPath.ActualHeight / 2,
                 radius, 1, _rotation
