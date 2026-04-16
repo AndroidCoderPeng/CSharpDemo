@@ -8,7 +8,6 @@ using System.Text;
 using System.Windows.Media.Imaging;
 using CSharpDemo.Tags;
 using MathWorks.MATLAB.NET.Arrays;
-using PixelFormat = System.Windows.Media.PixelFormat;
 
 namespace CSharpDemo.Utils
 {
@@ -41,45 +40,6 @@ namespace CSharpDemo.Utils
         }
 
         /// <summary>
-        /// 图片
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="format"></param>
-        /// <returns></returns>
-        public static FormatConvertedBitmap ToFormatConvertedBitmap(this Uri uri, PixelFormat format)
-        {
-            var bitmapImage = new BitmapImage(uri);
-
-            var formatConvertedBitmap = new FormatConvertedBitmap();
-            formatConvertedBitmap.BeginInit();
-            formatConvertedBitmap.Source = bitmapImage;
-            formatConvertedBitmap.DestinationFormat = format;
-            formatConvertedBitmap.EndInit();
-
-            return formatConvertedBitmap;
-        }
-
-        /// <summary>
-        /// 数据库UserId转为8位16进制
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public static string ToHex8(this int id)
-        {
-            return id.ToString("G").PadLeft(8, '0');
-        }
-
-        /// <summary>
-        /// 8位16进制转为数据库UserId
-        /// </summary>
-        /// <param name="hexId"></param>
-        /// <returns></returns>
-        public static int ToIntId(this string hexId)
-        {
-            return Convert.ToInt32(hexId);
-        }
-
-        /// <summary>
         /// 字节数组转Int
         /// </summary>
         /// <param name="bytes"></param>
@@ -97,62 +57,6 @@ namespace CSharpDemo.Utils
         private static string ConvertToString(this byte[] bytes)
         {
             return bytes.Aggregate("", (current, t) => current + t.ToString("X2"));
-        }
-
-        public static string GetOpeTypeByPdu(this byte[] pduType)
-        {
-            pduType = pduType.Reverse().ToArray();
-            var btPduType = BitConverter.ToInt16(pduType, 0);
-
-            var operaType = (btPduType >> 8) & 0xFF;
-            string result;
-            switch (operaType)
-            {
-                case 1:
-                    result = "GetRequest";
-                    break;
-                case 2:
-                    result = "GetResponse";
-                    break;
-                case 3:
-                    result = "SetRequest";
-                    break;
-                case 4:
-                    result = "TrapRequest";
-                    break;
-                case 5:
-                    result = "TrapResponse";
-                    break;
-                case 6:
-                    result = "OnlineRequest";
-                    break;
-                case 7:
-                    result = "OnlineResponse";
-                    break;
-                case 8:
-                    result = "StartupRequest";
-                    break;
-                case 9:
-                    result = "StartupResponse";
-                    break;
-                case 10:
-                    result = "WakeupRequest";
-                    break;
-                case 11:
-                    result = "WakeupResponse";
-                    break;
-                case 13:
-                    result = "ClientRequest";
-                    break;
-                case 12:
-                    result = "SetResponse";
-                    break;
-                default:
-                    result = "undefined";
-                    break;
-            }
-
-            return result;
         }
 
         /// <summary>

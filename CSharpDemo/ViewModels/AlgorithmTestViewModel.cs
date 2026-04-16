@@ -1,13 +1,5 @@
-﻿using System;
-using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using CSharpDemo.Utils;
-using CSharpDemo.Views;
-using MathWorks.MATLAB.NET.Arrays;
+﻿using CSharpDemo.Views;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
 

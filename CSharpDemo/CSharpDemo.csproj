@@ -55,9 +55,6 @@
             <SpecificVersion>False</SpecificVersion>
             <HintPath>bin\Leak_location.dll</HintPath>
         </Reference>
-        <Reference Include="log4net, Version=3.0.1.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-            <HintPath>..\packages\log4net.3.0.1\lib\net462\log4net.dll</HintPath>
-        </Reference>
         <Reference Include="main_location">
             <HintPath>C:\Users\Administrator\Desktop\main_location.dll</HintPath>
         </Reference>
@@ -163,16 +160,9 @@
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </ApplicationDefinition>
-        <Compile Include="Converters\ButtonImageConverter.cs"/>
-        <Compile Include="Dialogs\LoadingDialog.xaml.cs">
-            <DependentUpon>LoadingDialog.xaml</DependentUpon>
-        </Compile>
-        <Compile Include="Model\AudioWaveModel.cs"/>
         <Compile Include="Model\CorrelatorDataModel.cs"/>
         <Compile Include="Service\AppDataServiceImpl.cs"/>
         <Compile Include="Utils\AudioVisualizer.cs"/>
-        <Compile Include="Utils\DialogHub.cs"/>
-        <Compile Include="Utils\DirectoryManager.cs"/>
         <Compile Include="Utils\RuntimeCache.cs"/>
         <Compile Include="ViewModels\AlgorithmTestViewModel.cs"/>
         <Compile Include="ViewModels\AudioWaveViewModel.cs"/>
@@ -181,11 +171,6 @@
         </Compile>
         <Compile Include="Views\AudioWaveView.xaml.cs">
             <DependentUpon>AudioWaveView.xaml</DependentUpon>
-        </Compile>
-        <Compile Include="Model\ReginModel.cs"/>
-        <Compile Include="ViewModels\DataAnalysisViewModel.cs"/>
-        <Compile Include="Views\DataAnalysisView.xaml.cs">
-            <DependentUpon>DataAnalysisView.xaml</DependentUpon>
         </Compile>
         <Compile Include="Views\SerialPortView.xaml.cs">
             <DependentUpon>SerialPortView.xaml</DependentUpon>
@@ -200,7 +185,6 @@
         <Compile Include="Tags\UploadTag.cs"/>
         <Compile Include="Utils\MethodExtensions.cs"/>
         <Compile Include="Utils\SerialPortManager.cs"/>
-        <Compile Include="Utils\SystemHelper.cs"/>
         <Compile Include="Utils\TagFactory.cs"/>
         <Compile Include="ViewModels\SerialPortViewModel.cs"/>
         <Compile Include="ViewModels\MainWindowViewModel.cs"/>
@@ -229,20 +213,14 @@
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config"/>
-        <None Include="Config\log4net.config"/>
-        <None Include="Config\log4net.unix.config"/>
         <Resource Include="IconFont\iconfont.ttf"/>
         <None Include="packages.config"/>
     </ItemGroup>
     <ItemGroup>
-        <Page Include="Dialogs\LoadingDialog.xaml"/>
         <Page Include="Themes\DarkTheme.xaml"/>
         <Page Include="Themes\LightTheme.xaml"/>
         <Page Include="Views\AlgorithmTestView.xaml"/>
         <Page Include="Views\AudioWaveView.xaml"/>
-        <Page Include="Views\DataAnalysisView.xaml">
-            <SubType>Designer</SubType>
-        </Page>
         <Page Include="Views\SerialPortView.xaml">
             <SubType>Designer</SubType>
         </Page>
@@ -259,9 +237,6 @@
         <Resource Include="Image\gl_icon6.png"/>
     </ItemGroup>
     <ItemGroup>
-        <Resource Include="Image\return_g.png"/>
-    </ItemGroup>
-    <ItemGroup>
         <Resource Include="Image\start_background.png"/>
         <Resource Include="Image\start_icon2.png"/>
     </ItemGroup>
@@ -273,9 +248,8 @@
         <Resource Include="Image\tyr_icon7.png"/>
     </ItemGroup>
     <ItemGroup>
-        <Resource Include="Image\t_icon3.png"/>
-        <Resource Include="Image\t_icon6.png"/>
+        <Folder Include="Converters\"/>
+        <Folder Include="Dialogs\"/>
     </ItemGroup>
-    <ItemGroup/>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>
