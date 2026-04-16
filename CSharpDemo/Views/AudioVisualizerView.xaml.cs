@@ -136,7 +136,7 @@ namespace CSharpDemo.Views
             var curveBrush = new SolidColorBrush(color1);
             DrawCurve(
                 SampleWavePath, curveBrush,
-                _visualizer.SampleData, _visualizer.SampleData.Length,
+                _visualizer.FrameBuffer, _visualizer.FrameBuffer.Length,
                 SampleWavePanel.ActualWidth, 0, SampleWavePanel.ActualHeight / 2,
                 Math.Min(SampleWavePanel.ActualHeight / 2, 50)
             );

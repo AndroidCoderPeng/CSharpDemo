@@ -8,9 +8,9 @@ namespace CSharpDemo.Utils
     public class AudioVisualizer
     {
         /// <summary>
-        /// 采样数据
+        /// 界面刷新的音频帧
         /// </summary>
-        public double[] SampleData { get; }
+        public double[] FrameBuffer { get; }
 
         /// <summary>
         /// 
@@ -24,7 +24,7 @@ namespace CSharpDemo.Utils
                 throw new ArgumentException("长度必须是 2 的 n 次幂");
             }
 
-            SampleData = new double[size];
+            FrameBuffer = new double[size];
         }
 
         /// <summary>
@@ -33,16 +33,16 @@ namespace CSharpDemo.Utils
         /// <param name="audioData"></param>
         public void PushAudioData(float[] audioData)
         {
-            if (audioData.Length > SampleData.Length)
+            if (audioData.Length > FrameBuffer.Length)
             {
                 // 数据超长时：只保留最新的 SampleData.Length 个采样（从尾部截取）
-                Array.Copy(audioData, audioData.Length - SampleData.Length, SampleData, 0, SampleData.Length);
+                Array.Copy(audioData, audioData.Length - FrameBuffer.Length, FrameBuffer, 0, FrameBuffer.Length);
             }
             else
             {
                 // 数据不足时：将旧数据左移腾出空间，新数据追加到末尾
-                Array.Copy(SampleData, audioData.Length, SampleData, 0, SampleData.Length - audioData.Length);
-                Array.Copy(audioData, 0, SampleData, SampleData.Length - audioData.Length, audioData.Length);
+                Array.Copy(FrameBuffer, audioData.Length, FrameBuffer, 0, FrameBuffer.Length - audioData.Length);
+                Array.Copy(audioData, 0, FrameBuffer, FrameBuffer.Length - audioData.Length, audioData.Length);
             }
         }
 
@@ -52,12 +52,12 @@ namespace CSharpDemo.Utils
         /// <returns></returns>
         public double[] GetSpectrumData()
         {
-            var len = SampleData.Length;
+            var len = FrameBuffer.Length;
             var data = new Complex[len];
 
             for (var i = 0; i < len; i++)
             {
-                data[i] = new Complex(SampleData[i], 0);
+                data[i] = new Complex(FrameBuffer[i], 0);
             }
 
             FourierTransform.FFT(data, FourierTransform.Direction.Forward);
