@@ -28,14 +28,14 @@
         </Grid>
 
         <Grid
-            x:Name="AudioWavePanel"
+            x:Name="AudioCurvePanel"
             Grid.Row="2"
             Background="Black">
             <Rectangle Name="TopBorder" VerticalAlignment="Top" />
             <Rectangle Name="BottomBorder" VerticalAlignment="Bottom" />
             <Rectangle Name="LeftBorder" HorizontalAlignment="Left" />
             <Rectangle Name="RightBorder" HorizontalAlignment="Right" />
-            <Path x:Name="AudioWavePath" />
+            <Path x:Name="AudioCurvePath" />
         </Grid>
 
         <Grid

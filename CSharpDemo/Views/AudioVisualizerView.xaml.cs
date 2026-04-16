@@ -155,7 +155,7 @@ namespace CSharpDemo.Views
             //波形曲线
             var curveBrush = new SolidColorBrush(color1);
             _timeDomain.DrawGradientCurve(
-                AudioWavePanel.ActualWidth, AudioWavePanel.ActualHeight, AudioWavePath, curveBrush, 0
+                AudioCurvePanel.ActualWidth, AudioCurvePanel.ActualHeight, AudioCurvePath, curveBrush, 0
             );
 
             //长条形波动图
