@@ -187,9 +187,11 @@
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </ApplicationDefinition>
+        <Compile Include="Model\AudioDataModel.cs"/>
         <Compile Include="Model\CorrelatorDataModel.cs"/>
         <Compile Include="Service\AppDataServiceImpl.cs"/>
         <Compile Include="Utils\AudioVisualizer.cs"/>
+        <Compile Include="Utils\DrawPath.cs"/>
         <Compile Include="Utils\RuntimeCache.cs"/>
         <Compile Include="ViewModels\AlgorithmTestViewModel.cs"/>
         <Compile Include="ViewModels\AudioVisualizerViewModel.cs"/>

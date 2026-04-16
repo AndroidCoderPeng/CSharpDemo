@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using CSharpDemo.Model;
 using CSharpDemo.Service;
 using CSharpDemo.Utils;
 using NAudio.CoreAudioApi;
@@ -14,10 +15,11 @@ namespace CSharpDemo.Views
 {
     public partial class AudioVisualizerView : UserControl
     {
+        private const int SampleRate = 7500;
         private readonly Color[] _allColors;
         private readonly AudioVisualizer _visualizer; // 可视化
         private readonly WasapiCapture _audioCapture; // 音频捕获
-        private double[] _spectrumData; // 频谱数据
+        private FrequencyDomainData _spectrumData; // 频谱数据
         private int _colorIndex;
         private double _rotation;
 
@@ -26,10 +28,10 @@ namespace CSharpDemo.Views
             InitializeComponent();
 
             _allColors = dataService.GetHsvColors(); // 获取所有的渐变颜色 (HSV 颜色)
-            _visualizer = new AudioVisualizer(1024);
+            _visualizer = new AudioVisualizer(SampleRate, 512);
 
             _audioCapture = new WasapiLoopbackCapture(); // 捕获电脑发出的声音
-            _audioCapture.WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(7500, 1); // 7500Hz 采样率，单声道
+            _audioCapture.WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(SampleRate, 1); // 7500Hz 采样率，单声道
             _audioCapture.DataAvailable += delegate(object o, WaveInEventArgs args)
             {
                 var length = args.BytesRecorded / 4; // 采样的数量 (每一个采样是 4 字节)
@@ -43,8 +45,8 @@ namespace CSharpDemo.Views
                 _visualizer.PushAudioData(audioBuffer);
             };
 
-            _dataTimer.Tick += DataTimer_Tick;
-            _drawingTimer.Tick += DrawingTimer_Tick;
+            _dataTimer.Tick += DataTimer_Tick; // 定时取频域（频谱）数据
+            _drawingTimer.Tick += DrawingTimer_Tick; // 定时绘制频谱
         }
 
         private readonly DispatcherTimer _dataTimer = new DispatcherTimer
@@ -78,22 +80,29 @@ namespace CSharpDemo.Views
         /// <param name="e"></param>
         private void DataTimer_Tick(object sender, EventArgs e)
         {
-            var newSpectrumData = _visualizer.GetSpectrumData(); // 从可视化器中获取频谱数据
-            newSpectrumData = AudioVisualizer.MakeSmooth(newSpectrumData, 2); // 平滑频谱数据
+            var freqData = _visualizer.GetFrequencyDomain();
 
-            if (_spectrumData == null) // 如果已经存储的频谱数据为空, 则把新的频谱数据直接赋值上去
+            // 平滑频谱数据
+            var newSpectrumData = AudioVisualizer.MakeSmooth(freqData, 2); // 平滑频谱数据
+
+            // 转换为分贝显示（更符合人耳感知）
+            newSpectrumData.Magnitudes = newSpectrumData.Magnitudes.ToDecibels();
+
+            if (_spectrumData == null)
             {
+                // 如果已经存储的频谱数据为空, 则把新的频谱数据直接赋值上去
                 _spectrumData = newSpectrumData;
                 return;
             }
 
-            for (var i = 0; i < newSpectrumData.Length; i++) // 计算旧频谱数据和新频谱数据之间的 "中间值"
+            for (var i = 0; i < newSpectrumData.Magnitudes.Length; i++)
             {
-                var oldData = _spectrumData[i];
-                var newData = newSpectrumData[i];
-                // 每一次执行, 频谱值会向目标值移动 20% (如果太大, 缓动效果不明显, 如果太小, 频谱会有延迟的感觉)
-                var lerpData = oldData + (newData - oldData) * .2f;
-                _spectrumData[i] = lerpData;
+                var oldData = _spectrumData.Magnitudes[i];
+                var newData = newSpectrumData.Magnitudes[i];
+
+                // 计算旧频谱数据和新频谱数据之间的 "中间值"，每次向目标值移动 20%
+                var deltaData = oldData + (newData - oldData) * 0.2;
+                _spectrumData.Magnitudes[i] = deltaData;
             }
         }
 
@@ -110,112 +119,41 @@ namespace CSharpDemo.Views
             var color1 = _allColors[_colorIndex % _allColors.Length];
             var color2 = _allColors[(_colorIndex + 200) % _allColors.Length];
 
-            //长条形波动图
-            DrawGradientStrips(
-                StripsPath, color1, color2,
-                _spectrumData, _spectrumData.Length,
-                StripsPath.ActualWidth, 0, StripsPath.ActualHeight,
-                2, -StripsPath.ActualHeight * 25
-            );
-
             //圆形波动图
-            var bassArea = AudioVisualizer.TakeSpectrumOfFrequency(
-                _spectrumData, _audioCapture.WaveFormat.SampleRate, 250
-            );
-            var bassScale = bassArea.Average() * 100; //低音区
-            var extraScale = Math.Min(CirclePath.ActualWidth, CirclePath.ActualHeight) / 6; //高音区
-            DrawCircleGradientStrips(
-                CirclePath, color1, color2,
-                _spectrumData, _spectrumData.Length,
-                CirclePath.ActualWidth / 2, CirclePath.ActualHeight / 2,
-                Math.Min(CirclePath.ActualWidth, CirclePath.ActualHeight) / 3 + extraScale * bassScale,
-                1, _rotation, CirclePath.ActualHeight * 3
-            );
+            // var bassArea = AudioVisualizer.TakeSpectrumOfFrequency(
+            //     _spectrumData, _audioCapture.WaveFormat.SampleRate, 250
+            // );
+            // var bassScale = bassArea.Average() * 100; //低音区
+            // var extraScale = Math.Min(CirclePath.ActualWidth, CirclePath.ActualHeight) / 6; //高音区
+            // DrawCircleGradientStrips(
+            //     CirclePath, color1, color2,
+            //     _spectrumData, _spectrumData.Length,
+            //     CirclePath.ActualWidth / 2, CirclePath.ActualHeight / 2,
+            //     Math.Min(CirclePath.ActualWidth, CirclePath.ActualHeight) / 3 + extraScale * bassScale,
+            //     1, _rotation, CirclePath.ActualHeight * 3
+            // );
 
             //波形曲线
-            var curveBrush = new SolidColorBrush(color1);
-            DrawCurve(
-                SampleWavePath, curveBrush,
-                _visualizer.FrameBuffer, _visualizer.FrameBuffer.Length,
-                SampleWavePanel.ActualWidth, 0, SampleWavePanel.ActualHeight / 2,
-                Math.Min(SampleWavePanel.ActualHeight / 2, 50)
-            );
+            // var curveBrush = new SolidColorBrush(color1);
+            // DrawCurve(
+            //     SampleWavePath, curveBrush,
+            //     _visualizer.FrameBuffer, _visualizer.FrameBuffer.Length,
+            //     SampleWavePanel.ActualWidth, 0, SampleWavePanel.ActualHeight / 2,
+            //     Math.Min(SampleWavePanel.ActualHeight / 2, 50)
+            // );
 
             //四周边框
-            DrawGradientBorder(
-                TopBorder, BottomBorder, LeftBorder, RightBorder,
-                Color.FromArgb(0, color1.R, color1.G, color1.B), color2,
-                SampleWavePanel.ActualWidth / 3, bassScale
+            // DrawGradientBorder(
+            //     TopBorder, BottomBorder, LeftBorder, RightBorder,
+            //     Color.FromArgb(0, color1.R, color1.G, color1.B), color2,
+            //     SampleWavePanel.ActualWidth / 3, bassScale
+            // );
+
+            //长条形波动图
+            _spectrumData.DrawGradientStrips(
+                AudioStripPanel.ActualWidth, AudioStripPanel.ActualHeight, StripsPath, color1, color2, 0,
+                StripsPath.ActualHeight, 2
             );
-        }
-
-        /// <summary>
-        /// 绘制渐变的条形
-        /// </summary>
-        /// <param name="stripsPath">绘图目标</param>
-        /// <param name="bottomColor">下方颜色</param>
-        /// <param name="topColor">上方颜色</param>
-        /// <param name="spectrumData">频谱数据</param>
-        /// <param name="stripCount">条形的数量</param>
-        /// <param name="drawingWidth">绘图的宽度</param>
-        /// <param name="xOffset">绘图的起始 X 坐标</param>
-        /// <param name="yOffset">绘图的起始 Y 坐标</param>
-        /// <param name="spacing">条形与条形之间的间隔(像素)</param>
-        /// <param name="scale">控制波形图波峰高度</param>
-        private void DrawGradientStrips(
-            Path stripsPath, Color bottomColor, Color topColor, double[] spectrumData,
-            int stripCount, double drawingWidth, double xOffset, double yOffset, double spacing, double scale
-        )
-        {
-            //竖条宽度
-            var stripWidth = (drawingWidth - spacing * stripCount) / stripCount;
-            var pointArray = new Point[stripCount];
-
-            for (var i = 0; i < stripCount; i++)
-            {
-                var x = stripWidth * i + spacing * i + xOffset;
-                var y = spectrumData[i * spectrumData.Length / stripCount] * scale; // height
-                //给所有频谱位置赋值
-                pointArray[i] = new Point(x, y);
-            }
-
-            //生成一系列频谱竖条
-            var geometry = new GeometryGroup();
-            for (var i = 0; i < stripCount; i++)
-            {
-                var p = pointArray[i];
-                var height = p.Y;
-
-                if (height < 0)
-                {
-                    height = -height;
-                }
-
-                //每根竖条的四个角坐标
-                var endPoints = new[]
-                {
-                    new Point(p.X, p.Y + yOffset), //左下角
-                    new Point(p.X, p.Y + height + yOffset), //左上角
-                    new Point(p.X + stripWidth, p.Y + height + yOffset), //右上角
-                    new Point(p.X + stripWidth, p.Y + yOffset) //右下角
-                };
-
-                var figure = new PathFigure
-                {
-                    StartPoint = endPoints[0]
-                };
-
-                figure.Segments.Add(new PolyLineSegment(endPoints, false));
-                geometry.Children.Add(new PathGeometry { Figures = { figure } });
-            }
-
-            stripsPath.Data = geometry;
-
-            //设置频谱竖条的渐变色
-            var linearGradientBrush = new LinearGradientBrush(
-                bottomColor, topColor, new Point(0, 0), new Point(0, 1)
-            );
-            stripsPath.Fill = linearGradientBrush;
         }
 
         /// <summary>

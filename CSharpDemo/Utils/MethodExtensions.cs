@@ -125,6 +125,50 @@ namespace CSharpDemo.Utils
             return size > 0 && (size & (size - 1)) == 0;
         }
 
+        public static double[] GetWeights(this int radius)
+        {
+            double Gaussian(double x) => Math.Pow(Math.E, -4 * x * x); // 高斯函数
+
+            var len = 1 + radius * 2;
+            var end = len - 1;
+            var radiusF = (double)radius;
+            var weights = new double[len];
+
+            for (var i = 0; i <= radius; i++) // 先把右边的权重算出来
+            {
+                weights[radius + i] = Gaussian(i / radiusF);
+            }
+
+            for (var i = 0; i < radius; i++) // 把右边的权重拷贝到左边
+            {
+                weights[i] = weights[end - i];
+            }
+
+            var total = weights.Sum();
+            for (var i = 0; i < len; i++) // 使权重合为 0
+            {
+                weights[i] /= total;
+            }
+
+            return weights;
+        }
+
+        /// <summary>
+        /// 将幅度转换为分贝(dB)，用于专业频谱显示
+        /// </summary>
+        /// <param name="magnitudes"></param>
+        /// <returns></returns>
+        public static double[] ToDecibels(this double[] magnitudes)
+        {
+            var db = new double[magnitudes.Length];
+            for (var i = 0; i < magnitudes.Length; i++)
+            {
+                db[i] = 20 * Math.Log10(Math.Max(magnitudes[i], 1e-10));
+            }
+
+            return db;
+        }
+
         public static byte[] ToBytes(this Bitmap bitmap)
         {
             var ms = new MemoryStream();
