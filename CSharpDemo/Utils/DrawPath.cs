@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -22,7 +23,7 @@ namespace CSharpDemo.Utils
         /// <param name="spacing">条形与条形之间的间隔(像素)</param>
         public static void DrawGradientStrips(
             this FrequencyDomainData spectrumData, double width, double height, Path target, Color bottomColor,
-            Color topColor, double xOffset, double yOffset, double spacing
+            Color topColor, double xOffset, double spacing
         )
         {
             // 后续如果需要更专业的频谱分布方式，再考虑引入 frequencies。
@@ -56,6 +57,9 @@ namespace CSharpDemo.Utils
                 stripAxisPositions[i] = new Point(x, y);
             }
 
+            // 获取最小的振幅高度
+            var yBase = Math.Abs(magnitudes.Min());
+
             //生成一系列频谱竖条
             var geometry = new GeometryGroup();
             for (var i = 0; i < stripCount; i++)
@@ -67,13 +71,13 @@ namespace CSharpDemo.Utils
                     stripHeight = -stripHeight;
                 }
 
-                //每根竖条的四个角坐标
+                //每根竖条的四个角坐标。圆点在视图的左上角
                 var endPoints = new[]
                 {
-                    new Point(point.X, point.Y + yOffset), //左下角
-                    new Point(point.X, point.Y + stripHeight + yOffset), //左上角
-                    new Point(point.X + stripWidth, point.Y + stripHeight + yOffset), //右上角
-                    new Point(point.X + stripWidth, point.Y + yOffset) //右下角
+                    new Point(point.X, point.Y), //左下角
+                    new Point(point.X, point.Y + stripHeight), //左上角
+                    new Point(point.X + stripWidth, point.Y + stripHeight), //右上角
+                    new Point(point.X + stripWidth, point.Y) //右下角
                 };
 
                 var figure = new PathFigure

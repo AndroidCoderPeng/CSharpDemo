@@ -151,8 +151,7 @@ namespace CSharpDemo.Views
 
             //长条形波动图
             _spectrumData.DrawGradientStrips(
-                AudioStripPanel.ActualWidth, AudioStripPanel.ActualHeight, StripsPath, color1, color2, 0,
-                StripsPath.ActualHeight, 2
+                AudioStripPanel.ActualWidth, AudioStripPanel.ActualHeight, StripsPath, color1, color2, 0, 2
             );
         }
 
