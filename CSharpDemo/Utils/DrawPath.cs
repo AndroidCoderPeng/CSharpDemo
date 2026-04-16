@@ -27,7 +27,7 @@ namespace CSharpDemo.Utils
             //边框粗细根据音频高低音变化
             var thickness = (int)(stroke * bassScale);
             // Console.WriteLine($@"bassScale: {bassScale}, thickness: {thickness}");
-            
+
             topBorder.Height = thickness;
             bottomBorder.Height = thickness;
             leftBorder.Width = thickness;
@@ -37,6 +37,52 @@ namespace CSharpDemo.Utils
             bottomBorder.Fill = new LinearGradientBrush(inner, outer, 90);
             leftBorder.Fill = new LinearGradientBrush(outer, inner, 0);
             rightBorder.Fill = new LinearGradientBrush(inner, outer, 0);
+        }
+
+        /// <summary>
+        /// 画曲线
+        /// </summary>
+        /// <param name="spectrumData"></param>
+        /// <param name="width">绘制频谱图的视图宽度</param>
+        /// <param name="height">绘制频谱图的视图高度</param>
+        /// <param name="target"></param>
+        /// <param name="brush"></param>
+        /// <param name="xOffset"></param>
+        public static void DrawCurve(
+            this TimeDomainData spectrumData,
+            double width, double height, Path target, Brush brush, double xOffset)
+        {
+            var timeAxis = spectrumData.TimeAxis;
+            var amplitude = spectrumData.Amplitude;
+            var pointCount = timeAxis.Length;
+
+            var maxAmplitude = 0.0;
+            foreach (var magnitude in amplitude)
+            {
+                var mag = Math.Abs(magnitude);
+                if (mag > maxAmplitude) maxAmplitude = mag;
+            }
+
+            // 波峰波谷缩放比例
+            var scale = maxAmplitude > 0 ? height / maxAmplitude : 0;
+            
+            var pointArray = new Point[pointCount];
+            for (var i = 0; i < pointCount; i++)
+            {
+                var x = i * width / pointCount + xOffset;
+                var y = height / 2 - amplitude[i] * scale;
+                pointArray[i] = new Point(x, y);
+            }
+
+            var figure = new PathFigure
+            {
+                StartPoint = pointArray[0]
+            };
+            figure.Segments.Add(new PolyLineSegment(pointArray, true));
+
+            target.Data = new PathGeometry { Figures = { figure } };
+            target.StrokeThickness = 2;
+            target.Stroke = brush;
         }
 
         /// <summary>

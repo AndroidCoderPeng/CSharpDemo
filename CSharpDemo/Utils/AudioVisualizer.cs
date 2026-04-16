@@ -8,17 +8,17 @@ namespace CSharpDemo.Utils
 {
     public class AudioVisualizer
     {
+        /// <summary>
+        /// 界面刷新的音频帧
+        /// </summary>
+        private readonly double[] _frameBuffer;
+
         private readonly double _sampleRate;
         private Complex[] _fftBuffer;
         private double _minBass = double.MaxValue;
         private double _maxBass = double.MinValue;
         private const int HistorySize = 60;
         private readonly Queue<double> _bassHistory = new Queue<double>();
-
-        /// <summary>
-        /// 界面刷新的音频帧
-        /// </summary>
-        public double[] FrameBuffer { get; }
 
         /// <summary>
         /// 
@@ -34,7 +34,7 @@ namespace CSharpDemo.Utils
             }
 
             _sampleRate = sampleRate;
-            FrameBuffer = new double[size];
+            _frameBuffer = new double[size];
         }
 
         /// <summary>
@@ -43,16 +43,16 @@ namespace CSharpDemo.Utils
         /// <param name="audioData"></param>
         public void PushAudioData(float[] audioData)
         {
-            if (audioData.Length > FrameBuffer.Length)
+            if (audioData.Length > _frameBuffer.Length)
             {
                 // 数据超长时：只保留最新的 SampleData.Length 个采样（从尾部截取）
-                Array.Copy(audioData, audioData.Length - FrameBuffer.Length, FrameBuffer, 0, FrameBuffer.Length);
+                Array.Copy(audioData, audioData.Length - _frameBuffer.Length, _frameBuffer, 0, _frameBuffer.Length);
             }
             else
             {
                 // 数据不足时：将旧数据左移腾出空间，新数据追加到末尾
-                Array.Copy(FrameBuffer, audioData.Length, FrameBuffer, 0, FrameBuffer.Length - audioData.Length);
-                Array.Copy(audioData, 0, FrameBuffer, FrameBuffer.Length - audioData.Length, audioData.Length);
+                Array.Copy(_frameBuffer, audioData.Length, _frameBuffer, 0, _frameBuffer.Length - audioData.Length);
+                Array.Copy(audioData, 0, _frameBuffer, _frameBuffer.Length - audioData.Length, audioData.Length);
             }
         }
 
@@ -62,7 +62,7 @@ namespace CSharpDemo.Utils
         /// <returns></returns>
         public TimeDomainData GetTimeDomain()
         {
-            var len = FrameBuffer.Length;
+            var len = _frameBuffer.Length;
             if (len <= 1)
             {
                 return new TimeDomainData
@@ -82,7 +82,7 @@ namespace CSharpDemo.Utils
             return new TimeDomainData
             {
                 TimeAxis = timeAxis,
-                Amplitude = (double[])FrameBuffer.Clone()
+                Amplitude = (double[])_frameBuffer.Clone()
             };
         }
 
@@ -148,7 +148,7 @@ namespace CSharpDemo.Utils
         /// <returns></returns>
         public FrequencyDomainData GetFrequencyDomain()
         {
-            var len = FrameBuffer.Length;
+            var len = _frameBuffer.Length;
             if (len <= 1)
             {
                 return new FrequencyDomainData
@@ -161,7 +161,7 @@ namespace CSharpDemo.Utils
             _fftBuffer = new Complex[len];
             for (var i = 0; i < len; i++)
             {
-                _fftBuffer[i] = new Complex(FrameBuffer[i], 0);
+                _fftBuffer[i] = new Complex(_frameBuffer[i], 0);
             }
 
             var fftSize = _fftBuffer.Length;
@@ -222,6 +222,41 @@ namespace CSharpDemo.Utils
             {
                 Frequencies = data.Frequencies,
                 Magnitudes = smoothed
+            };
+        }
+
+        public TimeDomainData MakeSmooth(TimeDomainData data, int radius)
+        {
+            if (data?.Amplitude == null || data.Amplitude.Length == 0)
+            {
+                return data;
+            }
+
+            var amplitude = data.Amplitude;
+            var smoothed = new double[amplitude.Length];
+            var weights = radius.GetWeights();
+
+            for (var i = 0; i < amplitude.Length; i++)
+            {
+                var start = Math.Max(0, i - radius);
+                var end = Math.Min(amplitude.Length - 1, i + radius);
+
+                double sum = 0;
+                double weightSum = 0;
+                for (var j = start; j <= end; j++)
+                {
+                    var weightIndex = j - start;
+                    sum += amplitude[j] * weights[weightIndex];
+                    weightSum += weights[weightIndex];
+                }
+
+                smoothed[i] = sum / weightSum;
+            }
+
+            return new TimeDomainData
+            {
+                TimeAxis = data.TimeAxis,
+                Amplitude = smoothed
             };
         }
     }

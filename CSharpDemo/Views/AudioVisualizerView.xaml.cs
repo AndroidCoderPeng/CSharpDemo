@@ -19,7 +19,8 @@ namespace CSharpDemo.Views
         private readonly Color[] _allColors;
         private readonly AudioVisualizer _visualizer; // 可视化
         private readonly WasapiCapture _audioCapture; // 音频捕获
-        private FrequencyDomainData _spectrumData; // 频谱数据
+        private FrequencyDomainData _frequencyDomain; // 频域数据
+        private TimeDomainData _timeDomain; // 时域数据
         private int _colorIndex;
         private double _rotation;
 
@@ -80,35 +81,50 @@ namespace CSharpDemo.Views
         /// <param name="e"></param>
         private void DataTimer_Tick(object sender, EventArgs e)
         {
-            var freqData = _visualizer.GetFrequencyDomain();
+            // 获取频域数据
+            var frequencyDomain = _visualizer.GetFrequencyDomain();
+            var sFrequencyDomain = _visualizer.MakeSmooth(frequencyDomain, 2); // 平滑频谱数据
+            sFrequencyDomain.Magnitudes = sFrequencyDomain.Magnitudes.ToDecibels(); // 转换为分贝显示（更符合人耳感知）
 
-            // 平滑频谱数据
-            var newSpectrumData = _visualizer.MakeSmooth(freqData, 2); // 平滑频谱数据
-
-            // 转换为分贝显示（更符合人耳感知）
-            newSpectrumData.Magnitudes = newSpectrumData.Magnitudes.ToDecibels();
-
-            if (_spectrumData == null)
+            if (_frequencyDomain == null)
             {
-                // 如果已经存储的频谱数据为空, 则把新的频谱数据直接赋值上去
-                _spectrumData = newSpectrumData;
+                _frequencyDomain = sFrequencyDomain;
                 return;
             }
 
-            for (var i = 0; i < newSpectrumData.Magnitudes.Length; i++)
+            for (var i = 0; i < sFrequencyDomain.Magnitudes.Length; i++)
             {
-                var oldData = _spectrumData.Magnitudes[i];
-                var newData = newSpectrumData.Magnitudes[i];
+                var oldData = _frequencyDomain.Magnitudes[i];
+                var newData = sFrequencyDomain.Magnitudes[i];
 
                 // 计算旧频谱数据和新频谱数据之间的 "中间值"，每次向目标值移动 20%
                 var deltaData = oldData + (newData - oldData) * 0.2;
-                _spectrumData.Magnitudes[i] = deltaData;
+                _frequencyDomain.Magnitudes[i] = deltaData;
+            }
+
+            // 获取时域数据
+            var timeDomain = _visualizer.GetTimeDomain();
+            var sTimeDomain = _visualizer.MakeSmooth(timeDomain, 2); // 平滑时域数据
+
+            if (_timeDomain == null)
+            {
+                _timeDomain = sTimeDomain;
+                return;
+            }
+
+            for (var i = 0; i < _timeDomain.Amplitude.Length; i++)
+            {
+                var oldData = _timeDomain.Amplitude[i];
+                var newData = sTimeDomain.Amplitude[i];
+
+                var deltaData = oldData + (newData - oldData) * 0.2;
+                _timeDomain.Amplitude[i] = deltaData;
             }
         }
 
         private void DrawingTimer_Tick(object sender, EventArgs e)
         {
-            if (_spectrumData == null)
+            if (_frequencyDomain == null || _timeDomain == null)
             {
                 return;
             }
@@ -120,7 +136,7 @@ namespace CSharpDemo.Views
             var color2 = _allColors[(_colorIndex + 200) % _allColors.Length];
 
             // 获取低音系数
-            var bassScale = _visualizer.CalculateBassScale(_spectrumData);
+            var bassScale = _visualizer.CalculateBassScale(_frequencyDomain);
 
             //圆形波动图
             // var extraScale = Math.Min(CirclePath.ActualWidth, CirclePath.ActualHeight) / 6; //高音区
@@ -139,16 +155,13 @@ namespace CSharpDemo.Views
             );
 
             //波形曲线
-            // var curveBrush = new SolidColorBrush(color1);
-            // DrawCurve(
-            //     SampleWavePath, curveBrush,
-            //     _visualizer.FrameBuffer, _visualizer.FrameBuffer.Length,
-            //     SampleWavePanel.ActualWidth, 0, SampleWavePanel.ActualHeight / 2,
-            //     Math.Min(SampleWavePanel.ActualHeight / 2, 50)
-            // );
+            var curveBrush = new SolidColorBrush(color1);
+            _timeDomain.DrawCurve(
+                AudioWavePanel.ActualWidth, AudioWavePanel.ActualHeight, AudioWavePath, curveBrush, 0
+            );
 
             //长条形波动图
-            _spectrumData.DrawGradientStrips(
+            _frequencyDomain.DrawGradientStrips(
                 AudioStripPanel.ActualWidth, AudioStripPanel.ActualHeight, StripsPath, color1, color2, 0, 2
             );
         }
@@ -233,41 +246,6 @@ namespace CSharpDemo.Views
             );
 
             wavePath.Fill = brush;
-        }
-
-        /// <summary>
-        /// 画曲线
-        /// </summary>
-        /// <param name="wavePath"></param>
-        /// <param name="brush"></param>
-        /// <param name="spectrumData"></param>
-        /// <param name="pointCount"></param>
-        /// <param name="drawingWidth"></param>
-        /// <param name="xOffset"></param>
-        /// <param name="yOffset"></param>
-        /// <param name="scale">控制波形图波峰高度和波谷深度</param>
-        private void DrawCurve(
-            Path wavePath, Brush brush, double[] spectrumData, int pointCount, double drawingWidth,
-            double xOffset, double yOffset, double scale
-        )
-        {
-            var pointArray = new Point[pointCount];
-            for (var i = 0; i < pointCount; i++)
-            {
-                var x = i * drawingWidth / pointCount + xOffset;
-                var y = spectrumData[i * spectrumData.Length / pointCount] * scale + yOffset;
-                pointArray[i] = new Point(x, y);
-            }
-
-            var figure = new PathFigure
-            {
-                StartPoint = pointArray[0]
-            };
-            figure.Segments.Add(new PolyLineSegment(pointArray, true));
-
-            wavePath.Data = new PathGeometry { Figures = { figure } };
-            wavePath.StrokeThickness = 2;
-            wavePath.Stroke = brush;
         }
     }
 }
