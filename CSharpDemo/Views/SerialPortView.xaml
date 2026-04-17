@@ -24,7 +24,7 @@
                 Margin="15"
                 FontSize="18"
                 Foreground="{DynamicResource ForegroundBrush}"
-                Text="串口调试助手" />
+                Text="参数设置" />
 
             <DockPanel LastChildFill="True">
                 <TextBlock
@@ -183,7 +183,24 @@
                 Command="{Binding CloseSerialPortCommand}"
                 Content="关闭串口"
                 FontSize="16"
-                Style="{StaticResource ButtonPrimary}" />
+                Style="{StaticResource ButtonDanger}" />
+
+            <Button
+                Width="185"
+                Height="35"
+                Command="{Binding SendMessageCommand}"
+                Content="发送数据"
+                FontSize="16"
+                Style="{StaticResource ButtonSuccess}" />
+
+            <Button
+                Width="185"
+                Height="35"
+                Margin="0,15"
+                Command="{Binding CalculateCommand}"
+                Content="计算结果"
+                FontSize="16"
+                Style="{StaticResource ButtonInfo}" />
 
             <Button
                 Width="185"
@@ -193,7 +210,8 @@
                 Command="{Binding ClearMessageCommand}"
                 Content="清空数据"
                 FontSize="16"
-                Foreground="{DynamicResource ForegroundBrush}" />
+                Foreground="{DynamicResource ForegroundBrush}"
+                Style="{StaticResource ButtonWarning}" />
         </StackPanel>
 
         <Grid Grid.Column="1" Background="{DynamicResource SubBackgroundBrush}" />
@@ -232,68 +250,38 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+            <hc:TextBox
+                Grid.Row="2"
+                Height="35"
+                Margin="15"
+                VerticalContentAlignment="Center"
+                hc:InfoElement.Placeholder="请要发送的数据"
+                hc:InfoElement.ShowClearButton="True"
+                Background="{DynamicResource ThirdBgBrush}"
+                FontSize="16"
+                Foreground="{DynamicResource ForegroundBrush}"
+                Text="{Binding UserInputHex}" />
 
-                <hc:TextBox
-                    Grid.Column="0"
-                    Height="35"
-                    Margin="15"
-                    VerticalContentAlignment="Center"
-                    hc:InfoElement.Placeholder="请要发送的数据"
-                    hc:InfoElement.ShowClearButton="True"
-                    Background="{DynamicResource ThirdBgBrush}"
-                    FontSize="16"
-                    Foreground="{DynamicResource ForegroundBrush}"
-                    Text="{Binding UserInputHex}" />
-
-                <Button
-                    Grid.Column="1"
-                    Height="35"
-                    Margin="0,0,15,0"
-                    Command="{Binding SendMessageCommand}"
-                    Content="发送数据"
-                    FontSize="16"
-                    Style="{StaticResource ButtonPrimary}" />
-            </Grid>
-
-            <Grid Grid.Row="3" Margin="15,0,15,15">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <ListView
-                    Grid.Column="0"
-                    Height="300"
-                    Margin="0,0,15,0"
-                    Background="{DynamicResource ThirdBgBrush}"
-                    BorderBrush="{DynamicResource BackgroundBrush}"
-                    ItemsSource="{Binding LogCollection}"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock
-                                    FontSize="18"
-                                    Text="{Binding}"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-
-                <Button
-                    Grid.Column="1"
-                    Height="35"
-                    Command="{Binding CalculateCommand}"
-                    Content="计算结果"
-                    FontSize="16"
-                    Style="{StaticResource ButtonPrimary}" />
-            </Grid>
+            <ListView
+                Grid.Row="3"
+                Grid.Column="0"
+                Height="300"
+                Margin="15,0,15,15"
+                Background="{DynamicResource ThirdBgBrush}"
+                BorderBrush="{DynamicResource BackgroundBrush}"
+                ItemsSource="{Binding LogCollection}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="18"
+                                Text="{Binding}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
     </Grid>
 </UserControl>
