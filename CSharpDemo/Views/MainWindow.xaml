@@ -18,7 +18,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="180" />
+            <ColumnDefinition Width="200" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
@@ -46,7 +46,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock
-                            Padding="15"
+                            Padding="20"
                             VerticalAlignment="Center"
                             FontSize="16"
                             Text="{Binding}" />

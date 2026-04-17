@@ -38,7 +38,7 @@ namespace CSharpDemo.ViewModels
             switch (box.SelectedIndex)
             {
                 case 0:
-                    region.RequestNavigate("AudioWaveView");
+                    region.RequestNavigate("AudioVisualizerView");
                     break;
                 case 1:
                     region.RequestNavigate("SerialPortView");
