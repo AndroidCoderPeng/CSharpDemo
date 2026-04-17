@@ -32,7 +32,6 @@
                 x:Name="MenuListBox"
                 Grid.Row="0"
                 HorizontalAlignment="Stretch"
-                Background="Transparent"
                 BorderThickness="0"
                 Foreground="{DynamicResource ForegroundBrush}"
                 ItemsSource="{Binding ItemModels}"
@@ -40,8 +39,7 @@
 
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="SelectionChanged">
-                        <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}"
-                                               CommandParameter="{Binding ElementName=MenuListBox}" />
+                        <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding ElementName=MenuListBox}" />
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
 
@@ -57,26 +55,21 @@
 
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
-                        <Setter Property="Margin" Value="0,0,0,1" />
+                        <Setter Property="Margin" Value="3" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <Border x:Name="ItemContainerBorder">
+                                    <Border x:Name="ItemContainerBorder" CornerRadius="5">
                                         <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                                     </Border>
 
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="ItemContainerBorder" Property="Background"
-                                                    Value="{DynamicResource FirstBgBrush}" />
+                                            <Setter TargetName="ItemContainerBorder" Property="Background" Value="{DynamicResource FirstBgBrush}" />
                                         </Trigger>
 
                                         <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="ItemContainerBorder" Property="BorderBrush" Value="Red" />
-                                            <Setter TargetName="ItemContainerBorder" Property="BorderThickness"
-                                                    Value="10,0,0,0" />
-                                            <Setter TargetName="ItemContainerBorder" Property="Background"
-                                                    Value="{DynamicResource PrimaryBrush}" />
+                                            <Setter TargetName="ItemContainerBorder" Property="Background" Value="{DynamicResource PrimaryBrush}" />
                                             <Setter Property="TextBlock.Foreground" Value="White" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
