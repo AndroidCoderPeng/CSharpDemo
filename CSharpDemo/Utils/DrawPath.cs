@@ -155,10 +155,10 @@ namespace CSharpDemo.Utils
             var pointCount = timeAxis.Length;
 
             var maxAmplitude = 0.0;
-            foreach (var magnitude in amplitude)
+            foreach (var value in amplitude)
             {
-                var mag = Math.Abs(magnitude);
-                if (mag > maxAmplitude) maxAmplitude = mag;
+                var amp = Math.Abs(value);
+                if (amp > maxAmplitude) maxAmplitude = amp;
             }
 
             // 波峰波谷缩放比例
