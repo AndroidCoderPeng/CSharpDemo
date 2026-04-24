@@ -234,6 +234,7 @@ namespace CSharpDemo.ViewModels
             {
                 // 直接开始计算
                 var startTime = DateTime.Now;
+                Console.WriteLine(@"开始计算");
                 var array = LazyCorrelator.Value.locating(
                     11,
                     (MWNumericArray)_sensorData.RedDeviceData,

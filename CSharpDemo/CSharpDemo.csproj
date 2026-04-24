@@ -292,7 +292,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Converters\" />
-    <Folder Include="Dialogs\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DLL\CorrelatorSingle.dll" />
