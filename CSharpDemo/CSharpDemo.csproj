@@ -72,7 +72,7 @@
       <HintPath>..\packages\Accord.Math.3.8.0\lib\net462\Accord.Math.Core.dll</HintPath>
     </Reference>
     <Reference Include="CorrelatorSingle">
-      <HintPath>..\..\..\..\dll\CorrelatorSingle.dll</HintPath>
+        <HintPath>DLL\v901\CorrelatorSingle.dll</HintPath>
     </Reference>
     <Reference Include="DryIoc, Version=4.7.7.0, Culture=neutral, PublicKeyToken=dfbf2bd50fcf7768, processorArchitecture=MSIL">
       <HintPath>..\packages\DryIoc.dll.4.7.7\lib\net45\DryIoc.dll</HintPath>
@@ -95,7 +95,7 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="MWArray">
-      <HintPath>DLL\MWArray.dll</HintPath>
+        <HintPath>DLL\v901\MWArray.dll</HintPath>
     </Reference>
     <Reference Include="NAudio, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.2.1.0\lib\net472\NAudio.dll</HintPath>

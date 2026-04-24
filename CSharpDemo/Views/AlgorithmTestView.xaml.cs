@@ -17,9 +17,19 @@ namespace CSharpDemo.Views
             // 禁用缩放
             ScottplotView.UserInputProcessor.Disable();
 
-            // 禁用网格线
+            // 网格线
             var scottPlot = ScottplotView.Plot;
-            scottPlot.HideGrid();
+            ShowGridLineCheckBox.Checked += delegate
+            {
+                scottPlot.ShowGrid();
+                ScottplotView.Refresh();
+            };
+
+            ShowGridLineCheckBox.Unchecked += delegate
+            {
+                scottPlot.HideGrid();
+                ScottplotView.Refresh();
+            };
 
             //XY轴坐标
             ScottplotView.Plot.XLabel("Pipe Length(m)");

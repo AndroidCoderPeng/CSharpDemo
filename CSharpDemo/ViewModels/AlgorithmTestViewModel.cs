@@ -103,7 +103,10 @@ namespace CSharpDemo.ViewModels
 
         private readonly IEventAggregator _eventAggregator;
         private readonly BackgroundWorker _backgroundWorker;
-        private static readonly Lazy<Correlator> LazyCorrelator = new Lazy<Correlator>(() => new Correlator());
+
+        private static readonly Lazy<Correlator> LazyCorrelator =
+            new Lazy<Correlator>(() => new Correlator());
+
         private int _soundSpeed = 1130;
         private CorrelatorData _sensorData;
 
@@ -112,7 +115,6 @@ namespace CSharpDemo.ViewModels
             _eventAggregator = eventAggregator;
 
             _backgroundWorker = new BackgroundWorker();
-            _backgroundWorker.WorkerReportsProgress = true;
             _backgroundWorker.WorkerSupportsCancellation = true;
             _backgroundWorker.DoWork += Worker_OnDoWork;
             _backgroundWorker.RunWorkerCompleted += Worker_OnRunWorkerCompleted;
