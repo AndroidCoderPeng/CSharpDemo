@@ -18,89 +18,115 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <hc:TextBox
-                    Grid.Column="0"
-                    hc:InfoElement.Placeholder="请选择水听器数据文件"
-                    hc:InfoElement.ShowClearButton="True"
-                    Background="{DynamicResource ThirdBgBrush}"
-                    FontSize="16"
-                    Foreground="{DynamicResource ForegroundBrush}" />
-
-                <Button
-                    x:Name="ImportRedDataButton"
-                    Grid.Column="1"
-                    Height="35"
-                    Margin="10,0,0,0"
-                    Content="导入红色传感器数据"
-                    FontSize="16"
-                    Style="{StaticResource ButtonDashedDanger}" />
-            </Grid>
-
-            <Grid Grid.Row="1" Margin="0,10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <hc:TextBox
-                    Grid.Column="0"
-                    hc:InfoElement.Placeholder="请选择水听器数据文件"
-                    hc:InfoElement.ShowClearButton="True"
-                    Background="{DynamicResource ThirdBgBrush}"
-                    FontSize="16"
-                    Foreground="{DynamicResource ForegroundBrush}" />
-
-                <Button
-                    x:Name="ImportBlueDataButton"
-                    Grid.Column="1"
-                    Height="35"
-                    Margin="10,0,0,0"
-                    Content="导入蓝色传感器数据"
-                    FontSize="16"
-                    Style="{StaticResource ButtonDashedPrimary}" />
-            </Grid>
-        </Grid>
-
-        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
+            <StackPanel Grid.Column="0" Orientation="Vertical">
+                <hc:TextBox
+                    Height="35"
+                    hc:InfoElement.Placeholder="请选择传感器配置文件"
+                    hc:InfoElement.ShowClearButton="True"
+                    Background="{DynamicResource ThirdBgBrush}"
+                    FontSize="16"
+                    Foreground="{DynamicResource ForegroundBrush}"
+                    Text="{Binding ConfigFilePath}" />
+
+                <UniformGrid Margin="3" Columns="5">
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding Config.PipeMaterial, StringFormat={}管材：{0}}" />
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding Config.PipeDiameter, StringFormat={}管径：{0}mm}" />
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding Config.PipeLength, StringFormat={}管长：{0}m}" />
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding Config.LowFrequency, StringFormat={}低频：{0}Hz}" />
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding Config.HighFrequency, StringFormat={}高频：{0}Hz}" />
+                </UniformGrid>
+            </StackPanel>
+
+            <Button
+                Grid.Column="1"
+                Height="35"
+                Margin="10,0,0,0"
+                VerticalAlignment="Top"
+                Command="{Binding SelectParamConfigFileCommand}"
+                Content="导入传感器配置"
+                FontSize="16"
+                Style="{StaticResource ButtonPrimary}" />
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Vertical">
+                <hc:TextBox
+                    Height="35"
+                    hc:InfoElement.Placeholder="请选择传感器数据文件"
+                    hc:InfoElement.ShowClearButton="True"
+                    Background="{DynamicResource ThirdBgBrush}"
+                    FontSize="16"
+                    Foreground="{DynamicResource ForegroundBrush}"
+                    Text="{Binding SensorDataPath}" />
+
+                <UniformGrid Margin="3" Columns="2">
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding FirstSensorData.Length, StringFormat={}传感器1数据量：{0}}" />
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding SecondSensorData.Length, StringFormat={}传感器2数据量：{0}}" />
+                </UniformGrid>
+            </StackPanel>
+
+            <Button
+                Grid.Column="1"
+                Height="35"
+                Margin="10,0,0,0"
+                VerticalAlignment="Top"
+                Command="{Binding ImportSensorDataCommand}"
+                Content="导入传感器数据"
+                FontSize="16"
+                Style="{StaticResource ButtonPrimary}" />
+        </Grid>
+
+        <UniformGrid Grid.Row="2" Columns="3">
             <CheckBox
-                x:Name="CrossLineCheckBox"
-                Grid.Column="0"
-                Content="十字标线"
+                x:Name="ShowCrossLineCheckBox"
+                Content="显示十字标线"
+                FontSize="18"
+                Foreground="{DynamicResource ForegroundBrush}"
+                IsChecked="True" />
+
+            <CheckBox
+                x:Name="ShowGridLineCheckBox"
+                HorizontalAlignment="Center"
+                Content="显示网格线"
                 FontSize="18"
                 Foreground="{DynamicResource ForegroundBrush}"
                 IsChecked="True" />
 
             <Button
-                x:Name="StartCalculateButton"
-                Grid.Column="1"
                 Height="35"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Right"
+                Command="{Binding StartCalculateCommand}"
                 Content="开始计算"
                 FontSize="16"
+                IsEnabled="{Binding IsCalculateEnabled}"
                 Style="{StaticResource ButtonPrimary}" />
-        </Grid>
+        </UniformGrid>
 
-        <Grid Grid.Row="2" Margin="0,10,0,0">
-            <scottplot:WpfPlot x:Name="ScottPlotView" />
+        <Grid Grid.Row="3" Margin="0,10">
+            <scottplot:WpfPlot x:Name="ScottplotView" />
         </Grid>
     </Grid>
 </UserControl>

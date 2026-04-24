@@ -45,7 +45,8 @@
                     SelectedItem="{Binding PortName}">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="SelectionChanged">
-                            <b:InvokeCommandAction Command="{Binding PortItemSelectedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
+                            <b:InvokeCommandAction Command="{Binding PortItemSelectedCommand}"
+                                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
@@ -70,7 +71,8 @@
                     SelectedItem="{Binding BaudRate}">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="SelectionChanged">
-                            <b:InvokeCommandAction Command="{Binding BaudRateItemSelectedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
+                            <b:InvokeCommandAction Command="{Binding BaudRateItemSelectedCommand}"
+                                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
@@ -95,7 +97,8 @@
                     SelectedItem="{Binding DataBit}">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="SelectionChanged">
-                            <b:InvokeCommandAction Command="{Binding DataBitItemSelectedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
+                            <b:InvokeCommandAction Command="{Binding DataBitItemSelectedCommand}"
+                                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
@@ -120,7 +123,8 @@
                     SelectedItem="{Binding Parity}">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="SelectionChanged">
-                            <b:InvokeCommandAction Command="{Binding CheckModeItemSelectedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
+                            <b:InvokeCommandAction Command="{Binding CheckModeItemSelectedCommand}"
+                                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
@@ -145,7 +149,8 @@
                     SelectedItem="{Binding StopBit}">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="SelectionChanged">
-                            <b:InvokeCommandAction Command="{Binding StopBitItemSelectedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
+                            <b:InvokeCommandAction Command="{Binding StopBitItemSelectedCommand}"
+                                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
@@ -226,14 +231,14 @@
 
             <TextBlock
                 Grid.Row="0"
-                Margin="15"
+                Margin="0,15"
                 FontSize="18"
                 Foreground="{DynamicResource ForegroundBrush}"
                 Text="数据接收区" />
 
             <ListView
                 Grid.Row="1"
-                Margin="15,0"
+                Margin="0,0,15,0"
                 Background="{DynamicResource ThirdBgBrush}"
                 BorderBrush="{DynamicResource BackgroundBrush}"
                 ItemsSource="{Binding ResponseCollection}"
@@ -253,7 +258,7 @@
             <hc:TextBox
                 Grid.Row="2"
                 Height="35"
-                Margin="15"
+                Margin="0,15,15,15"
                 VerticalContentAlignment="Center"
                 hc:InfoElement.Placeholder="请要发送的数据"
                 hc:InfoElement.ShowClearButton="True"
@@ -266,7 +271,7 @@
                 Grid.Row="3"
                 Grid.Column="0"
                 Height="300"
-                Margin="15,0,15,15"
+                Margin="0,0,15,15"
                 Background="{DynamicResource ThirdBgBrush}"
                 BorderBrush="{DynamicResource BackgroundBrush}"
                 ItemsSource="{Binding LogCollection}"
