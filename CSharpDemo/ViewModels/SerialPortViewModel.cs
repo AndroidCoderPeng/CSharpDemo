@@ -273,7 +273,7 @@ namespace CSharpDemo.ViewModels
         private readonly SerialPortManager _serialPortManager = new SerialPortManager();
         private static readonly Lazy<Correlator> LazyCorrelator = new Lazy<Correlator>(() => new Correlator());
         private readonly BackgroundWorker _backgroundWorker;
-        private CorrelatorDataModel _dataModel;
+        private CorrelatorData _dataModel;
 
         #endregion
 
@@ -452,7 +452,7 @@ namespace CSharpDemo.ViewModels
         {
             if (_dataModel == null)
             {
-                _dataModel = new CorrelatorDataModel();
+                _dataModel = new CorrelatorData();
             }
 
             LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}开始处理数据");
@@ -470,19 +470,20 @@ namespace CSharpDemo.ViewModels
                     realData[i] = dStr.HexToDouble();
                 }
 
-                _dataModel.DevCode = devCode;
                 if (devCode.Equals(RuntimeCache.Dev1))
                 {
                     //接收到数据之后时间重新赋值
-                    _dataModel.LeftReceiveDataTime = DateTime.Now;
-                    _dataModel.LeftDeviceDataArray = realData;
+                    _dataModel.RedDevCode = RuntimeCache.Dev1;
+                    _dataModel.ReceiveRedSensorDataTime = DateTime.Now;
+                    _dataModel.RedDeviceData = realData;
                     LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}Dev1数据处理完成");
                 }
                 else
                 {
                     //接收到数据之后时间重新赋值
-                    _dataModel.RightReceiveDataTime = DateTime.Now;
-                    _dataModel.RightDeviceDataArray = realData;
+                    _dataModel.BlueDevCode = RuntimeCache.Dev2;
+                    _dataModel.ReceiveBlueSensorDataTime = DateTime.Now;
+                    _dataModel.BlueDeviceData = realData;
                     LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}Dev2数据处理完成");
                 }
             }
@@ -491,7 +492,7 @@ namespace CSharpDemo.ViewModels
         private void Worker_OnDoWork(object sender, DoWorkEventArgs e)
         {
             var array = LazyCorrelator.Value.locating(11,
-                (MWNumericArray)_dataModel.LeftDeviceDataArray, (MWNumericArray)_dataModel.RightDeviceDataArray,
+                (MWNumericArray)_dataModel.RedDeviceData, (MWNumericArray)_dataModel.BlueDeviceData,
                 7500,
                 int.Parse("150"), int.Parse("1130"),
                 0, 0,
