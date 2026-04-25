@@ -8,8 +8,6 @@
     d:DesignHeight="720"
     d:DesignWidth="1080"
     Background="{DynamicResource FirstBgBrush}"
-    Loaded="AudioWaveView_OnLoaded"
-    Unloaded="AudioWaveView_OnUnloaded"
     mc:Ignorable="d">
 
     <Grid Margin="10">
@@ -30,16 +28,16 @@
             </Grid.ColumnDefinitions>
 
             <hc:TextBox
+                x:Name="AudioFilePathTextBox"
                 Grid.Column="0"
                 HorizontalAlignment="Stretch"
                 hc:InfoElement.Placeholder="请选择需要可视化的音频文件"
-                hc:InfoElement.ShowClearButton="True"
-                Text="{Binding AudioFilePath}" />
+                hc:InfoElement.ShowClearButton="True" />
 
             <Button
+                x:Name="SelectAudioButton"
                 Grid.Column="1"
                 Margin="8,0,0,0"
-                Command="{Binding SelectAudioCommand}"
                 Content="选择文件" />
         </Grid>
 
