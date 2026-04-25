@@ -23,6 +23,9 @@ namespace CSharpDemo.Utils
         private readonly Queue<double> _bassHistory = new Queue<double>();
         private readonly Queue<double> _highHistory = new Queue<double>();
 
+        public event Action<TimeDomainData> TimeDomainEvent;
+        public event Action<FrequencyDomainData> FrequencyDomainEvent;
+
         /// <summary>
         /// 
         /// </summary>
@@ -57,6 +60,12 @@ namespace CSharpDemo.Utils
                 Array.Copy(_frameBuffer, audioData.Length, _frameBuffer, 0, _frameBuffer.Length - audioData.Length);
                 Array.Copy(audioData, 0, _frameBuffer, _frameBuffer.Length - audioData.Length, audioData.Length);
             }
+            
+            var timeDomain = GetTimeDomain();
+            TimeDomainEvent?.Invoke(timeDomain);
+            
+            var frequencyDomain = GetFrequencyDomain();
+            FrequencyDomainEvent?.Invoke(frequencyDomain);
         }
 
         /// <summary>
