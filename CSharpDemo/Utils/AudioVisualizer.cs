@@ -72,7 +72,7 @@ namespace CSharpDemo.Utils
         /// 获取频谱数据，也就是音频对应的时域数据
         /// </summary>
         /// <returns></returns>
-        public TimeDomainData GetTimeDomain()
+        private TimeDomainData GetTimeDomain()
         {
             var len = _frameBuffer.Length;
             if (len <= 1)
@@ -98,6 +98,48 @@ namespace CSharpDemo.Utils
             };
         }
 
+        /// <summary>
+        /// 获取频谱数据，也就是音频对应的频域数据
+        /// </summary>
+        /// <returns></returns>
+        private FrequencyDomainData GetFrequencyDomain()
+        {
+            var len = _frameBuffer.Length;
+            if (len <= 1)
+            {
+                return new FrequencyDomainData
+                {
+                    Frequencies = Array.Empty<double>(),
+                    Magnitudes = Array.Empty<double>()
+                };
+            }
+
+            _fftBuffer = new Complex[len];
+            for (var i = 0; i < len; i++)
+            {
+                _fftBuffer[i] = new Complex(_frameBuffer[i], 0);
+            }
+
+            var fftSize = _fftBuffer.Length;
+            FourierTransform.FFT(_fftBuffer, FourierTransform.Direction.Forward);
+
+            // 傅里叶变换结果左右对称, 只需要取一半
+            var binCount = fftSize / 2;
+            var frequencies = new double[binCount];
+            var magnitudes = new double[binCount];
+            for (var i = 0; i < binCount; i++)
+            {
+                frequencies[i] = i * _sampleRate / fftSize;
+                magnitudes[i] = _fftBuffer[i].Magnitude / fftSize;
+            }
+
+            return new FrequencyDomainData
+            {
+                Frequencies = frequencies,
+                Magnitudes = magnitudes
+            };
+        }
+        
         /// <summary>
         /// 
         /// </summary>
@@ -203,48 +245,6 @@ namespace CSharpDemo.Utils
             var scale = 0.8 + normalized * 0.8;
 
             return Math.Max(0.8, Math.Min(scale, 1.6));
-        }
-
-        /// <summary>
-        /// 获取频谱数据，也就是音频对应的频域数据
-        /// </summary>
-        /// <returns></returns>
-        public FrequencyDomainData GetFrequencyDomain()
-        {
-            var len = _frameBuffer.Length;
-            if (len <= 1)
-            {
-                return new FrequencyDomainData
-                {
-                    Frequencies = Array.Empty<double>(),
-                    Magnitudes = Array.Empty<double>()
-                };
-            }
-
-            _fftBuffer = new Complex[len];
-            for (var i = 0; i < len; i++)
-            {
-                _fftBuffer[i] = new Complex(_frameBuffer[i], 0);
-            }
-
-            var fftSize = _fftBuffer.Length;
-            FourierTransform.FFT(_fftBuffer, FourierTransform.Direction.Forward);
-
-            // 傅里叶变换结果左右对称, 只需要取一半
-            var binCount = fftSize / 2;
-            var frequencies = new double[binCount];
-            var magnitudes = new double[binCount];
-            for (var i = 0; i < binCount; i++)
-            {
-                frequencies[i] = i * _sampleRate / fftSize;
-                magnitudes[i] = _fftBuffer[i].Magnitude / fftSize;
-            }
-
-            return new FrequencyDomainData
-            {
-                Frequencies = frequencies,
-                Magnitudes = magnitudes
-            };
         }
 
         /// <summary>
