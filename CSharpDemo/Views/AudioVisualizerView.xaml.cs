@@ -17,108 +17,69 @@ namespace CSharpDemo.Views
         private readonly Color[] _allColors;
         private readonly AudioVisualizer _visualizer; // 可视化
         private IWavePlayer _wavePlayer;
-        private FrequencyDomainData _frequencyDomain; // 频域数据
-        private TimeDomainData _timeDomain; // 时域数据
-        private int _colorIndex;
+        private Color _color1;
+        private Color _color2;
         private double _rotation; // 旋转角度
+        private double _bassScale;
 
         public AudioVisualizerView(IAppDataService dataService)
         {
             InitializeComponent();
 
             _allColors = dataService.GetHsvColors(); // 获取所有的渐变颜色 (HSV 颜色)
-            _visualizer = new AudioVisualizer(SampleRate);
+            _visualizer = new AudioVisualizer(SampleRate, false);
             _visualizer.TimeDomainEvent += Handle_TimeDomainEvent;
             _visualizer.FrequencyDomainEvent += Handle_FrequencyDomainEvent;
+            _visualizer.RenderCountEvent += Handle_RenderCountEvent;
 
             SelectAudioButton.Click += SelectAudioButton_Click;
-
-            CompositionTarget.Rendering += Handle_RenderPathEvent;
         }
 
         private void Handle_TimeDomainEvent(TimeDomainData timeDomain)
         {
-            // var sTimeDomain = _visualizer.MakeSmooth(timeDomain, 2);
-            //
-            // if (_timeDomain == null)
-            // {
-            //     _timeDomain = sTimeDomain;
-            //     return;
-            // }
-            //
-            // for (var i = 0; i < sTimeDomain.Amplitude.Length; i++)
-            // {
-            //     var oldData = _timeDomain.Amplitude[i];
-            //     var newData = sTimeDomain.Amplitude[i];
-            //     var deltaData = oldData + (newData - oldData) * 0.2;
-            //     _timeDomain.Amplitude[i] = deltaData;
-            // }
-            _timeDomain = timeDomain;
+            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                _bassScale.DrawGradientBorder(
+                    TopBorder, BottomBorder, LeftBorder, RightBorder,
+                    Color.FromArgb(0, _color1.R, _color1.G, _color1.B), _color2, 10
+                );
+
+                var curveBrush = new SolidColorBrush(_color1);
+                timeDomain.DrawGradientCurve(
+                    AudioCurvePanel.ActualWidth, AudioCurvePanel.ActualHeight,
+                    AudioCurvePath, curveBrush, 0
+                );
+            }));
         }
 
         private void Handle_FrequencyDomainEvent(FrequencyDomainData frequencyDomain)
         {
-            // var sFrequencyDomain = _visualizer.MakeSmooth(frequencyDomain, 2);
-            //
-            // if (_frequencyDomain == null)
-            // {
-            //     _frequencyDomain = sFrequencyDomain;
-            //     return;
-            // }
-            //
-            // for (var i = 0; i < sFrequencyDomain.Magnitudes.Length; i++)
-            // {
-            //     var oldData = _frequencyDomain.Magnitudes[i];
-            //     var newData = sFrequencyDomain.Magnitudes[i];
-            //     var deltaData = oldData + (newData - oldData) * 0.2;
-            //     _frequencyDomain.Magnitudes[i] = deltaData;
-            // }
-            _frequencyDomain = frequencyDomain;
+            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                _bassScale = _visualizer.CalculateBassScale(frequencyDomain);
+                var highScale = _visualizer.CalculateHighScale(frequencyDomain);
+                var baseRadius = Math.Min(AudioCircularPanel.ActualWidth, AudioCircularPanel.ActualHeight) / 3;
+                var radius = baseRadius + highScale * _bassScale;
+
+                frequencyDomain.DrawCircularGradientStrips(
+                    AudioCircularPanel.ActualHeight, CircularPath, _color1, _color2,
+                    CircularPath.ActualWidth / 2,
+                    CircularPath.ActualHeight / 2,
+                    radius, 1, _rotation
+                );
+
+                frequencyDomain.DrawGradientStrips(
+                    AudioStripPanel.ActualWidth, AudioStripPanel.ActualHeight,
+                    StripsPath, _color1, _color2, 0, 2
+                );
+            }));
         }
 
-        private void Handle_RenderPathEvent(object sender, EventArgs e)
+        private void Handle_RenderCountEvent(int renderCount)
         {
-            if (_frequencyDomain == null || _timeDomain == null)
-            {
-                return;
-            }
-
-            _colorIndex++;
-            var color1 = _allColors[_colorIndex % _allColors.Length];
-            var color2 = _allColors[(_colorIndex + 200) % _allColors.Length];
-
-            var bassScale = _visualizer.CalculateBassScale(_frequencyDomain); // 获取低音系数
-            var highScale = _visualizer.CalculateHighScale(_frequencyDomain); // 获取高音系数
-            // Console.WriteLine($@"bassScale: {bassScale}, highScale: {highScale}");
-
-            //圆形波动图
             _rotation += .1;
-            var baseRadius = Math.Min(AudioCircularPanel.ActualWidth, AudioCircularPanel.ActualHeight) / 3;
-            var radius = baseRadius + highScale * bassScale;
-            // Console.WriteLine($@"radius: {radius}");
-            _frequencyDomain.DrawCircularGradientStrips(
-                AudioCircularPanel.ActualHeight, CircularPath, color1, color2,
-                CircularPath.ActualWidth / 2,
-                CircularPath.ActualHeight / 2,
-                radius, 1, _rotation
-            );
-
-            // 四周边框
-            bassScale.DrawGradientBorder(
-                TopBorder, BottomBorder, LeftBorder, RightBorder,
-                Color.FromArgb(0, color1.R, color1.G, color1.B), color2, 10
-            );
-
-            //波形曲线
-            var curveBrush = new SolidColorBrush(color1);
-            _timeDomain.DrawGradientCurve(
-                AudioCurvePanel.ActualWidth, AudioCurvePanel.ActualHeight, AudioCurvePath, curveBrush, 0
-            );
-
-            //长条形波动图
-            _frequencyDomain.DrawGradientStrips(
-                AudioStripPanel.ActualWidth, AudioStripPanel.ActualHeight, StripsPath, color1, color2, 0, 2
-            );
+            _color1 = _allColors[renderCount % _allColors.Length];
+            _color2 = _allColors[(renderCount + 200) % _allColors.Length];
         }
 
         private void SelectAudioButton_Click(object sender, RoutedEventArgs e)

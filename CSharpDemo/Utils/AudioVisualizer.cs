@@ -8,11 +8,8 @@ namespace CSharpDemo.Utils
 {
     public class AudioVisualizer
     {
-        /// <summary>
-        /// 界面刷新的音频帧
-        /// </summary>
         private readonly double[] _frameBuffer;
-
+        private readonly bool _smooth;
         private readonly double _sampleRate;
         private Complex[] _fftBuffer;
         private double _minBass = double.MaxValue;
@@ -22,17 +19,20 @@ namespace CSharpDemo.Utils
         private const int HistorySize = 60;
         private readonly Queue<double> _bassHistory = new Queue<double>();
         private readonly Queue<double> _highHistory = new Queue<double>();
+        private int _renderCount = 1;
 
         public event Action<TimeDomainData> TimeDomainEvent;
         public event Action<FrequencyDomainData> FrequencyDomainEvent;
+        public event Action<int> RenderCountEvent;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="sampleRate"></param>
+        /// <param name="smooth">是否需要平滑FFT</param>
         /// <param name="size">控制频谱数量，数量越多，界面显示波动的频谱越多，建议256就好</param>
         /// <exception cref="ArgumentException"></exception>
-        public AudioVisualizer(double sampleRate, int size = 256)
+        public AudioVisualizer(double sampleRate, bool smooth, int size = 256)
         {
             if (!size.IsPowerOfTwo())
             {
@@ -40,6 +40,7 @@ namespace CSharpDemo.Utils
             }
 
             _sampleRate = sampleRate;
+            _smooth = smooth;
             _frameBuffer = new double[size];
         }
 
@@ -60,12 +61,24 @@ namespace CSharpDemo.Utils
                 Array.Copy(_frameBuffer, audioData.Length, _frameBuffer, 0, _frameBuffer.Length - audioData.Length);
                 Array.Copy(audioData, 0, _frameBuffer, _frameBuffer.Length - audioData.Length, audioData.Length);
             }
-            
+
             var timeDomain = GetTimeDomain();
+            if (_smooth)
+            {
+                timeDomain = MakeSmooth(timeDomain, 2);
+            }
+
             TimeDomainEvent?.Invoke(timeDomain);
-            
+
             var frequencyDomain = GetFrequencyDomain();
+            if (_smooth)
+            {
+                frequencyDomain = MakeSmooth(frequencyDomain, 2);
+            }
+
             FrequencyDomainEvent?.Invoke(frequencyDomain);
+
+            RenderCountEvent?.Invoke(_renderCount++);
         }
 
         /// <summary>
@@ -139,7 +152,7 @@ namespace CSharpDemo.Utils
                 Magnitudes = magnitudes
             };
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -253,7 +266,7 @@ namespace CSharpDemo.Utils
         /// <param name="data">数据</param>
         /// <param name="radius">模糊半径</param>
         /// <returns>结果</returns>
-        public FrequencyDomainData MakeSmooth(FrequencyDomainData data, int radius)
+        private FrequencyDomainData MakeSmooth(FrequencyDomainData data, int radius)
         {
             if (data?.Magnitudes == null || data.Magnitudes.Length == 0)
             {
@@ -288,7 +301,7 @@ namespace CSharpDemo.Utils
             };
         }
 
-        public TimeDomainData MakeSmooth(TimeDomainData data, int radius)
+        private TimeDomainData MakeSmooth(TimeDomainData data, int radius)
         {
             if (data?.Amplitude == null || data.Amplitude.Length == 0)
             {
