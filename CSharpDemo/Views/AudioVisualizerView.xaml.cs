@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using CSharpDemo.Model;
 using CSharpDemo.Service;
 using CSharpDemo.Utils;
@@ -16,11 +17,13 @@ namespace CSharpDemo.Views
         private const int SampleRate = 7500;
         private readonly Color[] _allColors;
         private readonly AudioVisualizer _visualizer; // 可视化
-        private IWavePlayer _wavePlayer;
+        private WaveOutEvent _wavePlayer;
         private Color _color1;
         private Color _color2;
         private double _rotation; // 旋转角度
         private double _bassScale;
+        private TimeSpan _duration;
+        private readonly DispatcherTimer _positionTimer;
 
         public AudioVisualizerView(IAppDataService dataService)
         {
@@ -33,6 +36,13 @@ namespace CSharpDemo.Views
             _visualizer.RenderCountEvent += Handle_RenderCountEvent;
 
             SelectAudioButton.Click += SelectAudioButton_Click;
+
+            _positionTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(30) // ~33 FPS
+            };
+
+            _positionTimer.Tick += PositionTimer_Tick;
         }
 
         private void Handle_TimeDomainEvent(TimeDomainData timeDomain)
@@ -110,18 +120,25 @@ namespace CSharpDemo.Views
             StopAndCleanup();
 
             ISampleProvider sampleProvider;
+            WaveStream waveStream;
             if (path.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase))
             {
-                sampleProvider = new Mp3FileReader(path).ToSampleProvider();
+                var mp3 = new Mp3FileReader(path);
+                waveStream = mp3;
+                sampleProvider = mp3.ToSampleProvider();
             }
             else if (path.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
             {
-                sampleProvider = new WaveFileReader(path).ToSampleProvider();
+                var wav = new WaveFileReader(path);
+                waveStream = wav;
+                sampleProvider = wav.ToSampleProvider();
             }
             else
             {
                 throw new NotSupportedException("不支持的音频格式");
             }
+
+            _duration = waveStream.TotalTime;
 
             // 立体声 → 单声道（安全转为单声道）
             sampleProvider = sampleProvider.ToMono();
@@ -143,7 +160,23 @@ namespace CSharpDemo.Views
 
             _wavePlayer = new WaveOutEvent();
             _wavePlayer.Init(capturingProvider.ToWaveProvider16());
+            _positionTimer.Start();
             _wavePlayer.Play();
+        }
+
+        private void PositionTimer_Tick(object sender, EventArgs e)
+        {
+            if (_wavePlayer == null || _duration <= TimeSpan.Zero)
+                return;
+
+            var positionBytes = _wavePlayer.GetPosition();
+            var position = TimeSpan.FromSeconds(
+                positionBytes / (double)_wavePlayer.OutputWaveFormat.AverageBytesPerSecond
+            );
+            var progress = position.TotalSeconds / _duration.TotalSeconds;
+
+            DurationProgressBar.Value = progress * 100;
+            CurrentPositionTextBlock.Text = $"{position:mm\\:ss} / {_duration:mm\\:ss}";
         }
 
         /// <summary>
@@ -151,6 +184,8 @@ namespace CSharpDemo.Views
         /// </summary>
         private void StopAndCleanup()
         {
+            _positionTimer?.Stop();
+
             if (_wavePlayer != null)
             {
                 _wavePlayer.Stop();

@@ -14,6 +14,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="8" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="8" />
             <RowDefinition Height="3*" />
             <RowDefinition Height="8" />
             <RowDefinition Height="*" />
@@ -41,16 +43,37 @@
                 Content="选择文件" />
         </Grid>
 
+        <Grid Grid.Row="2">
+            <ProgressBar
+                x:Name="DurationProgressBar"
+                Height="3"
+                BorderThickness="0"
+                Style="{x:Null}" />
+
+            <Border
+                Grid.Row="0"
+                Padding="10,0"
+                HorizontalAlignment="Center"
+                Background="{StaticResource PrimaryBrush}"
+                CornerRadius="8">
+                <TextBlock
+                    x:Name="CurrentPositionTextBlock"
+                    VerticalAlignment="Center"
+                    Foreground="White"
+                    Text="00:00/00:00" />
+            </Border>
+        </Grid>
+
         <Grid
             x:Name="AudioCircularPanel"
-            Grid.Row="2"
+            Grid.Row="4"
             Background="Black">
             <Path x:Name="CircularPath" />
         </Grid>
 
         <Grid
             x:Name="AudioCurvePanel"
-            Grid.Row="4"
+            Grid.Row="6"
             Background="Black">
             <Rectangle Name="TopBorder" VerticalAlignment="Top" />
             <Rectangle Name="BottomBorder" VerticalAlignment="Bottom" />
@@ -61,7 +84,7 @@
 
         <Grid
             x:Name="AudioStripPanel"
-            Grid.Row="6"
+            Grid.Row="8"
             Background="Black">
             <Path x:Name="StripsPath" />
         </Grid>
