@@ -204,6 +204,7 @@
     <Compile Include="Model\ParamConfig.cs"/>
     <Compile Include="Service\AppDataServiceImpl.cs" />
     <Compile Include="Utils\AudioVisualizer.cs" />
+    <Compile Include="Utils\CrcCodeHub.cs"/>
     <Compile Include="Utils\DrawPath.cs" />
     <Compile Include="Utils\RuntimeCache.cs" />
     <Compile Include="ViewModels\AlgorithmTestViewModel.cs" />

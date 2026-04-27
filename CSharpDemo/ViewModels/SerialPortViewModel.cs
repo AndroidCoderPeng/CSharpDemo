@@ -273,7 +273,7 @@ namespace CSharpDemo.ViewModels
         private readonly SerialPortManager _serialPortManager = new SerialPortManager();
         private static readonly Lazy<Correlator> LazyCorrelator = new Lazy<Correlator>(() => new Correlator());
         private readonly BackgroundWorker _backgroundWorker;
-        private CorrelatorData _dataModel;
+        private readonly CorrelatorData _dataModel = new CorrelatorData();
 
         #endregion
 
@@ -289,7 +289,6 @@ namespace CSharpDemo.ViewModels
             _backgroundWorker.WorkerReportsProgress = true;
             _backgroundWorker.WorkerSupportsCancellation = true;
             _backgroundWorker.DoWork += Worker_OnDoWork;
-            _backgroundWorker.ProgressChanged += Worker_OnProgressChanged;
             _backgroundWorker.RunWorkerCompleted += Worker_OnRunWorkerCompleted;
 
             PortItemSelectedCommand = new DelegateCommand<ComboBox>(delegate(ComboBox box)
@@ -407,40 +406,23 @@ namespace CSharpDemo.ViewModels
             CalculateCommand = new DelegateCommand(delegate
             {
                 LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}开始计算");
-
-                if (_dataModel == null)
-                {
-                    return;
-                }
-
                 _backgroundWorker.RunWorkerAsync();
             });
 
-            _serialPortManager.DataReceivedAction += delegate(byte[] bytes)
+            _serialPortManager.DataReceivedEvent += args =>
             {
                 Application.Current.Dispatcher.Invoke(delegate
                 {
-                    ResponseCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}收到串口数据，长度是：{bytes.Length}");
-
-                    var deviceIdBytes = new byte[6];
-                    Array.Copy(bytes, 4, deviceIdBytes, 0, 6);
-                    var deviceId = BitConverter.ToString(deviceIdBytes).Replace("-", "");
-
-                    var tagBytes = new byte[bytes.Length - 18];
-                    Array.Copy(bytes, 16, tagBytes, 0, bytes.Length - 18);
-                    var tags = tagBytes.GetTags();
-                    switch (bytes.Length)
+                    ResponseCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}收到串口数据，类型是：{args.Item1}");
+                    switch (args.Item1)
                     {
-                        case 32: //设备状态、电量
+                        case 0: // 设备状态、电量
 
                             break;
-                        case 30:
-
+                        case 1: // 加速度计
+                            HandleCorrelatorData(args.Item2, args.Item3);
                             break;
-                        case 22543:
-                            HandleCorrelatorData(deviceId, tags);
-                            break;
-                        case 15024:
+                        case 2: // 水听器
 
                             break;
                     }
@@ -450,11 +432,6 @@ namespace CSharpDemo.ViewModels
 
         private void HandleCorrelatorData(string devCode, List<Tag> tags)
         {
-            if (_dataModel == null)
-            {
-                _dataModel = new CorrelatorData();
-            }
-
             LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}开始处理数据");
             //处理接到的噪声数据
             var noiseTag = tags.GetUploadNoiseTag();
@@ -491,6 +468,7 @@ namespace CSharpDemo.ViewModels
 
         private void Worker_OnDoWork(object sender, DoWorkEventArgs e)
         {
+            var startTime = DateTime.Now;
             var array = LazyCorrelator.Value.locating(11,
                 (MWNumericArray)_dataModel.RedDeviceData, (MWNumericArray)_dataModel.BlueDeviceData,
                 7500,
@@ -502,16 +480,15 @@ namespace CSharpDemo.ViewModels
                 1, -1,
                 -1, -1,
                 int.Parse("100"), int.Parse("3000"));
-        }
-
-        private void Worker_OnProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
+            var endTime = DateTime.Now;
+            var diffTime = Math.Abs((endTime - startTime).TotalMilliseconds) / 1000;
+            Console.WriteLine($@"计算耗时 => {diffTime:F2}秒");
+            e.Result = array;
         }
 
         private void Worker_OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}结束计算");
-            _dataModel = null;
         }
     }
 }

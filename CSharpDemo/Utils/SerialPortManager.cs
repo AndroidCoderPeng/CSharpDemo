@@ -1,51 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO.Ports;
 using System.Threading;
+using CSharpDemo.Tags;
 
 namespace CSharpDemo.Utils
 {
+    internal static class FrameConst
+    {
+        public const byte Sync1 = 0xA3;
+        public const byte Sync2 = 0x20;
+
+        public const int HeaderLength = 4;
+        public const int MinFrameLength = 12;
+
+        public const int StatusFrameLength = 32;
+        public const int CorrelatorFrameLength = 11293;
+        public const int NoiseListenFrameLength = 15024;
+    }
+
     public class SerialPortManager
     {
         #region 变量
 
-        private string _portName;
-        private int _baudRate;
-        private int _dataBits;
-        private Parity _parity;
-        private StopBits _stopBits;
-
-        public string PortName
-        {
-            get => _portName;
-            set => _portName = value;
-        }
-
-        public int BaudRate
-        {
-            get => _baudRate;
-            set => _baudRate = value;
-        }
-
-        public Parity Parity
-        {
-            get => _parity;
-            set => _parity = value;
-        }
-
-        public int DataBits
-        {
-            get => _dataBits;
-            set => _dataBits = value;
-        }
-
-        public StopBits StopBits
-        {
-            get => _stopBits;
-            set => _stopBits = value;
-        }
-
-        public event Action<byte[]> DataReceivedAction;
+        public string PortName { get; set; }
+        public int BaudRate { get; set; }
+        public int DataBits { get; set; }
+        public Parity Parity { get; set; }
+        public StopBits StopBits { get; set; }
         private readonly SerialPort _serialPort = new SerialPort();
+        public event Action<(int, string, List<Tag>)> DataReceivedEvent;
 
         #endregion
 
@@ -56,11 +40,11 @@ namespace CSharpDemo.Utils
 
         public SerialPortManager(string portName, int baudRate, string parity, int dataBits, string stopBits)
         {
-            _portName = portName;
-            _baudRate = baudRate;
-            _parity = (Parity)Enum.Parse(typeof(Parity), parity);
-            _dataBits = dataBits;
-            _stopBits = (StopBits)Enum.Parse(typeof(StopBits), stopBits);
+            PortName = portName;
+            BaudRate = baudRate;
+            Parity = (Parity)Enum.Parse(typeof(Parity), parity);
+            DataBits = dataBits;
+            StopBits = (StopBits)Enum.Parse(typeof(StopBits), stopBits);
             BoundSerialPortEvents();
         }
 
@@ -69,31 +53,21 @@ namespace CSharpDemo.Utils
             return SerialPort.GetPortNames();
         }
 
-        /// <summary>
-        /// 串口是否已打开
-        /// </summary>
         public bool IsOpen => _serialPort.IsOpen;
 
-        /// <summary>
-        /// 打开串口
-        /// </summary>
         public void Open()
         {
-            if (!_serialPort.IsOpen)
-            {
-                _serialPort.PortName = _portName;
-                _serialPort.BaudRate = _baudRate;
-                _serialPort.Parity = _parity;
-                _serialPort.DataBits = _dataBits;
-                _serialPort.StopBits = _stopBits;
+            if (_serialPort.IsOpen) return;
 
-                _serialPort.Open();
-            }
+            _serialPort.PortName = PortName;
+            _serialPort.BaudRate = BaudRate;
+            _serialPort.Parity = Parity;
+            _serialPort.DataBits = DataBits;
+            _serialPort.StopBits = StopBits;
+
+            _serialPort.Open();
         }
 
-        /// <summary>
-        /// 关闭端口
-        /// </summary>
         public void Close()
         {
             if (_serialPort.IsOpen)
@@ -111,31 +85,11 @@ namespace CSharpDemo.Utils
             _serialPort.DiscardOutBuffer();
         }
 
-        #region 写入数据
-
-        /// <summary>
-        /// 写入数据
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
-        public void Write(byte[] buffer, int offset, int count)
-        {
-            if (!_serialPort.IsOpen) _serialPort.Open();
-            _serialPort.Write(buffer, offset, count);
-        }
-
-        /// <summary>
-        /// 写入数据
-        /// </summary>
-        /// <param name="buffer">写入端口的字节数组</param>
         public void Write(byte[] buffer)
         {
             if (!_serialPort.IsOpen) _serialPort.Open();
             _serialPort.Write(buffer, 0, buffer.Length);
         }
-
-        #endregion
 
         private void BoundSerialPortEvents()
         {
@@ -152,51 +106,118 @@ namespace CSharpDemo.Utils
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            while (_serialPort.BytesToRead < 4)
+            try
             {
-                return;
-            }
+                if (!TryParseFrame(out var frame))
+                    return;
 
-            var headerBuff = new byte[2];
-            _serialPort.Read(headerBuff, 0, 2); //读取数据
-            if (headerBuff[0] != 0xA3 || headerBuff[1] != 0x20) //符合规范
-            {
-                _serialPort.DiscardInBuffer();
+                if (!CrcCodeHub.CheckCrc16Code(frame))
+                {
+                    Console.WriteLine(@"CRC校验失败");
+                    return;
+                }
+
+                HandleFrame(frame);
             }
-            else
+            catch (Exception ex)
             {
-                ReadFromSerialPort(headerBuff);
+                Console.WriteLine(ex.Message);
             }
         }
 
-        private void ReadFromSerialPort(byte[] header)
+        private bool TryParseFrame(out byte[] frame)
         {
-            var lengthBuffer = new byte[2];
-            _serialPort.Read(lengthBuffer, 0, 2);
-            var length = lengthBuffer.ConvertToInt();
+            frame = null;
 
-            if (length < 12)
+            if (_serialPort.BytesToRead < FrameConst.HeaderLength)
+                return false;
+
+            // 读取头部
+            var header = new byte[FrameConst.HeaderLength];
+            _serialPort.Read(header, 0, header.Length);
+
+            if (header[0] != FrameConst.Sync1 || header[1] != FrameConst.Sync2)
             {
-                _serialPort.DiscardInBuffer(); //长度数据不符合，丢弃
+                Console.WriteLine(@"串口数据头部校验失败");
+                _serialPort.DiscardInBuffer();
+                return false;
+            }
+
+            var length = (header[2] << 8) | header[3];
+            if (length < FrameConst.MinFrameLength)
+            {
+                _serialPort.DiscardInBuffer();
+                return false;
+            }
+
+            var totalLength = length + 6;
+
+            if (!WaitForBytes(totalLength))
+                return false;
+
+            frame = new byte[totalLength];
+            Buffer.BlockCopy(header, 0, frame, 0, header.Length);
+            _serialPort.Read(frame, header.Length, totalLength - header.Length);
+
+            return true;
+        }
+
+        private bool WaitForBytes(int count)
+        {
+            var timeout = DateTime.Now.AddMilliseconds(200);
+
+            while (_serialPort.BytesToRead < count)
+            {
+                if (DateTime.Now > timeout)
+                {
+                    Console.WriteLine(@"串口数据接收超时");
+                    _serialPort.DiscardInBuffer();
+                    return false;
+                }
+
+                Thread.Sleep(1);
+            }
+
+            return true;
+        }
+
+        private void HandleFrame(byte[] frame)
+        {
+            var deviceId = ParseDeviceId(frame);
+            var tags = ParseTags(frame);
+
+            if (frame.Length == FrameConst.StatusFrameLength)
+            {
+                DataReceivedEvent?.Invoke((0, deviceId, tags));
+            }
+            else if (frame.Length == FrameConst.CorrelatorFrameLength)
+            {
+                DataReceivedEvent?.Invoke((1, deviceId, tags));
+            }
+            else if (frame.Length == FrameConst.NoiseListenFrameLength)
+            {
+                DataReceivedEvent?.Invoke((2, deviceId, tags));
             }
             else
             {
-                while (_serialPort.BytesToRead < length + 2) //数据不够，要等待
-                {
-                    Thread.Sleep(20);
-                }
-
-                var result = new byte[length + 6];
-                result[0] = header[0];
-                result[1] = header[1];
-                result[2] = lengthBuffer[0];
-                result[3] = lengthBuffer[1];
-                _serialPort.Read(result, 4, result.Length - 4);
-
-                DataReceivedAction?.Invoke(result);
+                Console.WriteLine($@"未知帧长度：{frame.Length}");
             }
+        }
+
+        private string ParseDeviceId(byte[] frame)
+        {
+            var idBytes = new byte[6];
+            Buffer.BlockCopy(frame, 4, idBytes, 0, 6);
+            return BitConverter.ToString(idBytes).Replace("-", "");
+        }
+
+        private List<Tag> ParseTags(byte[] frame)
+        {
+            var tagBytes = new byte[frame.Length - 18];
+            Buffer.BlockCopy(frame, 16, tagBytes, 0, tagBytes.Length);
+            return tagBytes.GetTags();
         }
     }
 }
