@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -123,7 +124,7 @@ namespace CSharpDemo.ViewModels
 
         private int _soundSpeed = 1130;
         private CorrelatorData _sensorData;
-        private DispatcherTimer _timer;
+        private readonly DispatcherTimer _timer;
         private const int MaxEscapedTime = 120;
 
         public AlgorithmTestViewModel(IEventAggregator eventAggregator)
@@ -158,10 +159,16 @@ namespace CSharpDemo.ViewModels
             if (result != true) return;
 
             ConfigFilePath = fileDialog.FileName;
-            var fromFile = _configFilePath.ReadFromFile();
-            //参数配置就一行
-            var json = fromFile[0];
-            if (json == null) return;
+            var strings = _configFilePath.ReadFromFile();
+            if (!strings.Any()) return;
+            
+            var builder = new StringBuilder();
+            foreach (var str in strings)
+            {
+                builder.Append(str);
+            }
+            var json = builder.ToString();
+            
             // ParamConfig字段发生了变化，兼容旧版本的字段
             if (json.Contains("MinFrequency") && json.Contains("MaxFrequency"))
             {
