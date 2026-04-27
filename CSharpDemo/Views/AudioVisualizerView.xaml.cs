@@ -87,8 +87,8 @@ namespace CSharpDemo.Views
             var fileDialog = new OpenFileDialog
             {
                 // 设置默认格式
-                DefaultExt = ".mp3",
-                Filter = "音频文件(*.mp3)|*.mp3"
+                DefaultExt = ".wav",
+                Filter = "WAV 文件 (*.wav)|*.wav|MP3 文件 (*.mp3)|*.mp3"
             };
             var result = fileDialog.ShowDialog();
             if (result != true) return;
@@ -109,18 +109,25 @@ namespace CSharpDemo.Views
             // 清理旧的资源
             StopAndCleanup();
 
-            var mp3Reader = new Mp3FileReader(path);
-            var sampleProvider = mp3Reader.ToSampleProvider();
-
-            // 立体声 → 单声道
-            var monoProvider = new StereoToMonoSampleProvider(sampleProvider)
+            ISampleProvider sampleProvider;
+            if (path.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase))
             {
-                LeftVolume = 0.5f,
-                RightVolume = 0.5f
-            };
+                sampleProvider = new Mp3FileReader(path).ToSampleProvider();
+            }
+            else if (path.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
+            {
+                sampleProvider = new WaveFileReader(path).ToSampleProvider();
+            }
+            else
+            {
+                throw new NotSupportedException("不支持的音频格式");
+            }
+
+            // 立体声 → 单声道（安全转为单声道）
+            sampleProvider = sampleProvider.ToMono();
 
             // 重采样为 7500Hz, 24位, 单声道
-            var resampledProvider = new WdlResamplingSampleProvider(monoProvider, SampleRate);
+            var resampledProvider = new WdlResamplingSampleProvider(sampleProvider, SampleRate);
 
             // 包装一层，在 Read 时回调数据
             var capturingProvider = new CapturingWaveProvider(resampledProvider);
