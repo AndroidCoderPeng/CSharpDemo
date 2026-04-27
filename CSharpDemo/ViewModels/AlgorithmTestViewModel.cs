@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 using CorrelatorSingle;
 using CSharpDemo.Events;
 using CSharpDemo.Model;
@@ -91,6 +93,18 @@ namespace CSharpDemo.ViewModels
             }
         }
 
+        private int _escapedTime;
+
+        public int EscapedTime
+        {
+            get => _escapedTime;
+            set
+            {
+                _escapedTime = value;
+                RaisePropertyChanged();
+            }
+        }
+
         #endregion
 
         #region DelegateCommand
@@ -109,6 +123,8 @@ namespace CSharpDemo.ViewModels
 
         private int _soundSpeed = 1130;
         private CorrelatorData _sensorData;
+        private DispatcherTimer _timer;
+        private const int MaxEscapedTime = 120;
 
         public AlgorithmTestViewModel(IEventAggregator eventAggregator)
         {
@@ -122,6 +138,12 @@ namespace CSharpDemo.ViewModels
             SelectParamConfigFileCommand = new DelegateCommand(SelectParamConfigFile);
             ImportSensorDataCommand = new DelegateCommand(ImportSensorData);
             StartCalculateCommand = new DelegateCommand(CalculateData);
+
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            _timer.Tick += Timer_Tick;
         }
 
         private void SelectParamConfigFile()
@@ -232,31 +254,71 @@ namespace CSharpDemo.ViewModels
         /// </summary>
         private void CalculateData()
         {
+            StartTimer();
             Task.Run(() =>
             {
-                // 直接开始计算
-                var startTime = DateTime.Now;
-                Console.WriteLine(@"开始计算");
-                var array = LazyCorrelator.Value.locating(
-                    11,
-                    (MWNumericArray)_sensorData.RedDeviceData,
-                    (MWNumericArray)_sensorData.BlueDeviceData,
-                    7500,
-                    int.Parse(_config.PipeLength), _soundSpeed,
-                    0, 0,
-                    0, 0,
-                    _config.PipeMaterial,
-                    int.Parse(_config.PipeDiameter), int.Parse(_config.PipeDiameter),
-                    1, -1,
-                    -1, -1,
-                    int.Parse(_config.LowFrequency), int.Parse(_config.HighFrequency)
-                );
-                var endTime = DateTime.Now;
-                var diffTime = Math.Abs((endTime - startTime).TotalMilliseconds) / 1000;
-                Console.WriteLine($@"计算耗时 => {diffTime:F2}秒");
+                MWArray[] array = null;
+                try
+                {
+                    // 直接开始计算
+                    var startTime = DateTime.Now;
+                    Console.WriteLine(@"开始计算");
+                    array = LazyCorrelator.Value.locating(
+                        11,
+                        (MWNumericArray)_sensorData.RedDeviceData,
+                        (MWNumericArray)_sensorData.BlueDeviceData,
+                        7500,
+                        int.Parse(_config.PipeLength), _soundSpeed,
+                        0, 0,
+                        0, 0,
+                        _config.PipeMaterial,
+                        int.Parse(_config.PipeDiameter), int.Parse(_config.PipeDiameter),
+                        1, -1,
+                        -1, -1,
+                        int.Parse(_config.LowFrequency), int.Parse(_config.HighFrequency)
+                    );
+                    var endTime = DateTime.Now;
+                    var diffTime = Math.Abs((endTime - startTime).TotalMilliseconds) / 1000;
+                    Console.WriteLine($@"计算耗时 => {diffTime:F2}秒");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        StopTimer();
+                        EscapedTime = MaxEscapedTime;
+                    });
 
-                _eventAggregator.GetEvent<CorrelatorResultEvent>().Publish(array);
+                    if (array != null)
+                    {
+                        _eventAggregator.GetEvent<CorrelatorResultEvent>().Publish(array);
+                    }
+                }
             });
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            EscapedTime++;
+            if (_escapedTime > MaxEscapedTime)
+            {
+                StopTimer();
+            }
+        }
+
+        private void StartTimer()
+        {
+            EscapedTime = 0;
+            _timer.Start();
+        }
+
+        private void StopTimer()
+        {
+            _timer.Stop();
         }
     }
 }

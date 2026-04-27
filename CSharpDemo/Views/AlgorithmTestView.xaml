@@ -39,11 +39,16 @@
                     Text="{Binding ConfigFilePath}" />
 
                 <UniformGrid Margin="3" Columns="5">
-                    <TextBlock Foreground="{StaticResource PrimaryBrush}" Text="{Binding Config.PipeMaterial, StringFormat={}管材：{0}}" />
-                    <TextBlock Foreground="{StaticResource PrimaryBrush}" Text="{Binding Config.PipeDiameter, StringFormat={}管径：{0}mm}" />
-                    <TextBlock Foreground="{StaticResource PrimaryBrush}" Text="{Binding Config.PipeLength, StringFormat={}管长：{0}m}" />
-                    <TextBlock Foreground="{StaticResource PrimaryBrush}" Text="{Binding Config.LowFrequency, StringFormat={}低频：{0}Hz}" />
-                    <TextBlock Foreground="{StaticResource PrimaryBrush}" Text="{Binding Config.HighFrequency, StringFormat={}高频：{0}Hz}" />
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding Config.PipeMaterial, StringFormat={}管材：{0}}" />
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding Config.PipeDiameter, StringFormat={}管径：{0}mm}" />
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding Config.PipeLength, StringFormat={}管长：{0}m}" />
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding Config.LowFrequency, StringFormat={}低频：{0}Hz}" />
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding Config.HighFrequency, StringFormat={}高频：{0}Hz}" />
                 </UniformGrid>
             </StackPanel>
 
@@ -75,8 +80,10 @@
                     Text="{Binding SensorDataPath}" />
 
                 <UniformGrid Margin="3" Columns="2">
-                    <TextBlock Foreground="{StaticResource PrimaryBrush}" Text="{Binding FirstSensorData.Length, StringFormat={}传感器1数据量：{0}}" />
-                    <TextBlock Foreground="{StaticResource PrimaryBrush}" Text="{Binding SecondSensorData.Length, StringFormat={}传感器2数据量：{0}}" />
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding FirstSensorData.Length, StringFormat={}传感器1数据量：{0}}" />
+                    <TextBlock Foreground="{StaticResource PrimaryBrush}"
+                               Text="{Binding SecondSensorData.Length, StringFormat={}传感器2数据量：{0}}" />
                 </UniformGrid>
             </StackPanel>
 
@@ -91,9 +98,17 @@
                 Style="{StaticResource ButtonPrimary}" />
         </Grid>
 
-        <UniformGrid Grid.Row="2" Columns="3">
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
             <CheckBox
                 x:Name="ShowCrossLineCheckBox"
+                Grid.Column="0"
                 Content="显示十字标线"
                 FontSize="18"
                 Foreground="{DynamicResource ForegroundBrush}"
@@ -101,13 +116,21 @@
 
             <CheckBox
                 x:Name="ShowGridLineCheckBox"
-                HorizontalAlignment="Center"
+                Grid.Column="1"
                 Content="显示网格线"
                 FontSize="18"
                 Foreground="{DynamicResource ForegroundBrush}"
                 IsChecked="True" />
 
+            <ProgressBar
+                Grid.Column="2"
+                Height="5"
+                Maximum="120"
+                Style="{x:Null}"
+                Value="{Binding EscapedTime}" />
+
             <Button
+                Grid.Column="3"
                 Height="35"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Right"
@@ -116,7 +139,7 @@
                 FontSize="16"
                 IsEnabled="{Binding IsCalculateEnabled}"
                 Style="{StaticResource ButtonPrimary}" />
-        </UniformGrid>
+        </Grid>
 
         <Grid Grid.Row="3" Margin="0,10">
             <scottplot:WpfPlot x:Name="ScottplotView" />
