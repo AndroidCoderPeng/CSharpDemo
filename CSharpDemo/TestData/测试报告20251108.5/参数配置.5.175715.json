@@ -1,0 +1,7 @@
+{
+  "PipeMaterial": "铸铁",
+  "PipeDiameter": "300",
+  "PipeLength": "444",
+  "MinFrequency": "100",
+  "MaxFrequency": "3000"
+}

@@ -296,6 +296,9 @@
   <ItemGroup>
     <Content Include="DLL\v901\CorrelatorSingle.dll"/>
     <Content Include="DLL\v901\MWArray.dll"/>
+    <Content Include="TestData\测试报告20251108.5\参数配置.5.175715.json"/>
+    <Content Include="TestData\测试报告20251108.5\快照.5.175715.png"/>
+    <Content Include="TestData\测试报告20251108.5\测试数据.5.175715.txt"/>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SkiaSharp.NativeAssets.Linux.NoDependencies.3.119.0\build\net462\SkiaSharp.NativeAssets.Linux.NoDependencies.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.Linux.NoDependencies.3.119.0\build\net462\SkiaSharp.NativeAssets.Linux.NoDependencies.targets')" />
