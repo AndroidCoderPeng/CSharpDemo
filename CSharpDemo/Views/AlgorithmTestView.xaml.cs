@@ -72,6 +72,8 @@ namespace CSharpDemo.Views
             // 禁用十字准线
             var crosshair = ScottplotView.Plot.Add.Crosshair(0, 0);
             crosshair.LineColor = Colors.Red;
+            crosshair.HorizontalLine.LinePattern = LinePattern.Dotted;
+            crosshair.VerticalLine.LinePattern = LinePattern.Dotted;
             crosshair.IsVisible = false;
             ScottplotView.Refresh();
 

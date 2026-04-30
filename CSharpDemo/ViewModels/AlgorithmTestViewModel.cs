@@ -125,14 +125,16 @@ namespace CSharpDemo.ViewModels
         private int _soundSpeed = 1130;
         private CorrelatorData _sensorData;
         private readonly DispatcherTimer _timer;
-        private const int MaxEscapedTime = 120;
+        private const int MaxEscapedTime = 300;
 
         public AlgorithmTestViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
 
-            _backgroundWorker = new BackgroundWorker();
-            _backgroundWorker.WorkerSupportsCancellation = true;
+            _backgroundWorker = new BackgroundWorker
+            {
+                WorkerSupportsCancellation = true
+            };
             _backgroundWorker.DoWork += Worker_OnDoWork;
             _backgroundWorker.RunWorkerCompleted += Worker_OnRunWorkerCompleted;
 
@@ -161,22 +163,21 @@ namespace CSharpDemo.ViewModels
             ConfigFilePath = fileDialog.FileName;
             var strings = _configFilePath.ReadFromFile();
             if (!strings.Any()) return;
-            
+
             var builder = new StringBuilder();
             foreach (var str in strings)
             {
                 builder.Append(str);
             }
+
             var json = builder.ToString();
-            
+
             // ParamConfig字段发生了变化，兼容旧版本的字段
             if (json.Contains("MinFrequency") && json.Contains("MaxFrequency"))
             {
-                json = json.Replace("\"MinFrequency\"", "\"LowFrequency\"")
-                    .Replace("\"MaxFrequency\"", "\"HighFrequency\"");
+                json = json.Replace("MinFrequency", "LowFrequency").Replace("MaxFrequency", "HighFrequency");
             }
 
-            Console.WriteLine(json);
             var config = JsonConvert.DeserializeObject<ParamConfig>(json);
 
             //计算声速

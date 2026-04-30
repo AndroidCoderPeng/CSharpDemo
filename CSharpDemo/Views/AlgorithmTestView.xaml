@@ -125,7 +125,7 @@
             <ProgressBar
                 Grid.Column="2"
                 Height="5"
-                Maximum="120"
+                Maximum="300"
                 Style="{x:Null}"
                 Value="{Binding EscapedTime}" />
 

@@ -41,10 +41,10 @@ namespace CSharpDemo.ViewModels
                     region.RequestNavigate("AudioVisualizerView");
                     break;
                 case 1:
-                    region.RequestNavigate("SerialPortView");
+                    region.RequestNavigate("AlgorithmTestView");
                     break;
                 case 2:
-                    region.RequestNavigate("AlgorithmTestView");
+                    region.RequestNavigate("SerialPortView");
                     break;
             }
         }
