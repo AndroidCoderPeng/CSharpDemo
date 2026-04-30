@@ -111,8 +111,11 @@ namespace CSharpDemo.ViewModels
         #region DelegateCommand
 
         public DelegateCommand SelectParamConfigFileCommand { get; set; }
-        public DelegateCommand ImportSensorDataCommand { set; get; }
-        public DelegateCommand StartCalculateCommand { set; get; }
+        public DelegateCommand ImportSensorDataCommand { get; set; }
+        public DelegateCommand ShowTimeDomainCommand { get; set; }
+        public DelegateCommand ShowFrequencyDomainCommand { get; set; }
+        public DelegateCommand ShowMelSpectrumCommand { get; set; }
+        public DelegateCommand StartCalculateCommand { get; set; }
 
         #endregion
 
@@ -140,6 +143,9 @@ namespace CSharpDemo.ViewModels
 
             SelectParamConfigFileCommand = new DelegateCommand(SelectParamConfigFile);
             ImportSensorDataCommand = new DelegateCommand(ImportSensorData);
+            ShowTimeDomainCommand = new DelegateCommand(ShowTimeDomain);
+            ShowFrequencyDomainCommand = new DelegateCommand(ShowFrequencyDomain);
+            ShowMelSpectrumCommand = new DelegateCommand(ShowMelSpectrum);
             StartCalculateCommand = new DelegateCommand(CalculateData);
 
             _timer = new DispatcherTimer
@@ -257,6 +263,21 @@ namespace CSharpDemo.ViewModels
             IsCalculateEnabled = true;
         }
 
+        private void ShowTimeDomain()
+        {
+            
+        }
+        
+        private void ShowFrequencyDomain()
+        {
+            
+        }
+        
+        private void ShowMelSpectrum()
+        {
+            
+        }
+        
         /// <summary>
         /// 异步计算获得结果
         /// </summary>
