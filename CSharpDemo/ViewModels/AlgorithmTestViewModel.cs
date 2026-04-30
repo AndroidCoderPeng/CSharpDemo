@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using Accord.Math;
 using CorrelatorSingle;
 using CSharpDemo.Events;
 using CSharpDemo.Model;
@@ -125,10 +127,15 @@ namespace CSharpDemo.ViewModels
         private static readonly Lazy<Correlator> LazyCorrelator =
             new Lazy<Correlator>(() => new Correlator());
 
+        private const double SampleRate = 7500.0;
         private int _soundSpeed = 1130;
         private CorrelatorData _sensorData;
         private readonly DispatcherTimer _timer;
         private const int MaxEscapedTime = 300;
+        private (double[], double[]) _firstSensorTd;
+        private (double[], double[]) _secondSensorTd;
+        private (double[], double[]) _firstSensorFd;
+        private (double[], double[]) _secondSensorFd;
 
         public AlgorithmTestViewModel(IEventAggregator eventAggregator)
         {
@@ -253,6 +260,43 @@ namespace CSharpDemo.ViewModels
                 BlueSensorNoiseSumValue = blueNoiseValue
             };
 
+            // FFT计算时域和频域
+            var n = _firstSensorData.Length;
+            var firstTimeDomainX = Enumerable.Range(0, n).Select(i => i / SampleRate).ToArray();
+            var secondTimeDomainX = firstTimeDomainX; // 共用时间轴
+
+            _firstSensorTd = (firstTimeDomainX, _firstSensorData);
+            _secondSensorTd = (secondTimeDomainX, _secondSensorData);
+
+            var fftLength = (int)Math.Pow(2, Math.Ceiling(Math.Log(n, 2)));
+
+            var firstComplex = new Complex[fftLength];
+            var secondComplex = new Complex[fftLength];
+            for (var i = 0; i < n; i++)
+            {
+                firstComplex[i] = new Complex(_firstSensorData[i], 0);
+                secondComplex[i] = new Complex(_secondSensorData[i], 0);
+            }
+
+            FourierTransform.FFT(firstComplex, FourierTransform.Direction.Forward);
+            FourierTransform.FFT(secondComplex, FourierTransform.Direction.Forward);
+
+            // 取前半部分（正频率），计算幅值谱
+            var halfLen = fftLength / 2;
+            var firstFrequencyMagnitudes = new double[halfLen];
+            var secondFrequencyMagnitudes = new double[halfLen];
+            var frequencyAxis = new double[halfLen];
+
+            for (var i = 0; i < halfLen; i++)
+            {
+                firstFrequencyMagnitudes[i] = 2.0 * firstComplex[i].Magnitude / n;
+                secondFrequencyMagnitudes[i] = 2.0 * secondComplex[i].Magnitude / n;
+                frequencyAxis[i] = i * SampleRate / fftLength;
+            }
+
+            _firstSensorFd = (frequencyAxis, firstFrequencyMagnitudes);
+            _secondSensorFd = (frequencyAxis, secondFrequencyMagnitudes);
+
             // 将计算结果传递给Worker_OnRunWorkerCompleted
             e.Result = sensorData;
         }
@@ -265,19 +309,16 @@ namespace CSharpDemo.ViewModels
 
         private void ShowTimeDomain()
         {
-            
         }
-        
+
         private void ShowFrequencyDomain()
         {
-            
         }
-        
+
         private void ShowMelSpectrum()
         {
-            
         }
-        
+
         /// <summary>
         /// 异步计算获得结果
         /// </summary>
