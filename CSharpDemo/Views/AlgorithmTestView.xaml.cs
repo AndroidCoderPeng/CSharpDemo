@@ -15,25 +15,25 @@ namespace CSharpDemo.Views
             InitializeComponent();
 
             // 禁用缩放
-            ScottplotView.UserInputProcessor.Disable();
+            ScottPlotView.UserInputProcessor.Disable();
 
             // 网格线
-            var scottPlot = ScottplotView.Plot;
+            var scottPlot = ScottPlotView.Plot;
             ShowGridLineCheckBox.Checked += delegate
             {
                 scottPlot.ShowGrid();
-                ScottplotView.Refresh();
+                ScottPlotView.Refresh();
             };
 
             ShowGridLineCheckBox.Unchecked += delegate
             {
                 scottPlot.HideGrid();
-                ScottplotView.Refresh();
+                ScottPlotView.Refresh();
             };
 
             //XY轴坐标
-            ScottplotView.Plot.XLabel("Pipe Length(m)");
-            ScottplotView.Plot.YLabel("Correlation Coefficient");
+            ScottPlotView.Plot.XLabel("Pipe Length(m)");
+            ScottPlotView.Plot.YLabel("Correlation Coefficient");
 
             BindCrosshair();
 
@@ -45,79 +45,79 @@ namespace CSharpDemo.Views
                 //柱状图纵坐标集合
                 var yDoubles = ((MWNumericArray)array[4]).GetArray();
 
-                var scatter = ScottplotView.Plot.Add.Scatter(xDoubles, yDoubles);
+                var scatter = ScottPlotView.Plot.Add.Scatter(xDoubles, yDoubles);
                 scatter.Color = new Color(49, 151, 36);
                 scatter.LineWidth = 1;
                 scatter.MarkerStyle.IsVisible = false;
 
-                var baseline = ScottplotView.Plot.Add.Scatter(
+                var baseline = ScottPlotView.Plot.Add.Scatter(
                     xDoubles,
                     Enumerable.Repeat(0.0, xDoubles.Length).ToArray());
                 baseline.Color = Colors.Transparent;
                 baseline.MarkerStyle.IsVisible = false;
                 baseline.LineStyle.IsVisible = false;
 
-                var fillY = ScottplotView.Plot.Add.FillY(scatter, baseline);
+                var fillY = ScottPlotView.Plot.Add.FillY(scatter, baseline);
                 fillY.FillColor = new Color(49, 151, 36);
                 fillY.LineStyle.IsVisible = false;
 
                 // 数据会自动自动缩放至最合适的视角
-                ScottplotView.Plot.Axes.Margins(0.05f, 0.05f);
-                ScottplotView.Refresh();
+                ScottPlotView.Plot.Axes.Margins(0.05f, 0.05f);
+                ScottPlotView.Refresh();
             }, ThreadOption.UIThread);
         }
 
         private void BindCrosshair()
         {
             // 禁用十字准线
-            var crosshair = ScottplotView.Plot.Add.Crosshair(0, 0);
+            var crosshair = ScottPlotView.Plot.Add.Crosshair(0, 0);
             crosshair.LineColor = Colors.Red;
             crosshair.HorizontalLine.LinePattern = LinePattern.Dotted;
             crosshair.VerticalLine.LinePattern = LinePattern.Dotted;
             crosshair.IsVisible = false;
-            ScottplotView.Refresh();
+            ScottPlotView.Refresh();
 
             ShowCrossLineCheckBox.Checked += delegate
             {
                 crosshair.IsVisible = true;
-                ScottplotView.Refresh();
+                ScottPlotView.Refresh();
             };
 
             ShowCrossLineCheckBox.Unchecked += delegate
             {
                 crosshair.IsVisible = false;
-                ScottplotView.Refresh();
+                ScottPlotView.Refresh();
             };
 
             //鼠标进入
-            ScottplotView.MouseEnter += delegate
+            ScottPlotView.MouseEnter += delegate
             {
                 crosshair.IsVisible = ShowCrossLineCheckBox.IsChecked == true;
-                ScottplotView.Refresh();
+                ScottPlotView.Refresh();
             };
 
             //鼠标移动
-            ScottplotView.MouseMove += (sender, e) =>
+            ScottPlotView.MouseMove += (sender, e) =>
             {
                 if (ShowCrossLineCheckBox.IsChecked == true)
                 {
-                    var p = e.GetPosition(ScottplotView);
+                    var p = e.GetPosition(ScottPlotView);
                     var mousePixel = new Pixel(p.X, p.Y);
-                    var coordinates = ScottplotView.Plot.GetCoordinates(mousePixel);
+                    var coordinates = ScottPlotView.Plot.GetCoordinates(mousePixel);
 
                     crosshair.X = coordinates.X;
                     crosshair.Y = coordinates.Y;
-                    ScottplotView.Refresh();
+                    ScottPlotView.Refresh();
                 }
 
-                ScottplotView.Refresh();
+                ScottPlotView.Refresh();
             };
 
             //鼠标离开
-            ScottplotView.MouseLeave += delegate
+            ScottPlotView.MouseLeave += delegate
             {
                 crosshair.IsVisible = false;
-                ScottplotView.Refresh();
+                ScottPlotView.Refresh();
             };
         }
     }

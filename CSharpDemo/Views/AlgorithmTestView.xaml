@@ -123,6 +123,7 @@
                 Grid.Column="2"
                 Command="{Binding ShowTimeDomainCommand}"
                 Content="时域"
+                IsEnabled="{Binding IsCalculateEnabled}"
                 Style="{StaticResource ButtonDashedInfo}" />
 
             <Button
@@ -130,12 +131,14 @@
                 Margin="10,0"
                 Command="{Binding ShowFrequencyDomainCommand}"
                 Content="频域"
+                IsEnabled="{Binding IsCalculateEnabled}"
                 Style="{StaticResource ButtonDashedPrimary}" />
 
             <Button
                 Grid.Column="4"
                 Command="{Binding ShowMelSpectrumCommand}"
-                Content="MFCC"
+                Content="梅尔频谱"
+                IsEnabled="{Binding IsCalculateEnabled}"
                 Style="{StaticResource ButtonDashedWarning}" />
 
             <ProgressBar
@@ -158,7 +161,7 @@
         </Grid>
 
         <scottplot:WpfPlot
-            x:Name="ScottplotView"
+            x:Name="ScottPlotView"
             Grid.Row="3"
             Margin="0,10,0,0" />
     </Grid>
