@@ -472,14 +472,14 @@ namespace CSharpDemo.ViewModels
             var array = LazyCorrelator.Value.locating(11,
                 (MWNumericArray)_dataModel.RedDeviceData, (MWNumericArray)_dataModel.BlueDeviceData,
                 7500,
-                int.Parse("150"), int.Parse("1130"),
+                150, 1130,
                 0, 0,
                 0, 0,
                 "",
-                int.Parse("300"), int.Parse("300"),
+                300, 300,
                 1, -1,
                 -1, -1,
-                int.Parse("100"), int.Parse("3000"));
+                100, 3000);
             var endTime = DateTime.Now;
             var diffTime = Math.Abs((endTime - startTime).TotalMilliseconds) / 1000;
             Console.WriteLine($@"计算耗时 => {diffTime:F2}秒");
