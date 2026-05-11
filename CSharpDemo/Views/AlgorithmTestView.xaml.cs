@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using CSharpDemo.Events;
@@ -6,6 +8,7 @@ using CSharpDemo.Utils;
 using MathWorks.MATLAB.NET.Arrays;
 using Prism.Events;
 using ScottPlot;
+using ScottPlot.Plottables;
 using Color = ScottPlot.Color;
 using Colors = ScottPlot.Colors;
 
@@ -13,6 +16,8 @@ namespace CSharpDemo.Views
 {
     public partial class AlgorithmTestView : UserControl
     {
+        private Crosshair _crosshair;
+
         public AlgorithmTestView(IEventAggregator eventAggregator)
         {
             InitializeComponent();
@@ -34,67 +39,52 @@ namespace CSharpDemo.Views
                 ScottPlotView.Refresh();
             };
 
-            //XY轴坐标
-            ScottPlotView.Plot.XLabel("Pipe Length(m)");
-            ScottPlotView.Plot.YLabel("Correlation Coefficient");
-
             BindCrosshair();
 
-            eventAggregator.GetEvent<CorrelatorResultEvent>().Subscribe(delegate(MWArray[] array)
-            {
-                //柱状图横坐标集合
-                var xDoubles = ((MWNumericArray)array[5]).GetArray();
+            eventAggregator.GetEvent<CorrelatorResultEvent<MWArray[]>>()
+                .Subscribe(ShowMatlabCalculateResult, ThreadOption.UIThread);
 
-                //柱状图纵坐标集合
-                var yDoubles = ((MWNumericArray)array[4]).GetArray();
+            eventAggregator.GetEvent<CorrelatorResultEvent<SensorDataWrapper>>().Subscribe(
+                delegate(SensorDataWrapper wrapper)
+                {
+                    switch (wrapper.DataType)
+                    {
+                        case "TimeDomain":
+                            ShowTimeDomain(wrapper.FirstSensor, wrapper.SecondSensor);
+                            break;
 
-                var scatter = ScottPlotView.Plot.Add.Scatter(xDoubles, yDoubles);
-                scatter.Color = new Color(49, 151, 36);
-                scatter.LineWidth = 1;
-                scatter.MarkerStyle.IsVisible = false;
-
-                var baseline = ScottPlotView.Plot.Add.Scatter(
-                    xDoubles,
-                    Enumerable.Repeat(0.0, xDoubles.Length).ToArray());
-                baseline.Color = Colors.Transparent;
-                baseline.MarkerStyle.IsVisible = false;
-                baseline.LineStyle.IsVisible = false;
-
-                var fillY = ScottPlotView.Plot.Add.FillY(scatter, baseline);
-                fillY.FillColor = new Color(49, 151, 36);
-                fillY.LineStyle.IsVisible = false;
-
-                // 数据会自动自动缩放至最合适的视角
-                ScottPlotView.Plot.Axes.Margins(0.05f, 0.05f);
-                ScottPlotView.Refresh();
-            }, ThreadOption.UIThread);
+                        case "FrequencyDomain":
+                            ShowFrequencyDomain(wrapper.FirstSensor, wrapper.SecondSensor);
+                            break;
+                    }
+                }, ThreadOption.UIThread);
         }
 
         private void BindCrosshair()
         {
-            var crosshair = ScottPlotView.Plot.Add.Crosshair(0, 0);
-            crosshair.LineColor = Colors.Red;
-            crosshair.HorizontalLine.LinePattern = LinePattern.Dotted;
-            crosshair.VerticalLine.LinePattern = LinePattern.Dotted;
-            crosshair.IsVisible = false;
+            _crosshair = ScottPlotView.Plot.Add.Crosshair(0, 0);
+            _crosshair.LineColor = Colors.Red;
+            _crosshair.HorizontalLine.LinePattern = LinePattern.Dotted;
+            _crosshair.VerticalLine.LinePattern = LinePattern.Dotted;
+            _crosshair.IsVisible = false;
             ScottPlotView.Refresh();
 
             ShowCrossLineCheckBox.Checked += delegate
             {
-                crosshair.IsVisible = true;
+                _crosshair.IsVisible = true;
                 ScottPlotView.Refresh();
             };
 
             ShowCrossLineCheckBox.Unchecked += delegate
             {
-                crosshair.IsVisible = false;
+                _crosshair.IsVisible = false;
                 ScottPlotView.Refresh();
             };
 
             //鼠标进入
             ScottPlotView.MouseEnter += delegate
             {
-                crosshair.IsVisible = ShowCrossLineCheckBox.IsChecked == true;
+                _crosshair.IsVisible = ShowCrossLineCheckBox.IsChecked == true;
                 ScottPlotView.Refresh();
             };
 
@@ -118,8 +108,8 @@ namespace CSharpDemo.Views
                     var mousePixel = new Pixel(pixelX, pixelY);
                     var coordinates = ScottPlotView.Plot.GetCoordinates(mousePixel);
 
-                    crosshair.X = coordinates.X;
-                    crosshair.Y = coordinates.Y;
+                    _crosshair.X = coordinates.X;
+                    _crosshair.Y = coordinates.Y;
                     ScottPlotView.Refresh();
                 }
 
@@ -129,9 +119,94 @@ namespace CSharpDemo.Views
             //鼠标离开
             ScottPlotView.MouseLeave += delegate
             {
-                crosshair.IsVisible = false;
+                _crosshair.IsVisible = false;
                 ScottPlotView.Refresh();
             };
+        }
+
+        private void ShowMatlabCalculateResult(MWArray[] array)
+        {
+            ScottPlotView.Visibility = Visibility.Visible;
+            TdGrid.Visibility = Visibility.Collapsed;
+            FdGrid.Visibility = Visibility.Collapsed;
+
+            ScottPlotView.Plot.Clear();
+
+            //XY轴坐标
+            ScottPlotView.Plot.XLabel("Pipe Length(m)");
+            ScottPlotView.Plot.YLabel("Correlation Coefficient");
+
+            //柱状图横坐标集合
+            var xDoubles = ((MWNumericArray)array[5]).GetArray();
+
+            //柱状图纵坐标集合
+            var yDoubles = ((MWNumericArray)array[4]).GetArray();
+
+            var scatter = ScottPlotView.Plot.Add.Scatter(xDoubles, yDoubles);
+            scatter.Color = new Color(49, 151, 36);
+            scatter.LineWidth = 1;
+            scatter.MarkerStyle.IsVisible = false;
+
+            var baseline = ScottPlotView.Plot.Add.Scatter(
+                xDoubles,
+                Enumerable.Repeat(0.0, xDoubles.Length).ToArray());
+            baseline.Color = Colors.Transparent;
+            baseline.MarkerStyle.IsVisible = false;
+            baseline.LineStyle.IsVisible = false;
+
+            var fillY = ScottPlotView.Plot.Add.FillY(scatter, baseline);
+            fillY.FillColor = new Color(49, 151, 36);
+            fillY.LineStyle.IsVisible = false;
+
+            // 数据会自动自动缩放至最合适的视角
+            ScottPlotView.Plot.Axes.Margins(0.05f, 0.05f);
+            ScottPlotView.Refresh();
+        }
+
+        private void ShowTimeDomain((double[], double[]) firstSensor, (double[], double[]) secondSensor)
+        {
+            ScottPlotView.Visibility = Visibility.Collapsed;
+            TdGrid.Visibility = Visibility.Visible;
+            FdGrid.Visibility = Visibility.Collapsed;
+
+            Console.WriteLine(@"渲染时域图");
+
+            var firstPlot = FirstTdView.Plot.Add.SignalXY(firstSensor.Item1, firstSensor.Item2);
+            firstPlot.LineColor = new Color(49, 151, 36);
+            FirstTdView.Plot.XLabel("Time (s)");
+            FirstTdView.Plot.YLabel("Magnitude");
+            FirstTdView.Plot.Axes.Margins(0.05f, 0.05f);
+            FirstTdView.Refresh();
+
+            var secondPlot = SecondTdView.Plot.Add.SignalXY(secondSensor.Item1, secondSensor.Item2);
+            secondPlot.LineColor = new Color(49, 151, 36);
+            SecondTdView.Plot.XLabel("Time (s)");
+            SecondTdView.Plot.YLabel("Magnitude");
+            SecondTdView.Plot.Axes.Margins(0.05f, 0.05f);
+            SecondTdView.Refresh();
+        }
+
+        private void ShowFrequencyDomain((double[], double[]) firstSensor, (double[], double[]) secondSensor)
+        {
+            ScottPlotView.Visibility = Visibility.Collapsed;
+            TdGrid.Visibility = Visibility.Collapsed;
+            FdGrid.Visibility = Visibility.Visible;
+
+            Console.WriteLine(@"渲染频域图");
+
+            var firstPlot = FirstFdView.Plot.Add.SignalXY(firstSensor.Item1, firstSensor.Item2);
+            firstPlot.LineColor = new Color(49, 151, 36);
+            FirstFdView.Plot.XLabel("Time (s)");
+            FirstFdView.Plot.YLabel("Amplitude");
+            FirstFdView.Plot.Axes.Margins(0.05f, 0.05f);
+            FirstFdView.Refresh();
+
+            var secondPlot = SecondFdView.Plot.Add.SignalXY(secondSensor.Item1, secondSensor.Item2);
+            secondPlot.LineColor = new Color(49, 151, 36);
+            SecondFdView.Plot.XLabel("Time (s)");
+            SecondFdView.Plot.YLabel("Amplitude");
+            SecondFdView.Plot.Axes.Margins(0.05f, 0.05f);
+            SecondFdView.Refresh();
         }
     }
 }

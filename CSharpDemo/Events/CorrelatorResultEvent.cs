@@ -1,9 +1,8 @@
-﻿using MathWorks.MATLAB.NET.Arrays;
-using Prism.Events;
+﻿using Prism.Events;
 
 namespace CSharpDemo.Events
 {
-    public class CorrelatorResultEvent : PubSubEvent<MWArray[]>
+    public class CorrelatorResultEvent<T> : PubSubEvent<T>
     {
     }
 }

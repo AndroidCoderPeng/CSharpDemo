@@ -210,6 +210,7 @@
     <Compile Include="Utils\CrcCodeHub.cs"/>
     <Compile Include="Utils\DrawPath.cs" />
     <Compile Include="Utils\RuntimeCache.cs" />
+      <Compile Include="Utils\SensorData.cs"/>
     <Compile Include="ViewModels\AlgorithmTestViewModel.cs" />
     <Compile Include="ViewModels\AudioVisualizerViewModel.cs" />
     <Compile Include="Views\AlgorithmTestView.xaml.cs">

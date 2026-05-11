@@ -309,10 +309,22 @@ namespace CSharpDemo.ViewModels
 
         private void ShowTimeDomain()
         {
+            _eventAggregator.GetEvent<CorrelatorResultEvent<SensorDataWrapper>>().Publish(new SensorDataWrapper
+            {
+                DataType = "TimeDomain",
+                FirstSensor = _firstSensorTd,
+                SecondSensor = _secondSensorTd
+            });
         }
 
         private void ShowFrequencyDomain()
         {
+            _eventAggregator.GetEvent<CorrelatorResultEvent<SensorDataWrapper>>().Publish(new SensorDataWrapper
+            {
+                DataType = "FrequencyDomain",
+                FirstSensor = _firstSensorFd,
+                SecondSensor = _secondSensorFd
+            });
         }
 
         private void ShowMelSpectrum()
@@ -365,7 +377,7 @@ namespace CSharpDemo.ViewModels
 
                     if (array != null)
                     {
-                        _eventAggregator.GetEvent<CorrelatorResultEvent>().Publish(array);
+                        _eventAggregator.GetEvent<CorrelatorResultEvent<MWArray[]>>().Publish(array);
                     }
                 }
             });
