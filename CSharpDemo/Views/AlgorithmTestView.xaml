@@ -105,6 +105,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
@@ -148,17 +149,25 @@
                 IsEnabled="{Binding IsCalculateEnabled}"
                 Style="{StaticResource ButtonDashedWarning}" />
 
-            <ProgressBar
+            <Button
                 Grid.Column="5"
-                Height="5"
                 Margin="10,0"
+                Command="{Binding ShowMatlabResultCommand}"
+                Content="Matlab"
+                IsEnabled="{Binding IsCalculateEnabled}"
+                Style="{StaticResource ButtonDashedSuccess}" />
+
+            <ProgressBar
+                Grid.Column="6"
+                Height="5"
                 Maximum="300"
                 Style="{x:Null}"
                 Value="{Binding EscapedTime}" />
 
             <Button
-                Grid.Column="6"
+                Grid.Column="7"
                 Height="35"
+                Margin="10,0,0,0"
                 HorizontalAlignment="Right"
                 Command="{Binding StartCalculateCommand}"
                 Content="开始计算"

@@ -171,17 +171,21 @@ namespace CSharpDemo.Views
 
             Console.WriteLine(@"渲染时域图");
 
+            // 传感器1
+            FirstTdView.Plot.Clear();
             var firstPlot = FirstTdView.Plot.Add.SignalXY(firstSensor.Item1, firstSensor.Item2);
             firstPlot.LineColor = new Color(49, 151, 36);
             FirstTdView.Plot.XLabel("Time (s)");
-            FirstTdView.Plot.YLabel("Magnitude");
+            FirstTdView.Plot.YLabel("Amplitude");
             FirstTdView.Plot.Axes.Margins(0.05f, 0.05f);
             FirstTdView.Refresh();
 
+            // 传感器2
+            SecondTdView.Plot.Clear();
             var secondPlot = SecondTdView.Plot.Add.SignalXY(secondSensor.Item1, secondSensor.Item2);
             secondPlot.LineColor = new Color(49, 151, 36);
             SecondTdView.Plot.XLabel("Time (s)");
-            SecondTdView.Plot.YLabel("Magnitude");
+            SecondTdView.Plot.YLabel("Amplitude");
             SecondTdView.Plot.Axes.Margins(0.05f, 0.05f);
             SecondTdView.Refresh();
         }
@@ -194,17 +198,21 @@ namespace CSharpDemo.Views
 
             Console.WriteLine(@"渲染频域图");
 
+            // 传感器1
+            FirstFdView.Plot.Clear();
             var firstPlot = FirstFdView.Plot.Add.SignalXY(firstSensor.Item1, firstSensor.Item2);
             firstPlot.LineColor = new Color(49, 151, 36);
-            FirstFdView.Plot.XLabel("Time (s)");
-            FirstFdView.Plot.YLabel("Amplitude");
+            FirstFdView.Plot.XLabel("Frequency (Hz)");
+            FirstFdView.Plot.YLabel("Magnitude");
             FirstFdView.Plot.Axes.Margins(0.05f, 0.05f);
             FirstFdView.Refresh();
 
+            // 传感器2
+            SecondFdView.Plot.Clear();
             var secondPlot = SecondFdView.Plot.Add.SignalXY(secondSensor.Item1, secondSensor.Item2);
             secondPlot.LineColor = new Color(49, 151, 36);
-            SecondFdView.Plot.XLabel("Time (s)");
-            SecondFdView.Plot.YLabel("Amplitude");
+            SecondFdView.Plot.XLabel("Frequency (Hz)");
+            SecondFdView.Plot.YLabel("Magnitude");
             SecondFdView.Plot.Axes.Margins(0.05f, 0.05f);
             SecondFdView.Refresh();
         }

@@ -117,6 +117,7 @@ namespace CSharpDemo.ViewModels
         public DelegateCommand ShowTimeDomainCommand { get; set; }
         public DelegateCommand ShowFrequencyDomainCommand { get; set; }
         public DelegateCommand ShowMelSpectrumCommand { get; set; }
+        public DelegateCommand ShowMatlabResultCommand { get; set; }
         public DelegateCommand StartCalculateCommand { get; set; }
 
         #endregion
@@ -136,6 +137,7 @@ namespace CSharpDemo.ViewModels
         private (double[], double[]) _secondSensorTd;
         private (double[], double[]) _firstSensorFd;
         private (double[], double[]) _secondSensorFd;
+        private MWArray[] _matlabResult;
 
         public AlgorithmTestViewModel(IEventAggregator eventAggregator)
         {
@@ -153,6 +155,7 @@ namespace CSharpDemo.ViewModels
             ShowTimeDomainCommand = new DelegateCommand(ShowTimeDomain);
             ShowFrequencyDomainCommand = new DelegateCommand(ShowFrequencyDomain);
             ShowMelSpectrumCommand = new DelegateCommand(ShowMelSpectrum);
+            ShowMatlabResultCommand = new DelegateCommand(ShowMatlabResult);
             StartCalculateCommand = new DelegateCommand(CalculateData);
 
             _timer = new DispatcherTimer
@@ -331,6 +334,18 @@ namespace CSharpDemo.ViewModels
         {
         }
 
+        private void ShowMatlabResult()
+        {
+            if (_matlabResult != null)
+            {
+                _eventAggregator.GetEvent<CorrelatorResultEvent<MWArray[]>>().Publish(_matlabResult);
+            }
+            else
+            {
+                MessageBox.Show("请先计算结果", "温馨提示", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
         /// <summary>
         /// 异步计算获得结果
         /// </summary>
@@ -339,13 +354,12 @@ namespace CSharpDemo.ViewModels
             StartTimer();
             Task.Run(() =>
             {
-                MWArray[] array = null;
                 try
                 {
                     // 直接开始计算
                     var startTime = DateTime.Now;
                     Console.WriteLine(@"开始计算");
-                    array = LazyCorrelator.Value.locating(
+                    _matlabResult = LazyCorrelator.Value.locating(
                         11,
                         (MWNumericArray)_sensorData.RedDeviceData,
                         (MWNumericArray)_sensorData.BlueDeviceData,
@@ -375,9 +389,9 @@ namespace CSharpDemo.ViewModels
                         EscapedTime = MaxEscapedTime;
                     });
 
-                    if (array != null)
+                    if (_matlabResult != null)
                     {
-                        _eventAggregator.GetEvent<CorrelatorResultEvent<MWArray[]>>().Publish(array);
+                        _eventAggregator.GetEvent<CorrelatorResultEvent<MWArray[]>>().Publish(_matlabResult);
                     }
                 }
             });
