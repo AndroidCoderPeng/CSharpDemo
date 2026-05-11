@@ -132,6 +132,8 @@ namespace CSharpDemo.Views
 
             ScottPlotView.Plot.Clear();
 
+            BindCrosshair();
+
             //XY轴坐标
             ScottPlotView.Plot.XLabel("Pipe Length(m)");
             ScottPlotView.Plot.YLabel("Correlation Coefficient");

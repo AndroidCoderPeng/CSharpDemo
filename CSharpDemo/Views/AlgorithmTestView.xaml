@@ -179,25 +179,23 @@
         <Grid Grid.Row="3" Margin="0,10,0,0">
             <scottplot:WpfPlot x:Name="ScottPlotView" />
 
-            <Grid x:Name="TdGrid" Visibility="Collapsed">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+            <UniformGrid
+                x:Name="TdGrid"
+                Columns="1"
+                Rows="2"
+                Visibility="Collapsed">
+                <scottplot:WpfPlot x:Name="FirstTdView" />
+                <scottplot:WpfPlot x:Name="SecondTdView" />
+            </UniformGrid>
 
-                <scottplot:WpfPlot x:Name="FirstTdView" Grid.Row="0" />
-                <scottplot:WpfPlot x:Name="SecondTdView" Grid.Row="1" />
-            </Grid>
-
-            <Grid x:Name="FdGrid" Visibility="Collapsed">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-
-                <scottplot:WpfPlot x:Name="FirstFdView" Grid.Row="0" />
-                <scottplot:WpfPlot x:Name="SecondFdView" Grid.Row="1" />
-            </Grid>
+            <UniformGrid
+                x:Name="FdGrid"
+                Columns="1"
+                Rows="2"
+                Visibility="Collapsed">
+                <scottplot:WpfPlot x:Name="FirstFdView" />
+                <scottplot:WpfPlot x:Name="SecondFdView" />
+            </UniformGrid>
         </Grid>
     </Grid>
 </UserControl>
