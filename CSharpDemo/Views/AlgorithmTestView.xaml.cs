@@ -1,10 +1,13 @@
 ﻿using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Media;
 using CSharpDemo.Events;
 using CSharpDemo.Utils;
 using MathWorks.MATLAB.NET.Arrays;
 using Prism.Events;
 using ScottPlot;
+using Color = ScottPlot.Color;
+using Colors = ScottPlot.Colors;
 
 namespace CSharpDemo.Views
 {
@@ -69,7 +72,6 @@ namespace CSharpDemo.Views
 
         private void BindCrosshair()
         {
-            // 禁用十字准线
             var crosshair = ScottPlotView.Plot.Add.Crosshair(0, 0);
             crosshair.LineColor = Colors.Red;
             crosshair.HorizontalLine.LinePattern = LinePattern.Dotted;
@@ -102,7 +104,18 @@ namespace CSharpDemo.Views
                 if (ShowCrossLineCheckBox.IsChecked == true)
                 {
                     var p = e.GetPosition(ScottPlotView);
-                    var mousePixel = new Pixel(p.X, p.Y);
+
+                    // 获取DPI缩放因子
+                    var dpiScale = VisualTreeHelper.GetDpi(ScottPlotView);
+                    var dpiX = dpiScale.PixelsPerInchX / 96.0;
+                    var dpiY = dpiScale.PixelsPerInchY / 96.0;
+
+                    // 转换为物理像素坐标
+                    var pixelX = p.X * dpiX;
+                    var pixelY = p.Y * dpiY;
+
+                    // 使用Plot的坐标转换
+                    var mousePixel = new Pixel(pixelX, pixelY);
                     var coordinates = ScottPlotView.Plot.GetCoordinates(mousePixel);
 
                     crosshair.X = coordinates.X;
