@@ -8,6 +8,7 @@ using CSharpDemo.Utils;
 using MathWorks.MATLAB.NET.Arrays;
 using Prism.Events;
 using ScottPlot;
+using ScottPlot.Colormaps;
 using ScottPlot.Plottables;
 using Color = ScottPlot.Color;
 using Colors = ScottPlot.Colors;
@@ -58,6 +59,9 @@ namespace CSharpDemo.Views
                             break;
                     }
                 }, ThreadOption.UIThread);
+
+            eventAggregator.GetEvent<CorrelatorResultEvent<(double[], double[,], double[,])>>()
+                .Subscribe(ShowMelSpectrum, ThreadOption.UIThread);
         }
 
         private void BindCrosshair()
@@ -129,6 +133,7 @@ namespace CSharpDemo.Views
             ScottPlotView.Visibility = Visibility.Visible;
             TdGrid.Visibility = Visibility.Collapsed;
             FdGrid.Visibility = Visibility.Collapsed;
+            MelGrid.Visibility = Visibility.Collapsed;
 
             ScottPlotView.Plot.Clear();
 
@@ -170,6 +175,7 @@ namespace CSharpDemo.Views
             ScottPlotView.Visibility = Visibility.Collapsed;
             TdGrid.Visibility = Visibility.Visible;
             FdGrid.Visibility = Visibility.Collapsed;
+            MelGrid.Visibility = Visibility.Collapsed;
 
             Console.WriteLine(@"渲染时域图");
 
@@ -197,6 +203,7 @@ namespace CSharpDemo.Views
             ScottPlotView.Visibility = Visibility.Collapsed;
             TdGrid.Visibility = Visibility.Collapsed;
             FdGrid.Visibility = Visibility.Visible;
+            MelGrid.Visibility = Visibility.Collapsed;
 
             Console.WriteLine(@"渲染频域图");
 
@@ -217,6 +224,72 @@ namespace CSharpDemo.Views
             SecondFdView.Plot.YLabel("Magnitude");
             SecondFdView.Plot.Axes.Margins(0.05f, 0.05f);
             SecondFdView.Refresh();
+        }
+
+        private void ShowMelSpectrum((double[], double[,], double[,] ) melSpectrum)
+        {
+            ScottPlotView.Visibility = Visibility.Collapsed;
+            TdGrid.Visibility = Visibility.Collapsed;
+            FdGrid.Visibility = Visibility.Collapsed;
+            MelGrid.Visibility = Visibility.Visible;
+
+            Console.WriteLine(@"渲染梅尔频谱图");
+
+            var timeAxis = melSpectrum.Item1;
+            var firstSensor = melSpectrum.Item2;
+            var secondSensor = melSpectrum.Item3;
+
+            FirstMelView.Plot.Clear();
+            var firstNumFrames = firstSensor.GetLength(0);
+            var firstNumMelFilters = firstSensor.GetLength(1);
+            var firstMelTransposed = new double[firstNumMelFilters, firstNumFrames];
+
+            for (var i = 0; i < firstNumFrames; i++)
+            {
+                for (var j = 0; j < firstNumMelFilters; j++)
+                {
+                    firstMelTransposed[j, i] = firstSensor[i, j];
+                }
+            }
+
+            var firstHeatmap = FirstMelView.Plot.Add.Heatmap(firstMelTransposed);
+            firstHeatmap.Colormap = new Viridis();
+            firstHeatmap.Extent = new CoordinateRect(
+                left: timeAxis[0],
+                right: timeAxis[firstNumFrames - 1],
+                bottom: 0,
+                top: firstNumMelFilters
+            );
+            FirstMelView.Plot.XLabel("Time (s)");
+            FirstMelView.Plot.YLabel("Mel Frequency (Hz)");
+            FirstMelView.Plot.Axes.Margins(0.05f, 0.05f);
+            FirstMelView.Refresh();
+
+            SecondMelView.Plot.Clear();
+            var secondNumFrames = secondSensor.GetLength(0);
+            var secondNumMelFilters = secondSensor.GetLength(1);
+            var secondMelTransposed = new double[secondNumMelFilters, secondNumFrames];
+
+            for (var i = 0; i < secondNumFrames; i++)
+            {
+                for (var j = 0; j < secondNumMelFilters; j++)
+                {
+                    secondMelTransposed[j, i] = secondSensor[i, j];
+                }
+            }
+
+            var secondHeatmap = SecondMelView.Plot.Add.Heatmap(secondMelTransposed);
+            secondHeatmap.Colormap = new Viridis();
+            secondHeatmap.Extent = new CoordinateRect(
+                left: timeAxis[0],
+                right: timeAxis[secondNumFrames - 1],
+                bottom: 0,
+                top: secondNumMelFilters
+            );
+            SecondMelView.Plot.XLabel("Time (s)");
+            SecondMelView.Plot.YLabel("Mel Frequency (Hz)");
+            SecondMelView.Plot.Axes.Margins(0.05f, 0.05f);
+            SecondMelView.Refresh();
         }
     }
 }

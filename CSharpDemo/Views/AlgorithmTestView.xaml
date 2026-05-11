@@ -196,6 +196,15 @@
                 <scottplot:WpfPlot x:Name="FirstFdView" />
                 <scottplot:WpfPlot x:Name="SecondFdView" />
             </UniformGrid>
+
+            <UniformGrid
+                x:Name="MelGrid"
+                Columns="2"
+                Rows="1"
+                Visibility="Collapsed">
+                <scottplot:WpfPlot x:Name="FirstMelView" />
+                <scottplot:WpfPlot x:Name="SecondMelView" />
+            </UniformGrid>
         </Grid>
     </Grid>
 </UserControl>

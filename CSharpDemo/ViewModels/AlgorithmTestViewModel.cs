@@ -133,10 +133,18 @@ namespace CSharpDemo.ViewModels
         private CorrelatorData _sensorData;
         private readonly DispatcherTimer _timer;
         private const int MaxEscapedTime = 300;
+        private const int NumMelFilters = 40; // 梅尔滤波器数量, TODO 需要根据实际情况调整
+        private const double MinFreq = 0; // 最低频率
+        private const double MaxFreq = SampleRate / 2; // 最高频率（Nyquist）
+        private const int FrameSize = 256; // 帧长度
+        private const int HopSize = 128; // 帧移（50%重叠）
         private (double[], double[]) _firstSensorTd;
         private (double[], double[]) _secondSensorTd;
         private (double[], double[]) _firstSensorFd;
         private (double[], double[]) _secondSensorFd;
+        private double[,] _firstSensorMel;
+        private double[,] _secondSensorMel;
+        private double[] _melTimeAxis; // 时间轴
         private MWArray[] _matlabResult;
 
         public AlgorithmTestViewModel(IEventAggregator eventAggregator)
@@ -300,8 +308,150 @@ namespace CSharpDemo.ViewModels
             _firstSensorFd = (frequencyAxis, firstFrequencyMagnitudes);
             _secondSensorFd = (frequencyAxis, secondFrequencyMagnitudes);
 
+            _firstSensorMel = CalculateMelSpectrum(_firstSensorData, out _melTimeAxis);
+            _secondSensorMel = CalculateMelSpectrum(_secondSensorData, out _);
+
             // 将计算结果传递给Worker_OnRunWorkerCompleted
             e.Result = sensorData;
+        }
+
+        /// <summary>
+        /// 计算梅尔频谱
+        /// </summary>
+        private double[,] CalculateMelSpectrum(double[] data, out double[] timeAxis)
+        {
+            var signalLength = data.Length;
+            var numFrames = (signalLength - FrameSize) / HopSize + 1;
+
+            var melSpectrogram = new double[numFrames, NumMelFilters];
+
+            timeAxis = new double[numFrames];
+            for (var i = 0; i < numFrames; i++)
+            {
+                timeAxis[i] = i * HopSize / SampleRate;
+            }
+
+            // 构建梅尔滤波器组（只需构建一次）
+            var melFilterBank = CreateMelFilterBank(FrameSize, SampleRate, NumMelFilters, MinFreq, MaxFreq);
+            const int halfFrameSize = FrameSize / 2;
+
+            // 分帧处理
+            for (var frame = 0; frame < numFrames; frame++)
+            {
+                var startIdx = frame * HopSize;
+
+                // 1: 提取帧并加窗（汉明窗）
+                var frameData = new double[FrameSize];
+                for (var i = 0; i < FrameSize; i++)
+                {
+                    var window = 0.54 - 0.46 * Math.Cos(2 * Math.PI * i / (FrameSize - 1));
+                    frameData[i] = data[startIdx + i] * window;
+                }
+
+                // 2: FFT变换
+                var complex = new Complex[FrameSize];
+                for (var i = 0; i < FrameSize; i++)
+                {
+                    complex[i] = new Complex(frameData[i], 0);
+                }
+
+                FourierTransform.FFT(complex, FourierTransform.Direction.Forward);
+
+                // 3: 计算功率谱
+                var powerSpectrum = new double[halfFrameSize];
+                for (var i = 0; i < halfFrameSize; i++)
+                {
+                    powerSpectrum[i] = Math.Pow(complex[i].Magnitude, 2) / FrameSize;
+                }
+
+                // 4: 应用梅尔滤波器组
+                for (var i = 0; i < NumMelFilters; i++)
+                {
+                    double sum = 0;
+                    for (var j = 0; j < halfFrameSize; j++)
+                    {
+                        sum += powerSpectrum[j] * melFilterBank[i, j];
+                    }
+
+                    melSpectrogram[frame, i] = sum;
+                }
+            }
+
+            // 5: 对数压缩（对整个矩阵）
+            for (var i = 0; i < numFrames; i++)
+            {
+                for (var j = 0; j < NumMelFilters; j++)
+                {
+                    melSpectrogram[i, j] = Math.Log(melSpectrogram[i, j] + 1e-10);
+                }
+            }
+
+            return melSpectrogram;
+        }
+
+        /// <summary>
+        /// 创建梅尔滤波器组
+        /// </summary>
+        private double[,] CreateMelFilterBank(int fftLength, double sampleRate, int numFilters, double minFreq,
+            double maxFreq)
+        {
+            var halfLen = fftLength / 2;
+            var filterBank = new double[numFilters, halfLen];
+
+            var minMel = FrequencyToMel(minFreq);
+            var maxMel = FrequencyToMel(maxFreq);
+
+            var melPoints = new double[numFilters + 2];
+            for (var i = 0; i < numFilters + 2; i++)
+            {
+                melPoints[i] = minMel + (maxMel - minMel) * i / (numFilters + 1);
+            }
+
+            var freqPoints = melPoints.Select(MelToFrequency).ToArray();
+            var binPoints = freqPoints.Select(f => f * fftLength / sampleRate).ToArray();
+
+            for (var i = 0; i < numFilters; i++)
+            {
+                var leftBin = (int)Math.Floor(binPoints[i]);
+                var centerBin = (int)Math.Floor(binPoints[i + 1]);
+                var rightBin = (int)Math.Floor(binPoints[i + 2]);
+
+                // 上升沿
+                for (var j = leftBin; j < centerBin && j < halfLen; j++)
+                {
+                    if (centerBin != leftBin)
+                    {
+                        filterBank[i, j] = (double)(j - leftBin) / (centerBin - leftBin);
+                    }
+                }
+
+                // 下降沿
+                for (var j = centerBin; j < rightBin && j < halfLen; j++)
+                {
+                    if (rightBin != centerBin)
+                    {
+                        filterBank[i, j] = (double)(rightBin - j) / (rightBin - centerBin);
+                    }
+                }
+            }
+
+            return filterBank;
+        }
+
+        /// <summary>
+        /// 频率转梅尔刻度
+        /// </summary>
+        private double FrequencyToMel(double freq)
+        {
+            return 2595.0 * Math.Log10(1.0 + freq / 700.0);
+        }
+
+        /// <summary>
+        /// 梅尔刻度转频率
+        /// </summary>
+        private double MelToFrequency(double mel)
+        {
+            return 700.0 * (Math.Pow(10, mel / 2595.0) - 1.0);
         }
 
         private void Worker_OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -332,6 +482,8 @@ namespace CSharpDemo.ViewModels
 
         private void ShowMelSpectrum()
         {
+            _eventAggregator.GetEvent<CorrelatorResultEvent<(double[], double[,], double[,])>>()
+                .Publish((_melTimeAxis, _firstSensorMel, _secondSensorMel));
         }
 
         private void ShowMatlabResult()
