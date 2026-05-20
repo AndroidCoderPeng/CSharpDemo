@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Windows.Controls;
 using CSharpDemo.Service;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -17,7 +16,7 @@ namespace CSharpDemo.ViewModels
 
         #region DelegateCommand
 
-        public DelegateCommand<ListBox> ItemSelectedCommand { set; get; }
+        public DelegateCommand<object> ItemSelectedCommand { get; set; }
 
         #endregion
 
@@ -29,21 +28,29 @@ namespace CSharpDemo.ViewModels
 
             ItemModels = dataService.GetItemModels();
 
-            ItemSelectedCommand = new DelegateCommand<ListBox>(OnListItemSelected);
+            ItemSelectedCommand = new DelegateCommand<object>(OnListItemSelected);
         }
 
-        private void OnListItemSelected(ListBox box)
+        private void OnListItemSelected(object index)
         {
+            if (index == null)
+            {
+                return;
+            }
+
             var region = _regionManager.Regions["ContentRegion"];
-            switch (box.SelectedIndex)
+            switch (index)
             {
                 case 0:
-                    region.RequestNavigate("AudioVisualizerView");
+                    region.RequestNavigate("AudioCaptureView");
                     break;
                 case 1:
-                    region.RequestNavigate("AlgorithmTestView");
+                    region.RequestNavigate("AudioAnalyzerView");
                     break;
                 case 2:
+                    region.RequestNavigate("AlgorithmTestView");
+                    break;
+                case 3:
                     region.RequestNavigate("SerialPortView");
                     break;
             }

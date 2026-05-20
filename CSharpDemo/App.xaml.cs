@@ -19,7 +19,7 @@ namespace CSharpDemo
             mainWindow.Loaded += delegate
             {
                 var regionManager = Container.Resolve<IRegionManager>();
-                regionManager.RequestNavigate("ContentRegion", "AudioVisualizerView");
+                regionManager.RequestNavigate("ContentRegion", "AudioCaptureView");
             };
             return mainWindow;
         }
@@ -34,7 +34,8 @@ namespace CSharpDemo
             containerRegistry.Register<IAppDataService, AppDataServiceImpl>();
 
             //Navigation
-            containerRegistry.RegisterForNavigation<AudioVisualizerView, AudioVisualizerViewModel>();
+            containerRegistry.RegisterForNavigation<AudioCaptureView, AudioCaptureViewModel>();
+            containerRegistry.RegisterForNavigation<AudioAnalyzerView, AudioAnalyzerViewModel>();
             containerRegistry.RegisterForNavigation<SerialPortView, SerialPortViewModel>();
             containerRegistry.RegisterForNavigation<AlgorithmTestView, AlgorithmTestViewModel>();
         }
