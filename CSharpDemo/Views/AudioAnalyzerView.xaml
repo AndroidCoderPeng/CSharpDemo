@@ -6,10 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:CSharpDemo.ViewModels"
+    d:DataContext="{d:DesignInstance Type=vm:AudioAnalyzerViewModel}"
     d:DesignHeight="720"
     d:DesignWidth="1080"
     Background="{DynamicResource FirstBgBrush}"
-    Unloaded="AudioAnalyzerView_OnUnloaded"
     mc:Ignorable="d">
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -27,7 +28,6 @@
             </Grid.ColumnDefinitions>
 
             <hc:TextBox
-                x:Name="AudioFilePathTextBox"
                 Grid.Column="0"
                 Height="35"
                 HorizontalAlignment="Stretch"
@@ -35,13 +35,14 @@
                 hc:InfoElement.ShowClearButton="True"
                 Background="{DynamicResource ThirdBgBrush}"
                 FontSize="16"
-                Foreground="{DynamicResource ForegroundBrush}" />
+                Foreground="{DynamicResource ForegroundBrush}"
+                Text="{Binding AudioFilePath, Mode=OneWay}" />
 
             <Button
-                x:Name="SelectAudioButton"
                 Grid.Column="1"
                 Height="35"
                 Margin="8,0,0,0"
+                Command="{Binding SelectAudioCommand}"
                 Content="选择文件"
                 FontSize="16"
                 Style="{StaticResource ButtonPrimary}" />
@@ -50,7 +51,11 @@
         <Grid Grid.Row="1" />
 
         <Grid Grid.Row="2" Background="Black">
-            <ctrl:AudioWaveformRender x:Name="WaveformRender" PositionChanged="WaveformRender_OnPositionChanged" />
+            <ctrl:AudioWaveformRender
+                CurrentPosition="{Binding CurrentPosition, Mode=TwoWay}"
+                PositionChangedCommand="{Binding PositionChangedCommand}"
+                TotalDuration="{Binding TotalDuration}"
+                WaveformData="{Binding WaveformData}" />
 
             <Button
                 Margin="10"

@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace CSharpDemo.Controls
 {
@@ -26,18 +25,20 @@ namespace CSharpDemo.Controls
             typeof(AudioWaveformRender), new PropertyMetadata(TimeSpan.Zero, OnCurrentPositionChanged)
         );
 
+        public static readonly DependencyProperty PositionChangedCommandProperty = DependencyProperty.Register(
+            nameof(PositionChangedCommand), typeof(ICommand),
+            typeof(AudioWaveformRender), new PropertyMetadata(null)
+        );
+
         private double[] _waveformData;
         private double _maxAmplitude = 1.0;
         private readonly Polyline _waveformLine;
         private readonly Rectangle _positionIndicator;
         private readonly Line _zeroLine;
         private bool _isDragging;
-        private readonly DispatcherTimer _playbackTimer;
 
         private const double LeftMargin = 10;
         private const double RightMargin = 15;
-
-        public event EventHandler<TimeSpan> PositionChanged;
 
         public double[] WaveformData
         {
@@ -57,16 +58,16 @@ namespace CSharpDemo.Controls
             set => SetValue(CurrentPositionProperty, value);
         }
 
+        public ICommand PositionChangedCommand
+        {
+            get => (ICommand)GetValue(PositionChangedCommandProperty);
+            set => SetValue(PositionChangedCommandProperty, value);
+        }
+
+
         public AudioWaveformRender()
         {
             Background = Brushes.Transparent;
-
-            // 播放进度更新定时器（约60fps）
-            _playbackTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromMilliseconds(16)
-            };
-            _playbackTimer.Tick += OnPlaybackTimerTick;
 
             // 零线（水平中心线）
             _zeroLine = new Line
@@ -100,11 +101,6 @@ namespace CSharpDemo.Controls
             MouseLeftButtonUp += OnMouseLeftButtonUp;
             MouseMove += OnMouseMove;
             SizeChanged += OnSizeChanged;
-        }
-
-        private void OnPlaybackTimerTick(object sender, EventArgs e)
-        {
-            UpdatePositionIndicator();
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
@@ -364,35 +360,7 @@ namespace CSharpDemo.Controls
 
             var newPosition = TimeSpan.FromSeconds(ratio * TotalDuration.TotalSeconds);
             CurrentPosition = newPosition;
-            PositionChanged?.Invoke(this, newPosition);
-        }
-
-        /// <summary>
-        /// 开始跟踪播放进度
-        /// </summary>
-        public void StartPlaybackTracking()
-        {
-            _playbackTimer.Start();
-        }
-
-        /// <summary>
-        /// 停止跟踪播放进度
-        /// </summary>
-        public void StopPlaybackTracking()
-        {
-            _playbackTimer.Stop();
-        }
-
-        /// <summary>
-        /// 更新播放位置（由外部调用）
-        /// </summary>
-        /// <param name="position">当前播放位置</param>
-        public void UpdatePlaybackPosition(TimeSpan position)
-        {
-            if (!_isDragging)
-            {
-                CurrentPosition = position;
-            }
+            PositionChangedCommand?.Execute(newPosition);
         }
 
         public void AddGridLines(int hCount, int vCount)

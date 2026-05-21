@@ -212,7 +212,6 @@
       <Compile Include="Utils\SensorData.cs" />
     <Compile Include="ViewModels\AlgorithmTestViewModel.cs" />
     <Compile Include="ViewModels\AudioAnalyzerViewModel.cs" />
-    <Compile Include="ViewModels\AudioCaptureViewModel.cs" />
     <Compile Include="Views\AlgorithmTestView.xaml.cs">
       <DependentUpon>AlgorithmTestView.xaml</DependentUpon>
     </Compile>
@@ -301,6 +300,7 @@
   <ItemGroup>
     <Content Include="DLL\v901\CorrelatorSingle.dll"/>
     <Content Include="DLL\v901\MWArray.dll"/>
+      <Content Include="TestData\听音_蓝_20240910_175955.wav"/>
     <Content Include="TestData\测试报告20251108.5\参数配置.5.175715.json"/>
     <Content Include="TestData\测试报告20251108.5\快照.5.175715.png"/>
     <Content Include="TestData\测试报告20251108.5\测试数据.5.175715.txt"/>
