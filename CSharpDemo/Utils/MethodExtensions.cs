@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows.Media.Imaging;
 using CSharpDemo.Tags;
 using MathWorks.MATLAB.NET.Arrays;
 
@@ -13,16 +9,6 @@ namespace CSharpDemo.Utils
 {
     public static class MethodExtensions
     {
-        /// <summary>
-        /// 字节数组转Int
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
-        public static int ConvertToInt(this byte[] bytes)
-        {
-            return bytes.Aggregate(0, (current, b) => 16 * 16 * current + b);
-        }
-
         /// <summary>
         /// 字节数组转String
         /// </summary>
@@ -117,68 +103,6 @@ namespace CSharpDemo.Utils
             return (result1 * 65536 + result2 * 256 + result3) * 5 / 83.88607 / 100000;
         }
 
-        /// <summary>
-        /// 判断是否是2的幂
-        /// </summary>
-        public static bool IsPowerOfTwo(this int size)
-        {
-            return size > 0 && (size & (size - 1)) == 0;
-        }
-
-        public static double[] GetWeights(this int radius)
-        {
-            double Gaussian(double x) => Math.Pow(Math.E, -4 * x * x); // 高斯函数
-
-            var len = 1 + radius * 2;
-            var end = len - 1;
-            var radiusF = (double)radius;
-            var weights = new double[len];
-
-            for (var i = 0; i <= radius; i++) // 先把右边的权重算出来
-            {
-                weights[radius + i] = Gaussian(i / radiusF);
-            }
-
-            for (var i = 0; i < radius; i++) // 把右边的权重拷贝到左边
-            {
-                weights[i] = weights[end - i];
-            }
-
-            var total = weights.Sum();
-            for (var i = 0; i < len; i++) // 使权重合为 0
-            {
-                weights[i] /= total;
-            }
-
-            return weights;
-        }
-
-        public static byte[] ToBytes(this Bitmap bitmap)
-        {
-            var ms = new MemoryStream();
-            bitmap.Save(ms, ImageFormat.Jpeg);
-            var buffer = ms.ToArray();
-            ms.Close();
-            ms.Dispose();
-            return buffer;
-        }
-
-        public static BitmapImage ToBitmapImage(this Bitmap bitmap)
-        {
-            var ms = new MemoryStream();
-            bitmap.Save(ms, ImageFormat.Png);
-            var bitImage = new BitmapImage();
-            bitImage.BeginInit();
-            bitImage.StreamSource = ms;
-            bitImage.EndInit();
-            return bitImage;
-        }
-
-        public static void ToImageFile(this Bitmap bitmap, string dirPath)
-        {
-            bitmap.Save(dirPath + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg", ImageFormat.Jpeg);
-        }
-
         public static List<string> ReadFromFile(this string filePath)
         {
             var list = new List<string>();
@@ -208,17 +132,6 @@ namespace CSharpDemo.Utils
             }
 
             return outArray;
-        }
-
-        public static void SaveArrayToFile(this double[] array, string fileName)
-        {
-            var builder = new StringBuilder();
-            foreach (var d in array)
-            {
-                builder.Append(d).Append("\r\n");
-            }
-
-            File.AppendAllText(fileName, builder.ToString());
         }
     }
 }

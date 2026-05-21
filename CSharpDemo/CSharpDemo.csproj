@@ -204,13 +204,10 @@
     <Compile Include="Controls\AudioSpectrumRender.cs" />
     <Compile Include="Controls\AudioWaveformRender.cs" />
     <Compile Include="Events\CorrelatorResultEvent.cs" />
-    <Compile Include="Model\AudioDataModel.cs" />
     <Compile Include="Model\CorrelatorData.cs" />
     <Compile Include="Model\ParamConfig.cs" />
     <Compile Include="Service\AppDataServiceImpl.cs" />
-    <Compile Include="Utils\AudioVisualizer.cs" />
     <Compile Include="Utils\CrcCodeHub.cs" />
-    <Compile Include="Utils\DrawPath.cs" />
     <Compile Include="Utils\RuntimeCache.cs" />
       <Compile Include="Utils\SensorData.cs" />
     <Compile Include="ViewModels\AlgorithmTestViewModel.cs" />
@@ -221,9 +218,6 @@
     </Compile>
     <Compile Include="Views\AudioAnalyzerView.xaml.cs">
       <DependentUpon>AudioAnalyzerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\AudioCaptureView.xaml.cs">
-      <DependentUpon>AudioCaptureView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SerialPortView.xaml.cs">
       <DependentUpon>SerialPortView.xaml</DependentUpon>
@@ -275,7 +269,6 @@
     <Page Include="Themes\LightTheme.xaml" />
     <Page Include="Views\AlgorithmTestView.xaml" />
     <Page Include="Views\AudioAnalyzerView.xaml" />
-    <Page Include="Views\AudioCaptureView.xaml" />
     <Page Include="Views\SerialPortView.xaml">
       <SubType>Designer</SubType>
     </Page>

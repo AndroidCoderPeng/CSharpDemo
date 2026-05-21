@@ -2,12 +2,14 @@
     x:Class="CSharpDemo.Views.AudioAnalyzerView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctrl="clr-namespace:CSharpDemo.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="720"
     d:DesignWidth="1080"
     Background="{DynamicResource FirstBgBrush}"
+    Unloaded="AudioAnalyzerView_OnUnloaded"
     mc:Ignorable="d">
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -48,11 +50,25 @@
         <Grid Grid.Row="1" />
 
         <Grid Grid.Row="2" Background="Black">
-            <Path x:Name="CircularPath" />
+            <ctrl:AudioWaveformRender x:Name="WaveformRender" PositionChanged="WaveformRender_OnPositionChanged" />
+
+            <Button
+                Margin="10"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Content="时域图"
+                Style="{StaticResource ButtonDashedInfo}" />
         </Grid>
 
         <Grid Grid.Row="4" Background="Black">
-            <Path x:Name="StripsPath" />
+            <ctrl:AudioSpectrumRender x:Name="SpectrumRender" />
+
+            <Button
+                Margin="10"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Content="频域图"
+                Style="{StaticResource ButtonDashedInfo}" />
         </Grid>
     </Grid>
 </UserControl>

@@ -34,10 +34,9 @@ namespace CSharpDemo
             containerRegistry.Register<IAppDataService, AppDataServiceImpl>();
 
             //Navigation
-            containerRegistry.RegisterForNavigation<AudioCaptureView, AudioCaptureViewModel>();
+            containerRegistry.RegisterForNavigation<AlgorithmTestView, AlgorithmTestViewModel>();
             containerRegistry.RegisterForNavigation<AudioAnalyzerView, AudioAnalyzerViewModel>();
             containerRegistry.RegisterForNavigation<SerialPortView, SerialPortViewModel>();
-            containerRegistry.RegisterForNavigation<AlgorithmTestView, AlgorithmTestViewModel>();
         }
     }
 }

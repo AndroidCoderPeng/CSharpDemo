@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media;
 
 namespace CSharpDemo.Service
 {
@@ -8,49 +7,12 @@ namespace CSharpDemo.Service
     {
         private readonly string[] _itemTitles =
         {
-            "相关仪算法测试", "音频捕获", "音频可视化", "串口通信"
+            "相关仪算法测试", "音频可视化", "串口通信"
         };
 
         public List<string> GetItemModels()
         {
             return _itemTitles.ToList();
-        }
-
-        public Color[] GetHsvColors()
-        {
-            var result = new Color[256 * 6];
-
-            for (var i = 0; i <= 255; i++)
-            {
-                result[i] = Color.FromArgb(255, 255, (byte)i, 0);
-            }
-
-            for (var i = 0; i <= 255; i++)
-            {
-                result[256 + i] = Color.FromArgb(255, (byte)(255 - i), 255, 0);
-            }
-
-            for (var i = 0; i <= 255; i++)
-            {
-                result[512 + i] = Color.FromArgb(255, 0, 255, (byte)i);
-            }
-
-            for (var i = 0; i <= 255; i++)
-            {
-                result[768 + i] = Color.FromArgb(255, 0, (byte)(255 - i), 255);
-            }
-
-            for (var i = 0; i <= 255; i++)
-            {
-                result[1024 + i] = Color.FromArgb(255, (byte)i, 0, 255);
-            }
-
-            for (var i = 0; i <= 255; i++)
-            {
-                result[1280 + i] = Color.FromArgb(255, 255, 0, (byte)(255 - i));
-            }
-
-            return result;
         }
     }
 }

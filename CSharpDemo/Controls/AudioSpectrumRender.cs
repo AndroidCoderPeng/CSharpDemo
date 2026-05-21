@@ -40,10 +40,8 @@ namespace CSharpDemo.Controls
         private const double MaxZoom = 20.0;
         private bool _isPanning;
         private double _lastPanX;
-        private double _lastPinchDistance;
-        private bool _isPinching;
 
-        
+
         public double[] WaveformData
         {
             get => (double[])GetValue(WaveformDataProperty);
@@ -67,13 +65,13 @@ namespace CSharpDemo.Controls
             Children.Add(_spectrumImage);
 
             SizeChanged += OnSizeChanged;
-            
+
             // 添加鼠标事件处理程序
             MouseWheel += OnMouseWheel;
             MouseLeftButtonDown += OnMouseLeftButtonDown;
             MouseLeftButtonUp += OnMouseLeftButtonUp;
             MouseMove += OnMouseMove;
-            
+
             // 添加触摸事件处理程序
             ManipulationStarting += OnManipulationStarting;
             ManipulationDelta += OnManipulationDelta;
@@ -107,11 +105,11 @@ namespace CSharpDemo.Controls
             RenderAxes();
         }
 
-         private void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
             var mousePos = e.GetPosition(this);
             var plotWidth = ActualWidth - LeftMargin - RightMargin;
-            
+
             if (plotWidth <= 0) return;
 
             var oldZoom = _zoomLevel;
@@ -128,7 +126,7 @@ namespace CSharpDemo.Controls
             var mouseRatio = (mousePos.X - LeftMargin) / plotWidth;
             var visibleRange = _spectrumData.Length / oldZoom;
             var oldStart = _panOffset;
-            
+
             var newVisibleRange = _spectrumData.Length / _zoomLevel;
             _panOffset = oldStart + (mouseRatio * visibleRange) - (mouseRatio * newVisibleRange);
             _panOffset = Math.Max(0, Math.Min(_spectrumData.Length - newVisibleRange, _panOffset));
@@ -175,20 +173,20 @@ namespace CSharpDemo.Controls
             RenderSpectrum();
             RenderXAxis();
         }
-        
+
         private void OnManipulationStarting(object sender, ManipulationStartingEventArgs e)
         {
             e.Mode = ManipulationModes.Scale | ManipulationModes.TranslateX;
             e.ManipulationContainer = this;
             e.Handled = true;
         }
-        
+
         private void OnManipulationDelta(object sender, ManipulationDeltaEventArgs e)
         {
             if (_spectrumData == null || _spectrumData.Length == 0) return;
 
             var manipulationDelta = e.DeltaManipulation;
-            
+
             var plotWidth = ActualWidth - LeftMargin - RightMargin;
             if (plotWidth <= 0) return;
 
@@ -214,12 +212,12 @@ namespace CSharpDemo.Controls
 
             e.Handled = true;
         }
-        
+
         private void OnManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
         {
             e.Handled = true;
         }
-        
+
         private void ComputeSpectrum()
         {
             if (_waveformData == null || _waveformData.Length == 0)
@@ -302,6 +300,7 @@ namespace CSharpDemo.Controls
                 {
                     break;
                 }
+
                 if (binIndex < 0)
                 {
                     continue;
@@ -328,7 +327,7 @@ namespace CSharpDemo.Controls
 
             var stride = plotWidth * 4;
             _spectrumBitmap.WritePixels(new Int32Rect(0, 0, plotWidth, plotHeight), pixels, stride, 0);
-            
+
             _spectrumImage.Source = _spectrumBitmap;
             SetLeft(_spectrumImage, LeftMargin);
             SetTop(_spectrumImage, TopMargin);
@@ -399,7 +398,7 @@ namespace CSharpDemo.Controls
             {
                 return;
             }
-            
+
             var width = ActualWidth;
             if (width <= 0)
             {
