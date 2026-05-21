@@ -26,6 +26,12 @@ namespace CSharpDemo.Views
 
             // 禁用缩放
             ScottPlotView.UserInputProcessor.Disable();
+            FirstTdView.UserInputProcessor.Disable();
+            SecondTdView.UserInputProcessor.Disable();
+            FirstFdView.UserInputProcessor.Disable();
+            SecondFdView.UserInputProcessor.Disable();
+            FirstMelView.UserInputProcessor.Disable();
+            SecondMelView.UserInputProcessor.Disable();
 
             // 网格线
             var scottPlot = ScottPlotView.Plot;
