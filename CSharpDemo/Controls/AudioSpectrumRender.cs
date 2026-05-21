@@ -22,17 +22,23 @@ namespace CSharpDemo.Controls
             typeof(AudioSpectrumRender), new PropertyMetadata(7500, OnSampleRateChanged)
         );
 
+        public static readonly DependencyProperty SpectrumMarginProperty = DependencyProperty.Register(
+            nameof(SpectrumMargin), typeof(Thickness),
+            typeof(AudioSpectrumRender), new PropertyMetadata(new Thickness(10, 5, 15, 20))
+        );
+
+        // 数据样本3750个点，FFT size一般是大于样本数的最小2次幂，如果小于样本数，会导致样本FFT计算出现遗漏
+        public static readonly DependencyProperty FftSizeProperty = DependencyProperty.Register(
+            nameof(FftSize), typeof(int),
+            typeof(AudioSpectrumRender), new PropertyMetadata(4096, OnFftSizeChanged)
+        );
+
         private double[] _waveformData;
         private int _sampleRate = 7500;
+        private int _fftSize = 4096;
         private readonly Image _spectrumImage;
         private WriteableBitmap _spectrumBitmap;
         private double[] _spectrumData;
-
-        private const double LeftMargin = 10;
-        private const double TopMargin = 5;
-        private const double RightMargin = 15;
-        private const double BottomMargin = 25;
-        private const int FftSize = 4096; // 数据样本3750个点，FFT size一般是大于样本数的最小2次幂，如果小于样本数，会导致样本FFT计算出现遗漏
 
         private double _zoomLevel = 1.0;
         private double _panOffset;
@@ -52,6 +58,18 @@ namespace CSharpDemo.Controls
         {
             get => (int)GetValue(SampleRateProperty);
             set => SetValue(SampleRateProperty, value);
+        }
+
+        public Thickness SpectrumMargin
+        {
+            get => (Thickness)GetValue(SpectrumMarginProperty);
+            set => SetValue(SpectrumMarginProperty, value);
+        }
+
+        public int FftSize
+        {
+            get => (int)GetValue(FftSizeProperty);
+            set => SetValue(FftSizeProperty, value);
         }
 
         public AudioSpectrumRender()
@@ -99,6 +117,16 @@ namespace CSharpDemo.Controls
             }
         }
 
+        private static void OnFftSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is AudioSpectrumRender render)
+            {
+                render._fftSize = (int)e.NewValue;
+                render.ComputeSpectrum();
+                render.RenderSpectrum();
+            }
+        }
+
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             RenderSpectrum();
@@ -108,7 +136,7 @@ namespace CSharpDemo.Controls
         private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
             var mousePos = e.GetPosition(this);
-            var plotWidth = ActualWidth - LeftMargin - RightMargin;
+            var plotWidth = ActualWidth - SpectrumMargin.Left - SpectrumMargin.Right;
 
             if (plotWidth <= 0) return;
 
@@ -123,7 +151,7 @@ namespace CSharpDemo.Controls
                 _zoomLevel = Math.Max(MinZoom, _zoomLevel / 1.2);
             }
 
-            var mouseRatio = (mousePos.X - LeftMargin) / plotWidth;
+            var mouseRatio = (mousePos.X - SpectrumMargin.Left) / plotWidth;
             var visibleRange = _spectrumData.Length / oldZoom;
             var oldStart = _panOffset;
 
@@ -161,7 +189,7 @@ namespace CSharpDemo.Controls
             var deltaX = currentX - _lastPanX;
             _lastPanX = currentX;
 
-            var plotWidth = ActualWidth - LeftMargin - RightMargin;
+            var plotWidth = ActualWidth - SpectrumMargin.Left - SpectrumMargin.Right;
             if (plotWidth <= 0) return;
 
             var visibleRange = _spectrumData.Length / _zoomLevel;
@@ -187,11 +215,11 @@ namespace CSharpDemo.Controls
 
             var manipulationDelta = e.DeltaManipulation;
 
-            var plotWidth = ActualWidth - LeftMargin - RightMargin;
+            var plotWidth = ActualWidth - SpectrumMargin.Left - SpectrumMargin.Right;
             if (plotWidth <= 0) return;
 
             var centerPoint = e.ManipulationOrigin.X;
-            var centerRatio = (centerPoint - LeftMargin) / plotWidth;
+            var centerRatio = (centerPoint - SpectrumMargin.Left) / plotWidth;
 
             var oldZoom = _zoomLevel;
             var scale = manipulationDelta.Scale.X;
@@ -225,20 +253,20 @@ namespace CSharpDemo.Controls
                 return;
             }
 
-            var fftBuffer = new double[FftSize];
-            var copyLength = Math.Min(FftSize, _waveformData.Length);
+            var fftBuffer = new double[_fftSize];
+            var copyLength = Math.Min(_fftSize, _waveformData.Length);
             Array.Copy(_waveformData, 0, fftBuffer, 0, copyLength);
 
-            var complex = new Complex[FftSize];
-            for (var i = 0; i < FftSize; i++)
+            var complex = new Complex[_fftSize];
+            for (var i = 0; i < _fftSize; i++)
             {
                 complex[i] = new Complex(fftBuffer[i], 0);
             }
 
             FourierTransform.FFT(complex, FourierTransform.Direction.Forward);
 
-            _spectrumData = new double[FftSize / 2];
-            for (var i = 0; i < FftSize / 2; i++)
+            _spectrumData = new double[_fftSize / 2];
+            for (var i = 0; i < _fftSize / 2; i++)
             {
                 _spectrumData[i] = complex[i].Magnitude;
             }
@@ -276,8 +304,8 @@ namespace CSharpDemo.Controls
                 return;
             }
 
-            var plotWidth = (int)(width - LeftMargin - RightMargin);
-            var plotHeight = (int)(height - TopMargin - BottomMargin);
+            var plotWidth = (int)(width - SpectrumMargin.Left - SpectrumMargin.Right);
+            var plotHeight = (int)(height - SpectrumMargin.Top - SpectrumMargin.Bottom);
 
             if (plotWidth <= 0 || plotHeight <= 0)
             {
@@ -329,8 +357,8 @@ namespace CSharpDemo.Controls
             _spectrumBitmap.WritePixels(new Int32Rect(0, 0, plotWidth, plotHeight), pixels, stride, 0);
 
             _spectrumImage.Source = _spectrumBitmap;
-            SetLeft(_spectrumImage, LeftMargin);
-            SetTop(_spectrumImage, TopMargin);
+            SetLeft(_spectrumImage, SpectrumMargin.Left);
+            SetTop(_spectrumImage, SpectrumMargin.Top);
             _spectrumImage.Width = plotWidth;
             _spectrumImage.Height = plotHeight;
 
@@ -405,12 +433,14 @@ namespace CSharpDemo.Controls
                 return;
             }
 
-            var plotWidth = width - LeftMargin - RightMargin;
+            var plotWidth = width - SpectrumMargin.Left - SpectrumMargin.Right;
             var visibleRange = _spectrumData.Length / _zoomLevel;
             var startBin = (int)_panOffset;
-            var startFreq = startBin * (_sampleRate / 2.0 / (_spectrumData.Length - 1));
             var endBin = Math.Min(startBin + (int)visibleRange, _spectrumData.Length - 1);
-            var endFreq = endBin * (_sampleRate / 2.0 / (_spectrumData.Length - 1));
+
+            var nyquistFrequency = _sampleRate / 2.0;
+            var startFreq = startBin * nyquistFrequency / (_spectrumData.Length - 1);
+            var endFreq = endBin * nyquistFrequency / (_spectrumData.Length - 1);
             var freqRange = endFreq - startFreq;
 
             const int tickCount = 10;
@@ -433,7 +463,7 @@ namespace CSharpDemo.Controls
             for (var i = 0; i <= tickCount; i++)
             {
                 var frequency = startFreq + i * frequencyStep;
-                var x = LeftMargin + (i * plotWidth / tickCount);
+                var x = SpectrumMargin.Left + (i * plotWidth / tickCount);
                 AddXAxisLabel(frequency, x);
             }
         }
