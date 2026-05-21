@@ -97,16 +97,16 @@
                     Text="端口：" />
 
                 <hc:ComboBox
+                    x:Name="PortNameComboBox"
                     Height="30"
                     Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
-                    IsEnabled="{Binding PortNameComboBoxIsEnabled}"
-                    ItemsSource="{Binding PortArray}"
-                    SelectedItem="{Binding PortName}">
+                    IsEnabled="{Binding ComboBoxEnabled}"
+                    ItemsSource="{Binding PortArray}">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="SelectionChanged">
-                            <b:InvokeCommandAction Command="{Binding PortItemSelectedCommand}"
-                                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
+                            <b:InvokeCommandAction Command="{Binding PortNameItemSelectedCommand}"
+                                                   CommandParameter="{Binding ElementName=PortNameComboBox, Path=SelectedItem}" />
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
@@ -122,16 +122,16 @@
                     Text="波特率：" />
 
                 <hc:ComboBox
+                    x:Name="BaudRateComboBox"
                     Height="30"
                     Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
-                    IsEnabled="{Binding BaudRateComboBoxIsEnabled}"
-                    ItemsSource="{Binding BaudRateList}"
-                    SelectedItem="{Binding BaudRate}">
+                    IsEnabled="{Binding ComboBoxEnabled}"
+                    ItemsSource="{Binding BaudRateList}">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="SelectionChanged">
                             <b:InvokeCommandAction Command="{Binding BaudRateItemSelectedCommand}"
-                                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
+                                                   CommandParameter="{Binding ElementName=BaudRateComboBox, Path=SelectedItem}" />
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
@@ -146,16 +146,16 @@
                     Text="数据位：" />
 
                 <hc:ComboBox
+                    x:Name="DataBitComboBox"
                     Height="30"
                     Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
-                    IsEnabled="{Binding DataBitComboBoxIsEnabled}"
-                    ItemsSource="{Binding DataBitList}"
-                    SelectedItem="{Binding DataBit}">
+                    IsEnabled="{Binding ComboBoxEnabled}"
+                    ItemsSource="{Binding DataBitList}">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="SelectionChanged">
                             <b:InvokeCommandAction Command="{Binding DataBitItemSelectedCommand}"
-                                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
+                                                   CommandParameter="{Binding ElementName=DataBitComboBox, Path=SelectedItem}" />
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
@@ -171,16 +171,16 @@
                     Text="校验位：" />
 
                 <hc:ComboBox
+                    x:Name="ParityComboBox"
                     Height="30"
                     Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
-                    IsEnabled="{Binding ParityComboBoxIsEnabled}"
-                    ItemsSource="{Binding ParityList}"
-                    SelectedItem="{Binding Parity}">
+                    IsEnabled="{Binding ComboBoxEnabled}"
+                    ItemsSource="{Binding ParityList}">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="SelectionChanged">
                             <b:InvokeCommandAction Command="{Binding CheckModeItemSelectedCommand}"
-                                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
+                                                   CommandParameter="{Binding ElementName=ParityComboBox, Path=SelectedItem}" />
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
@@ -195,16 +195,16 @@
                     Text="停止位：" />
 
                 <hc:ComboBox
+                    x:Name="StopBitComboBox"
                     Height="30"
                     Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
-                    IsEnabled="{Binding StopBitComboBoxIsEnabled}"
-                    ItemsSource="{Binding StopBitList}"
-                    SelectedItem="{Binding StopBit}">
+                    IsEnabled="{Binding ComboBoxEnabled}"
+                    ItemsSource="{Binding StopBitList}">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="SelectionChanged">
                             <b:InvokeCommandAction Command="{Binding StopBitItemSelectedCommand}"
-                                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
+                                                   CommandParameter="{Binding ElementName=StopBitComboBox, Path=SelectedItem}" />
                         </b:EventTrigger>
                     </b:Interaction.Triggers>
                 </hc:ComboBox>
@@ -229,7 +229,7 @@
                 Width="185"
                 Height="35"
                 Command="{Binding OpenSerialPortCommand}"
-                Content="打开串口"
+                Content="{Binding ButtonContent}"
                 FontSize="16"
                 Style="{StaticResource ButtonPrimary}" />
 
@@ -237,15 +237,6 @@
                 Width="185"
                 Height="35"
                 Margin="0,15"
-                HorizontalAlignment="Center"
-                Command="{Binding CloseSerialPortCommand}"
-                Content="关闭串口"
-                FontSize="16"
-                Style="{StaticResource ButtonDanger}" />
-
-            <Button
-                Width="185"
-                Height="35"
                 Command="{Binding SendMessageCommand}"
                 Content="发送数据"
                 FontSize="16"
@@ -254,7 +245,6 @@
             <Button
                 Width="185"
                 Height="35"
-                Margin="0,15"
                 HorizontalAlignment="Center"
                 Command="{Binding ClearMessageCommand}"
                 Content="清空记录"

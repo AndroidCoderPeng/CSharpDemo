@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Threading;
+using System.Windows;
 using CSharpDemo.Tags;
 
 namespace CSharpDemo.Utils
@@ -19,33 +20,33 @@ namespace CSharpDemo.Utils
         public const int NoiseListenFrameLength = 15024;
     }
 
-    public class SerialPortManager
+    public class SerialPortManager : IDisposable
     {
-        #region 变量
-
-        public string PortName { get; set; }
-        public int BaudRate { get; set; }
-        public int DataBits { get; set; }
-        public Parity Parity { get; set; }
-        public StopBits StopBits { get; set; }
         private readonly SerialPort _serialPort = new SerialPort();
         public event Action<(int, string, List<Tag>)> DataReceivedEvent;
 
-        #endregion
-
-        public SerialPortManager()
+        public bool SetConfiguration(string portName, string baudRate, string parity, string dataBits, string stopBit)
         {
-            BoundSerialPortEvents();
-        }
+            if (IsOpen)
+            {
+                MessageBox.Show("串口已打开，请先关闭串口再进行配置", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
 
-        public SerialPortManager(string portName, int baudRate, string parity, int dataBits, string stopBits)
-        {
-            PortName = portName;
-            BaudRate = baudRate;
-            Parity = (Parity)Enum.Parse(typeof(Parity), parity);
-            DataBits = dataBits;
-            StopBits = (StopBits)Enum.Parse(typeof(StopBits), stopBits);
-            BoundSerialPortEvents();
+            if (string.IsNullOrEmpty(portName) || string.IsNullOrEmpty(baudRate) || string.IsNullOrEmpty(parity) ||
+                string.IsNullOrEmpty(dataBits) || string.IsNullOrEmpty(stopBit))
+            {
+                MessageBox.Show("串口配置不完整，请检查", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            _serialPort.PortName = portName;
+            _serialPort.BaudRate = int.Parse(baudRate);
+            _serialPort.Parity = (Parity)Enum.Parse(typeof(Parity), parity);
+            _serialPort.DataBits = int.Parse(dataBits);
+            _serialPort.StopBits = (StopBits)Enum.Parse(typeof(StopBits), stopBit);
+            SubscribeSerialPortEvent();
+            return true;
         }
 
         public string[] GetPorts()
@@ -57,14 +58,6 @@ namespace CSharpDemo.Utils
 
         public void Open()
         {
-            if (_serialPort.IsOpen) return;
-
-            _serialPort.PortName = PortName;
-            _serialPort.BaudRate = BaudRate;
-            _serialPort.Parity = Parity;
-            _serialPort.DataBits = DataBits;
-            _serialPort.StopBits = StopBits;
-
             _serialPort.Open();
         }
 
@@ -91,12 +84,12 @@ namespace CSharpDemo.Utils
             _serialPort.Write(buffer, 0, buffer.Length);
         }
 
-        private void BoundSerialPortEvents()
+        private void SubscribeSerialPortEvent()
         {
             _serialPort.DataReceived += SerialPort_DataReceived;
         }
 
-        public void UnBoundSerialPortEvents()
+        public void UnsubscribeSerialPortEvent()
         {
             _serialPort.DataReceived -= SerialPort_DataReceived;
         }
@@ -218,6 +211,12 @@ namespace CSharpDemo.Utils
             var tagBytes = new byte[frame.Length - 18];
             Buffer.BlockCopy(frame, 16, tagBytes, 0, tagBytes.Length);
             return tagBytes.GetTags();
+        }
+
+        public void Dispose()
+        {
+            DataReceivedEvent = null;
+            _serialPort.Dispose();
         }
     }
 }

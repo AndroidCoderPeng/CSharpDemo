@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using CSharpDemo.Model;
 using CSharpDemo.Utils;
-using HandyControl.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
 using MessageBox = System.Windows.MessageBox;
@@ -19,246 +17,104 @@ namespace CSharpDemo.ViewModels
     {
         #region VM
 
-        private string[] _portArray;
-        private List<int> _baudRateList;
-        private List<int> _dataBitList;
-        private List<Parity> _parityList;
-        private List<int> _stopBitList;
         private ObservableCollection<string> _responseCollection = new ObservableCollection<string>();
-        private ObservableCollection<string> _logCollection = new ObservableCollection<string>();
-        private string _portName = "COM3";
-        private int _baudRate = 230400;
-        private int _dataBits = 8;
-        private Parity _parity = Parity.None;
-        private int _stopBit = 1;
-        private string _stateColorBrush = "DarkGray";
-        private string _userInputHex = "A3-20-00-13-00-00-00-00-00-00-01-FF-FF-0A-82-01-30-00-00-01-00-01-00-7D-87";
-        private bool _portNameComboBoxIsEnabled = true;
-        private bool _baudRateComboBoxIsEnabled = true;
-        private bool _dataBitComboBoxIsEnabled = true;
-        private bool _parityComboBoxIsEnabled = true;
-        private bool _stopBitComboBoxIsEnabled = true;
 
-        /// <summary>
-        /// 端口
-        /// </summary>
-        public string[] PortArray
-        {
-            get => _portArray;
-            private set
-            {
-                _portArray = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// 校验模式
-        /// </summary>
-        public List<Parity> ParityList
-        {
-            get => _parityList;
-            private set
-            {
-                _parityList = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// 停止位
-        /// </summary>
-        public List<int> StopBitList
-        {
-            get => _stopBitList;
-            private set
-            {
-                _stopBitList = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// 波特率
-        /// </summary>
-        public List<int> BaudRateList
-        {
-            get => _baudRateList;
-            private set
-            {
-                _baudRateList = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// 数据位
-        /// </summary>
-        public List<int> DataBitList
-        {
-            get => _dataBitList;
-            private set
-            {
-                _dataBitList = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// 串口返回值消息集合
-        /// </summary>
         public ObservableCollection<string> ResponseCollection
         {
             get => _responseCollection;
-            set
-            {
-                _responseCollection = value;
-                RaisePropertyChanged();
-            }
+            set => SetProperty(ref _responseCollection, value);
         }
+
+        private ObservableCollection<string> _logCollection = new ObservableCollection<string>();
 
         public ObservableCollection<string> LogCollection
         {
             get => _logCollection;
-            set
-            {
-                _logCollection = value;
-                RaisePropertyChanged();
-            }
+            set => SetProperty(ref _logCollection, value);
         }
 
-        public string PortName
-        {
-            get => _portName;
-            set
-            {
-                _portName = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public int BaudRate
-        {
-            get => _baudRate;
-            set
-            {
-                _baudRate = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public int DataBit
-        {
-            get => _dataBits;
-            set
-            {
-                _dataBits = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public Parity Parity
-        {
-            get => _parity;
-            set
-            {
-                _parity = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public int StopBit
-        {
-            get => _stopBit;
-            set
-            {
-                _stopBit = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-        public string StateColorBrush
-        {
-            get => _stateColorBrush;
-            private set
-            {
-                _stateColorBrush = value;
-                RaisePropertyChanged();
-            }
-        }
+        private string _userInputHex = "A3-20-00-13-00-00-00-00-00-00-01-FF-FF-0A-82-01-30-00-00-01-00-01-00-7D-87";
 
         public string UserInputHex
         {
             get => _userInputHex;
-            set
-            {
-                _userInputHex = value;
-                RaisePropertyChanged();
-            }
+            set => SetProperty(ref _userInputHex, value);
         }
 
-        public bool PortNameComboBoxIsEnabled
+        private string[] _portArray;
+
+        public string[] PortArray
         {
-            get => _portNameComboBoxIsEnabled;
-            set
-            {
-                _portNameComboBoxIsEnabled = value;
-                RaisePropertyChanged();
-            }
+            get => _portArray;
+            set => SetProperty(ref _portArray, value);
         }
 
-        public bool BaudRateComboBoxIsEnabled
+        private List<string> _baudRateList;
+
+        public List<string> BaudRateList
         {
-            get => _baudRateComboBoxIsEnabled;
-            set
-            {
-                _baudRateComboBoxIsEnabled = value;
-                RaisePropertyChanged();
-            }
+            get => _baudRateList;
+            set => SetProperty(ref _baudRateList, value);
         }
 
-        public bool DataBitComboBoxIsEnabled
+        private List<string> _dataBitList;
+
+        public List<string> DataBitList
         {
-            get => _dataBitComboBoxIsEnabled;
-            set
-            {
-                _dataBitComboBoxIsEnabled = value;
-                RaisePropertyChanged();
-            }
+            get => _dataBitList;
+            set => SetProperty(ref _dataBitList, value);
         }
 
-        public bool ParityComboBoxIsEnabled
+        private List<string> _parityList;
+
+        public List<string> ParityList
         {
-            get => _parityComboBoxIsEnabled;
-            set
-            {
-                _parityComboBoxIsEnabled = value;
-                RaisePropertyChanged();
-            }
+            get => _parityList;
+            set => SetProperty(ref _parityList, value);
         }
 
-        public bool StopBitComboBoxIsEnabled
+        private List<string> _stopBitList;
+
+        public List<string> StopBitList
         {
-            get => _stopBitComboBoxIsEnabled;
-            set
-            {
-                _stopBitComboBoxIsEnabled = value;
-                RaisePropertyChanged();
-            }
+            get => _stopBitList;
+            set => SetProperty(ref _stopBitList, value);
+        }
+
+        private string _stateColorBrush = "DarkGray";
+
+        public string StateColorBrush
+        {
+            get => _stateColorBrush;
+            set => SetProperty(ref _stateColorBrush, value);
+        }
+
+        private bool _comboBoxEnabled = true;
+
+        public bool ComboBoxEnabled
+        {
+            get => _comboBoxEnabled;
+            set => SetProperty(ref _comboBoxEnabled, value);
+        }
+
+        private string _buttonContent = "打开串口";
+
+        public string ButtonContent
+        {
+            get => _buttonContent;
+            set => SetProperty(ref _buttonContent, value);
         }
 
         #endregion
 
         #region DelegateCommand
 
-        public DelegateCommand<ComboBox> PortItemSelectedCommand { get; }
-        public DelegateCommand<ComboBox> BaudRateItemSelectedCommand { get; }
-        public DelegateCommand<ComboBox> DataBitItemSelectedCommand { get; }
-        public DelegateCommand<ComboBox> CheckModeItemSelectedCommand { get; }
-        public DelegateCommand<ComboBox> StopBitItemSelectedCommand { get; }
+        public DelegateCommand<string> PortNameItemSelectedCommand { get; }
+        public DelegateCommand<string> BaudRateItemSelectedCommand { get; }
+        public DelegateCommand<string> DataBitItemSelectedCommand { get; }
+        public DelegateCommand<string> CheckModeItemSelectedCommand { get; }
+        public DelegateCommand<string> StopBitItemSelectedCommand { get; }
         public DelegateCommand OpenSerialPortCommand { get; }
-        public DelegateCommand CloseSerialPortCommand { get; }
         public DelegateCommand ClearMessageCommand { get; }
         public DelegateCommand SendMessageCommand { get; }
 
@@ -266,83 +122,34 @@ namespace CSharpDemo.ViewModels
 
         #region 变量
 
-        private readonly SerialPortManager _serialPortManager = new SerialPortManager();
+        private readonly SerialPortManager _portManager = new SerialPortManager();
+        private string _portName = "COM5";
+        private string _baudRate = "230400";
+        private string _dataBits = "8";
+        private string _parity = "None";
+        private string _stopBit = "1";
         private readonly CorrelatorData _dataModel = new CorrelatorData();
 
         #endregion
 
         public SerialPortViewModel()
         {
-            PortArray = _serialPortManager.GetPorts();
-            BaudRateList = new List<int> { 9600, 14400, 19200, 38400, 56000, 57600, 115200, 128000, 230400 };
-            DataBitList = new List<int> { 5, 6, 7, 8 };
-            ParityList = new List<Parity> { Parity.None, Parity.Odd, Parity.Even, Parity.Mark, Parity.Space };
-            StopBitList = new List<int> { 1, 2 };
-
-            PortItemSelectedCommand = new DelegateCommand<ComboBox>(delegate(ComboBox box)
+            PortArray = _portManager.GetPorts();
+            BaudRateList = new List<string>
             {
-                PortName = box.SelectedItem.ToString();
-            });
+                "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "230400"
+            };
+            DataBitList = new List<string> { "5", "6", "7", "8" };
+            ParityList = new List<string> { "None", "Odd", "Even", "Mark", "Space" };
+            StopBitList = new List<string> { "1", "2" };
 
-            BaudRateItemSelectedCommand = new DelegateCommand<ComboBox>(delegate(ComboBox box)
-            {
-                BaudRate = int.Parse(box.SelectedItem.ToString());
-            });
+            PortNameItemSelectedCommand = new DelegateCommand<string>(item => { _portName = item; });
+            BaudRateItemSelectedCommand = new DelegateCommand<string>(item => { _baudRate = item; });
+            DataBitItemSelectedCommand = new DelegateCommand<string>(item => { _dataBits = item; });
+            CheckModeItemSelectedCommand = new DelegateCommand<string>(item => { _parity = item; });
+            StopBitItemSelectedCommand = new DelegateCommand<string>(item => { _stopBit = item; });
 
-            DataBitItemSelectedCommand = new DelegateCommand<ComboBox>(delegate(ComboBox box)
-            {
-                DataBit = int.Parse(box.SelectedItem.ToString());
-            });
-
-            CheckModeItemSelectedCommand = new DelegateCommand<ComboBox>(delegate(ComboBox box)
-            {
-                Parity = (Parity)box.SelectedItem;
-            });
-
-            StopBitItemSelectedCommand = new DelegateCommand<ComboBox>(delegate(ComboBox box)
-            {
-                StopBit = int.Parse(box.SelectedItem.ToString());
-            });
-
-            OpenSerialPortCommand = new DelegateCommand(delegate
-            {
-                if (!_serialPortManager.GetPorts().Any())
-                {
-                    MessageBox.Show("没有可用的串口", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                _serialPortManager.PortName = _portName;
-                _serialPortManager.BaudRate = _baudRate;
-                _serialPortManager.DataBits = _dataBits;
-                _serialPortManager.Parity = _parity;
-                _serialPortManager.StopBits = (StopBits)_stopBit;
-
-                _serialPortManager.Open();
-                if (_serialPortManager.IsOpen)
-                {
-                    StateColorBrush = "LimeGreen";
-                    PortNameComboBoxIsEnabled = false;
-                    BaudRateComboBoxIsEnabled = false;
-                    DataBitComboBoxIsEnabled = false;
-                    ParityComboBoxIsEnabled = false;
-                    StopBitComboBoxIsEnabled = false;
-                }
-            });
-
-            CloseSerialPortCommand = new DelegateCommand(delegate
-            {
-                _serialPortManager.Close();
-                if (!_serialPortManager.IsOpen)
-                {
-                    StateColorBrush = "LightGray";
-                    PortNameComboBoxIsEnabled = true;
-                    BaudRateComboBoxIsEnabled = true;
-                    DataBitComboBoxIsEnabled = true;
-                    ParityComboBoxIsEnabled = true;
-                    StopBitComboBoxIsEnabled = true;
-                }
-            });
+            OpenSerialPortCommand = new DelegateCommand(OpenSerialPort);
 
             ClearMessageCommand = new DelegateCommand(delegate
             {
@@ -350,72 +157,95 @@ namespace CSharpDemo.ViewModels
                 LogCollection.Clear();
             });
 
-            SendMessageCommand = new DelegateCommand(delegate
+            SendMessageCommand = new DelegateCommand(SendMessage);
+
+            _portManager.DataReceivedEvent += delegate((int, string, List<Tag>) args)
             {
-                if (!_serialPortManager.IsOpen)
+                switch (args.Item1)
                 {
-                    MessageBox.Show("串口未打开", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
+                    case 0: // 设备状态、电量
+
+                        break;
+                    case 1: // 加速度计
+                        HandleCorrelatorData(args.Item2, args.Item3);
+                        break;
                 }
-
-                if (_userInputHex.Equals(""))
-                {
-                    MessageBox.Show("不能发送空消息", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                string[] bytes;
-                if (_userInputHex.Contains(" "))
-                {
-                    bytes = _userInputHex.Split(' ');
-                }
-                else if (_userInputHex.Contains("-"))
-                {
-                    bytes = _userInputHex.Split('-');
-                }
-                else
-                {
-                    //每两个字符作为一个Hex
-                    var dataValue = _userInputHex.ToList();
-                    var temp = new List<string>();
-                    for (var i = 0; i < dataValue.Count; i += 2)
-                    {
-                        var builder = new StringBuilder();
-                        var hex = builder.Append(dataValue[i]).Append(dataValue[i + 1]);
-                        temp.Add(hex.ToString());
-                    }
-
-                    bytes = temp.ToArray();
-                }
-
-                var cmd = new byte[bytes.Length];
-                for (var i = 0; i < bytes.Length; i++)
-                {
-                    cmd[i] = Convert.ToByte(bytes[i], 16);
-                }
-
-                _serialPortManager.Write(cmd);
-            });
-
-            _serialPortManager.DataReceivedEvent += args =>
-            {
-                Application.Current.Dispatcher.Invoke(delegate
-                {
-                    ResponseCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}收到串口数据，类型是：{args.Item1}");
-                    switch (args.Item1)
-                    {
-                        case 0: // 设备状态、电量
-
-                            break;
-                        case 1: // 加速度计
-                            HandleCorrelatorData(args.Item2, args.Item3);
-                            break;
-                        case 2: // 水听器
-
-                            break;
-                    }
-                });
             };
+        }
+
+        private void OpenSerialPort()
+        {
+            if (_portManager.IsOpen)
+            {
+                _portManager.Close();
+
+                StateColorBrush = "LightGray";
+                ButtonContent = "打开串口";
+                ComboBoxEnabled = true;
+            }
+            else
+            {
+                if (!_portManager.GetPorts().Any())
+                {
+                    MessageBox.Show("没有可用的串口", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (_portManager.SetConfiguration(_portName, _baudRate, _parity, _dataBits, _stopBit))
+                {
+                    _portManager.Open();
+                    StateColorBrush = "LimeGreen";
+                    ButtonContent = "关闭串口";
+                    ComboBoxEnabled = false;
+                }
+            }
+        }
+
+        private void SendMessage()
+        {
+            if (!_portManager.IsOpen)
+            {
+                MessageBox.Show("串口未打开", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (_userInputHex.Equals(""))
+            {
+                MessageBox.Show("不能发送空消息", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            string[] bytes;
+            if (_userInputHex.Contains(" "))
+            {
+                bytes = _userInputHex.Split(' ');
+            }
+            else if (_userInputHex.Contains("-"))
+            {
+                bytes = _userInputHex.Split('-');
+            }
+            else
+            {
+                //每两个字符作为一个Hex
+                var dataValue = _userInputHex.ToList();
+                var temp = new List<string>();
+                for (var i = 0; i < dataValue.Count; i += 2)
+                {
+                    var builder = new StringBuilder();
+                    var hex = builder.Append(dataValue[i]).Append(dataValue[i + 1]);
+                    temp.Add(hex.ToString());
+                }
+
+                bytes = temp.ToArray();
+            }
+
+            var cmd = new byte[bytes.Length];
+            for (var i = 0; i < bytes.Length; i++)
+            {
+                cmd[i] = Convert.ToByte(bytes[i], 16);
+            }
+
+            _portManager.Write(cmd);
         }
 
         private void HandleCorrelatorData(string devCode, List<Tag> tags)
