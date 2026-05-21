@@ -5,7 +5,6 @@ using System.Windows.Media;
 using CSharpDemo.Model;
 using CSharpDemo.Service;
 using CSharpDemo.Utils;
-using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
 namespace CSharpDemo.Views
@@ -29,8 +28,6 @@ namespace CSharpDemo.Views
             _allColors = dataService.GetHsvColors(); // 获取所有的渐变颜色 (HSV 颜色)
             _visualizer = new AudioVisualizer(SampleRate, false);
 
-            InitializeAudioCapture();
-
             CaptureButton.Click += (sender, e) =>
             {
                 if (_isCapturing)
@@ -48,18 +45,50 @@ namespace CSharpDemo.Views
             };
         }
 
-        private void InitializeAudioCapture()
+        private void StartCapture()
         {
             try
             {
-                _capture = new WasapiLoopbackCapture();
+                if (_visualizer != null)
+                {
+                    _visualizer.TimeDomainEvent += Handle_TimeDomainEvent;
+                    _visualizer.FrequencyDomainEvent += Handle_FrequencyDomainEvent;
+                    _visualizer.RenderCountEvent += Handle_RenderCountEvent;
+                }
 
+                _capture = new WasapiLoopbackCapture();
                 _capture.DataAvailable += OnDataAvailable;
                 _capture.RecordingStopped += OnRecordingStopped;
+                _capture.StartRecording();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"初始化音频捕获失败: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"开始捕获失败: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void StopCapture()
+        {
+            try
+            {
+                _capture.StopRecording();
+                if (_visualizer != null)
+                {
+                    _visualizer.TimeDomainEvent -= Handle_TimeDomainEvent;
+                    _visualizer.FrequencyDomainEvent -= Handle_FrequencyDomainEvent;
+                    _visualizer.RenderCountEvent -= Handle_RenderCountEvent;
+                }
+
+                if (_capture != null)
+                {
+                    _capture.DataAvailable -= OnDataAvailable;
+                    _capture.RecordingStopped -= OnRecordingStopped;
+                    _capture.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"停止捕获失败: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -77,56 +106,6 @@ namespace CSharpDemo.Views
             if (e.Exception != null)
             {
                 Console.WriteLine($@"音频捕获停止: {e.Exception.Message}");
-            }
-        }
-
-        private void StartCapture()
-        {
-            if (_capture != null && _capture.CaptureState != CaptureState.Capturing)
-            {
-                try
-                {
-                    if (_visualizer != null)
-                    {
-                        _visualizer.TimeDomainEvent += Handle_TimeDomainEvent;
-                        _visualizer.FrequencyDomainEvent += Handle_FrequencyDomainEvent;
-                        _visualizer.RenderCountEvent += Handle_RenderCountEvent;
-                    }
-
-                    _capture.StartRecording();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"开始捕获失败: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
-        private void StopCapture()
-        {
-            if (_capture != null && _capture.CaptureState == CaptureState.Capturing)
-            {
-                try
-                {
-                    _capture.StopRecording();
-                    if (_visualizer != null)
-                    {
-                        _visualizer.TimeDomainEvent -= Handle_TimeDomainEvent;
-                        _visualizer.FrequencyDomainEvent -= Handle_FrequencyDomainEvent;
-                        _visualizer.RenderCountEvent -= Handle_RenderCountEvent;
-                    }
-
-                    if (_capture != null)
-                    {
-                        _capture.DataAvailable -= OnDataAvailable;
-                        _capture.RecordingStopped -= OnRecordingStopped;
-                        _capture.Dispose();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"停止捕获失败: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
             }
         }
 
