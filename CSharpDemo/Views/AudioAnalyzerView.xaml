@@ -52,7 +52,7 @@
 
         <Grid Grid.Row="2" Background="Black">
             <ctrl:AudioWaveformRender
-                CurrentPosition="{Binding CurrentPosition, Mode=TwoWay}"
+                CurrentPosition="{Binding CurrentPosition}"
                 PositionChangedCommand="{Binding PositionChangedCommand}"
                 TotalDuration="{Binding TotalDuration}"
                 WaveformData="{Binding WaveformData}" />

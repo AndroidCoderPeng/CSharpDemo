@@ -29,8 +29,8 @@ namespace CSharpDemo.Controls
         private double[] _spectrumData;
 
         private const double LeftMargin = 10;
-        private const double RightMargin = 15;
         private const double TopMargin = 5;
+        private const double RightMargin = 15;
         private const double BottomMargin = 25;
         private const int FftSize = 4096; // 数据样本3750个点，FFT size一般是大于样本数的最小2次幂，如果小于样本数，会导致样本FFT计算出现遗漏
 

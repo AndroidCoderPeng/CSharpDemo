@@ -25,6 +25,11 @@ namespace CSharpDemo.Controls
             typeof(AudioWaveformRender), new PropertyMetadata(TimeSpan.Zero, OnCurrentPositionChanged)
         );
 
+        public static readonly DependencyProperty WaveMarginProperty = DependencyProperty.Register(
+            nameof(WaveMargin), typeof(Thickness),
+            typeof(AudioWaveformRender), new PropertyMetadata(new Thickness(10, 0, 15, 15))
+        );
+
         public static readonly DependencyProperty PositionChangedCommandProperty = DependencyProperty.Register(
             nameof(PositionChangedCommand), typeof(ICommand),
             typeof(AudioWaveformRender), new PropertyMetadata(null)
@@ -36,9 +41,6 @@ namespace CSharpDemo.Controls
         private readonly Rectangle _positionIndicator;
         private readonly Line _zeroLine;
         private bool _isDragging;
-
-        private const double LeftMargin = 10;
-        private const double RightMargin = 15;
 
         public double[] WaveformData
         {
@@ -58,12 +60,17 @@ namespace CSharpDemo.Controls
             set => SetValue(CurrentPositionProperty, value);
         }
 
+        public Thickness WaveMargin
+        {
+            get => (Thickness)GetValue(WaveMarginProperty);
+            set => SetValue(WaveMarginProperty, value);
+        }
+
         public ICommand PositionChangedCommand
         {
             get => (ICommand)GetValue(PositionChangedCommandProperty);
             set => SetValue(PositionChangedCommandProperty, value);
         }
-
 
         public AudioWaveformRender()
         {
@@ -193,7 +200,8 @@ namespace CSharpDemo.Controls
             }
 
             // 计算有效绘图区域（减去边距）
-            var effectiveWidth = width - LeftMargin - RightMargin;
+            var effectiveWidth = width - WaveMargin.Left - WaveMargin.Right;
+            var effectiveHeight = height - WaveMargin.Top - WaveMargin.Bottom;
 
             // 绘制波形
             var points = new PointCollection();
@@ -212,20 +220,21 @@ namespace CSharpDemo.Controls
                 // (sample / _maxAmplitude) * (height / 2)：缩放到屏幕高度
                 // height / 2 - ...：转换为屏幕坐标
                 // * 0.9：留出顶部和底部边距
-                var y = height / 2 - (sample / _maxAmplitude) * (height / 2) * 0.9;
-                // var y = height / 2 - sample * (height / 2) * 0.9; // 直接使用采样值（未归一化）
+                var centerY = WaveMargin.Top + effectiveHeight / 2;
+                var y = centerY - (sample / _maxAmplitude) * (effectiveHeight / 2) * 0.9;
+                // var y = centerY - sample * (effectiveHeight / 2) * 0.9; // 直接使用采样值（未归一化）
 
                 // 添加左边距偏移
-                points.Add(new Point(x + LeftMargin, y));
+                points.Add(new Point(x + WaveMargin.Left, y));
             }
 
             _waveformLine.Points = points;
 
             // 绘制零线（也添加边距）
-            _zeroLine.X1 = LeftMargin;
-            _zeroLine.Y1 = height / 2;
-            _zeroLine.X2 = width - RightMargin;
-            _zeroLine.Y2 = height / 2;
+            _zeroLine.X1 = WaveMargin.Left;
+            _zeroLine.Y1 = WaveMargin.Top + effectiveHeight / 2;
+            _zeroLine.X2 = width - WaveMargin.Right;
+            _zeroLine.Y2 = WaveMargin.Top + effectiveHeight / 2;
         }
 
         private void RenderXAxis()
@@ -257,9 +266,7 @@ namespace CSharpDemo.Controls
             }
 
             var totalSeconds = TotalDuration.TotalSeconds;
-
-            // 计算有效绘图区域
-            var effectiveWidth = width - LeftMargin - RightMargin;
+            var effectiveWidth = width - WaveMargin.Left - WaveMargin.Right;
 
             if (totalSeconds <= 10)
             {
@@ -268,7 +275,7 @@ namespace CSharpDemo.Controls
                 for (var i = 0; i < tickCount; i++)
                 {
                     var timeValue = (double)i;
-                    var x = LeftMargin + (timeValue / totalSeconds) * effectiveWidth;
+                    var x = WaveMargin.Left + (timeValue / totalSeconds) * effectiveWidth;
                     AddXAxisLabel(timeValue, x);
                 }
             }
@@ -281,7 +288,7 @@ namespace CSharpDemo.Controls
                 for (var i = 0; i <= tickCount; i++)
                 {
                     var timeValue = i * timeStep;
-                    var x = LeftMargin + (i * effectiveWidth / tickCount);
+                    var x = WaveMargin.Left + (i * effectiveWidth / tickCount);
                     AddXAxisLabel(timeValue, x);
                 }
             }
@@ -313,13 +320,13 @@ namespace CSharpDemo.Controls
             }
 
             var width = ActualWidth;
-            var effectiveWidth = width - LeftMargin - RightMargin;
+            var effectiveWidth = width - WaveMargin.Left - WaveMargin.Right;
             var ratio = CurrentPosition.TotalSeconds / TotalDuration.TotalSeconds;
-            var x = LeftMargin + ratio * effectiveWidth;
+            var x = WaveMargin.Left + ratio * effectiveWidth;
 
             SetLeft(_positionIndicator, x - 1);
-            SetTop(_positionIndicator, 0);
-            _positionIndicator.Height = ActualHeight;
+            SetTop(_positionIndicator, WaveMargin.Top);
+            _positionIndicator.Height = ActualHeight - WaveMargin.Top - WaveMargin.Bottom;
         }
 
         private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -351,10 +358,10 @@ namespace CSharpDemo.Controls
         {
             var pos = e.GetPosition(this);
             var width = ActualWidth;
-            var effectiveWidth = width - LeftMargin - RightMargin;
+            var effectiveWidth = width - WaveMargin.Left - WaveMargin.Right;
 
             // 计算在有效区域内的相对位置
-            var relativeX = pos.X - LeftMargin;
+            var relativeX = pos.X - WaveMargin.Left;
             var ratio = relativeX / effectiveWidth;
             ratio = Math.Max(0, Math.Min(1, ratio));
 
@@ -367,33 +374,32 @@ namespace CSharpDemo.Controls
         {
             var width = ActualWidth;
             var height = ActualHeight;
-            var effectiveWidth = width - LeftMargin - RightMargin;
+            var effectiveWidth = width - WaveMargin.Left - WaveMargin.Right;
+            var effectiveHeight = height - WaveMargin.Top - WaveMargin.Bottom;
 
-            // 垂直网格线（在有效区域内）
             for (var i = 1; i < vCount; i++)
             {
-                var x = LeftMargin + i * effectiveWidth / vCount;
+                var x = WaveMargin.Left + i * effectiveWidth / vCount;
                 var line = new Line
                 {
                     X1 = x,
-                    Y1 = 0,
+                    Y1 = WaveMargin.Top,
                     X2 = x,
-                    Y2 = height,
+                    Y2 = height - WaveMargin.Bottom,
                     Stroke = new SolidColorBrush(Color.FromArgb(30, 255, 255, 255)),
                     StrokeThickness = 1
                 };
                 Children.Add(line);
             }
 
-            // 水平网格线
             for (var i = 1; i < hCount; i++)
             {
-                var y = i * height / hCount;
+                var y = WaveMargin.Top + i * effectiveHeight / hCount;
                 var line = new Line
                 {
-                    X1 = LeftMargin,
+                    X1 = WaveMargin.Left,
                     Y1 = y,
-                    X2 = width - RightMargin,
+                    X2 = width - WaveMargin.Right,
                     Y2 = y,
                     Stroke = new SolidColorBrush(Color.FromArgb(30, 255, 255, 255)),
                     StrokeThickness = 1
