@@ -306,6 +306,12 @@ namespace CSharpDemo.ViewModels
 
             OpenSerialPortCommand = new DelegateCommand(delegate
             {
+                if (!_serialPortManager.GetPorts().Any())
+                {
+                    MessageBox.Show("没有可用的串口", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
                 _serialPortManager.PortName = _portName;
                 _serialPortManager.BaudRate = _baudRate;
                 _serialPortManager.DataBits = _dataBits;

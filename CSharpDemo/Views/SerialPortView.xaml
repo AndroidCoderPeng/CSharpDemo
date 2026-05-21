@@ -14,14 +14,76 @@
     mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="1" />
             <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0" Orientation="Vertical">
+        <Grid Grid.Column="0" Margin="15,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="4*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
             <TextBlock
-                Margin="15"
+                Grid.Row="0"
+                Margin="0,10"
+                FontSize="18"
+                Foreground="{DynamicResource ForegroundBrush}"
+                Text="数据收发区" />
+
+            <ListView
+                Grid.Row="1"
+                Background="{DynamicResource ThirdBgBrush}"
+                BorderBrush="{DynamicResource BackgroundBrush}"
+                ItemsSource="{Binding ResponseCollection}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <hc:TextBox
+                Grid.Row="2"
+                Height="35"
+                Margin="0,15"
+                VerticalContentAlignment="Center"
+                hc:InfoElement.Placeholder="请要发送的数据"
+                hc:InfoElement.ShowClearButton="True"
+                Background="{DynamicResource ThirdBgBrush}"
+                FontSize="16"
+                Foreground="{DynamicResource ForegroundBrush}"
+                Text="{Binding UserInputHex}" />
+
+            <ListView
+                Grid.Row="3"
+                Grid.Column="0"
+                Margin="0,0,0,15"
+                Background="{DynamicResource ThirdBgBrush}"
+                BorderBrush="{DynamicResource BackgroundBrush}"
+                ItemsSource="{Binding LogCollection}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+
+        <StackPanel
+            Grid.Column="1"
+            Margin="0,0,15,0"
+            Orientation="Vertical">
+            <TextBlock
+                Margin="0,10"
                 FontSize="18"
                 Foreground="{DynamicResource ForegroundBrush}"
                 Text="参数设置" />
@@ -29,7 +91,6 @@
             <DockPanel LastChildFill="True">
                 <TextBlock
                     Width="80"
-                    Margin="15,0"
                     VerticalAlignment="Center"
                     FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
@@ -37,7 +98,6 @@
 
                 <hc:ComboBox
                     Height="30"
-                    Margin="0,0,15,0"
                     Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
                     IsEnabled="{Binding PortNameComboBoxIsEnabled}"
@@ -55,7 +115,7 @@
             <DockPanel LastChildFill="True">
                 <TextBlock
                     Width="80"
-                    Margin="15"
+                    Margin="0,15"
                     VerticalAlignment="Center"
                     FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
@@ -63,7 +123,6 @@
 
                 <hc:ComboBox
                     Height="30"
-                    Margin="0,0,15,0"
                     Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
                     IsEnabled="{Binding BaudRateComboBoxIsEnabled}"
@@ -81,7 +140,6 @@
             <DockPanel LastChildFill="True">
                 <TextBlock
                     Width="80"
-                    Margin="15,0"
                     VerticalAlignment="Center"
                     FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
@@ -89,7 +147,6 @@
 
                 <hc:ComboBox
                     Height="30"
-                    Margin="0,0,15,0"
                     Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
                     IsEnabled="{Binding DataBitComboBoxIsEnabled}"
@@ -107,7 +164,7 @@
             <DockPanel LastChildFill="True">
                 <TextBlock
                     Width="80"
-                    Margin="15"
+                    Margin="0,15"
                     VerticalAlignment="Center"
                     FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
@@ -115,7 +172,6 @@
 
                 <hc:ComboBox
                     Height="30"
-                    Margin="0,0,15,0"
                     Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
                     IsEnabled="{Binding ParityComboBoxIsEnabled}"
@@ -133,7 +189,6 @@
             <DockPanel LastChildFill="True">
                 <TextBlock
                     Width="80"
-                    Margin="15,0"
                     VerticalAlignment="Center"
                     FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
@@ -141,7 +196,6 @@
 
                 <hc:ComboBox
                     Height="30"
-                    Margin="0,0,15,0"
                     Background="{DynamicResource ThirdBgBrush}"
                     Foreground="{DynamicResource ForegroundBrush}"
                     IsEnabled="{Binding StopBitComboBoxIsEnabled}"
@@ -159,7 +213,7 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock
                     Width="80"
-                    Margin="15"
+                    Margin="0,15"
                     VerticalAlignment="Center"
                     FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
@@ -168,7 +222,6 @@
                 <Ellipse
                     Width="20"
                     Height="20"
-                    Margin="0,0,15,0"
                     Fill="{Binding StateColorBrush}" />
             </StackPanel>
 
@@ -208,74 +261,5 @@
                 FontSize="16"
                 Style="{StaticResource ButtonWarning}" />
         </StackPanel>
-
-        <Grid Grid.Column="1" Background="{DynamicResource SubBackgroundBrush}" />
-
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="4*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <TextBlock
-                Grid.Row="0"
-                Margin="0,15"
-                FontSize="18"
-                Foreground="{DynamicResource ForegroundBrush}"
-                Text="数据收发区" />
-
-            <ListView
-                Grid.Row="1"
-                Margin="0,0,15,0"
-                Background="{DynamicResource ThirdBgBrush}"
-                BorderBrush="{DynamicResource BackgroundBrush}"
-                ItemsSource="{Binding ResponseCollection}"
-                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock
-                                FontSize="18"
-                                Text="{Binding}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-
-            <hc:TextBox
-                Grid.Row="2"
-                Height="35"
-                Margin="0,15,15,15"
-                VerticalContentAlignment="Center"
-                hc:InfoElement.Placeholder="请要发送的数据"
-                hc:InfoElement.ShowClearButton="True"
-                Background="{DynamicResource ThirdBgBrush}"
-                FontSize="16"
-                Foreground="{DynamicResource ForegroundBrush}"
-                Text="{Binding UserInputHex}" />
-
-            <ListView
-                Grid.Row="3"
-                Grid.Column="0"
-                Margin="0,0,15,15"
-                Background="{DynamicResource ThirdBgBrush}"
-                BorderBrush="{DynamicResource BackgroundBrush}"
-                ItemsSource="{Binding LogCollection}"
-                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock
-                                FontSize="18"
-                                Text="{Binding}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </Grid>
     </Grid>
 </UserControl>
