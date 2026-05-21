@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using CorrelatorSingle;
 using CSharpDemo.Model;
 using CSharpDemo.Utils;
 using HandyControl.Controls;
-using MathWorks.MATLAB.NET.Arrays;
 using Prism.Commands;
 using Prism.Mvvm;
 using MessageBox = System.Windows.MessageBox;
@@ -264,15 +261,12 @@ namespace CSharpDemo.ViewModels
         public DelegateCommand CloseSerialPortCommand { get; }
         public DelegateCommand ClearMessageCommand { get; }
         public DelegateCommand SendMessageCommand { get; }
-        public DelegateCommand CalculateCommand { get; }
 
         #endregion
 
         #region 变量
 
         private readonly SerialPortManager _serialPortManager = new SerialPortManager();
-        private static readonly Lazy<Correlator> LazyCorrelator = new Lazy<Correlator>(() => new Correlator());
-        private readonly BackgroundWorker _backgroundWorker;
         private readonly CorrelatorData _dataModel = new CorrelatorData();
 
         #endregion
@@ -284,12 +278,6 @@ namespace CSharpDemo.ViewModels
             DataBitList = new List<int> { 5, 6, 7, 8 };
             ParityList = new List<Parity> { Parity.None, Parity.Odd, Parity.Even, Parity.Mark, Parity.Space };
             StopBitList = new List<int> { 1, 2 };
-
-            _backgroundWorker = new BackgroundWorker();
-            _backgroundWorker.WorkerReportsProgress = true;
-            _backgroundWorker.WorkerSupportsCancellation = true;
-            _backgroundWorker.DoWork += Worker_OnDoWork;
-            _backgroundWorker.RunWorkerCompleted += Worker_OnRunWorkerCompleted;
 
             PortItemSelectedCommand = new DelegateCommand<ComboBox>(delegate(ComboBox box)
             {
@@ -403,12 +391,6 @@ namespace CSharpDemo.ViewModels
                 _serialPortManager.Write(cmd);
             });
 
-            CalculateCommand = new DelegateCommand(delegate
-            {
-                LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}开始计算");
-                _backgroundWorker.RunWorkerAsync();
-            });
-
             _serialPortManager.DataReceivedEvent += args =>
             {
                 Application.Current.Dispatcher.Invoke(delegate
@@ -464,31 +446,6 @@ namespace CSharpDemo.ViewModels
                     LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}Dev2数据处理完成");
                 }
             }
-        }
-
-        private void Worker_OnDoWork(object sender, DoWorkEventArgs e)
-        {
-            var startTime = DateTime.Now;
-            var array = LazyCorrelator.Value.locating(11,
-                (MWNumericArray)_dataModel.RedDeviceData, (MWNumericArray)_dataModel.BlueDeviceData,
-                7500,
-                150, 1130,
-                0, 0,
-                0, 0,
-                "",
-                300, 300,
-                1, -1,
-                -1, -1,
-                100, 3000);
-            var endTime = DateTime.Now;
-            var diffTime = Math.Abs((endTime - startTime).TotalMilliseconds) / 1000;
-            Console.WriteLine($@"计算耗时 => {diffTime:F2}秒");
-            e.Result = array;
-        }
-
-        private void Worker_OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}结束计算");
         }
     }
 }

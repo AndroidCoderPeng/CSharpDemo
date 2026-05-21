@@ -31,7 +31,7 @@
                     Width="80"
                     Margin="15,0"
                     VerticalAlignment="Center"
-                    FontSize="18"
+                    FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
                     Text="端口：" />
 
@@ -57,7 +57,7 @@
                     Width="80"
                     Margin="15"
                     VerticalAlignment="Center"
-                    FontSize="18"
+                    FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
                     Text="波特率：" />
 
@@ -83,7 +83,7 @@
                     Width="80"
                     Margin="15,0"
                     VerticalAlignment="Center"
-                    FontSize="18"
+                    FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
                     Text="数据位：" />
 
@@ -109,7 +109,7 @@
                     Width="80"
                     Margin="15"
                     VerticalAlignment="Center"
-                    FontSize="18"
+                    FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
                     Text="校验位：" />
 
@@ -135,7 +135,7 @@
                     Width="80"
                     Margin="15,0"
                     VerticalAlignment="Center"
-                    FontSize="18"
+                    FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
                     Text="停止位：" />
 
@@ -161,7 +161,7 @@
                     Width="80"
                     Margin="15"
                     VerticalAlignment="Center"
-                    FontSize="18"
+                    FontSize="16"
                     Foreground="{DynamicResource ForegroundBrush}"
                     Text="串口状态：" />
 
@@ -202,20 +202,10 @@
                 Width="185"
                 Height="35"
                 Margin="0,15"
-                Command="{Binding CalculateCommand}"
-                Content="计算结果"
-                FontSize="16"
-                Style="{StaticResource ButtonInfo}" />
-
-            <Button
-                Width="185"
-                Height="35"
                 HorizontalAlignment="Center"
-                Background="{DynamicResource ThirdBgBrush}"
                 Command="{Binding ClearMessageCommand}"
-                Content="清空数据"
+                Content="清空记录"
                 FontSize="16"
-                Foreground="{DynamicResource ForegroundBrush}"
                 Style="{StaticResource ButtonWarning}" />
         </StackPanel>
 
@@ -224,9 +214,9 @@
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition />
+                <RowDefinition Height="4*" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <TextBlock
@@ -234,7 +224,7 @@
                 Margin="0,15"
                 FontSize="18"
                 Foreground="{DynamicResource ForegroundBrush}"
-                Text="数据接收区" />
+                Text="数据收发区" />
 
             <ListView
                 Grid.Row="1"
@@ -270,7 +260,6 @@
             <ListView
                 Grid.Row="3"
                 Grid.Column="0"
-                Height="300"
                 Margin="0,0,15,15"
                 Background="{DynamicResource ThirdBgBrush}"
                 BorderBrush="{DynamicResource BackgroundBrush}"
