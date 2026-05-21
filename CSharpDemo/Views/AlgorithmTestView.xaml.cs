@@ -19,6 +19,7 @@ namespace CSharpDemo.Views
     public partial class AlgorithmTestView : UserControl
     {
         private Crosshair _crosshair;
+        private static readonly Color RenderColor = new Color(49, 151, 36);
 
         public AlgorithmTestView(IEventAggregator eventAggregator)
         {
@@ -157,7 +158,7 @@ namespace CSharpDemo.Views
             var yDoubles = ((MWNumericArray)array[4]).GetArray();
 
             var scatter = ScottPlotView.Plot.Add.Scatter(xDoubles, yDoubles);
-            scatter.Color = new Color(49, 151, 36);
+            scatter.Color = RenderColor;
             scatter.LineWidth = 1;
             scatter.MarkerStyle.IsVisible = false;
 
@@ -169,11 +170,11 @@ namespace CSharpDemo.Views
             baseline.LineStyle.IsVisible = false;
 
             var fillY = ScottPlotView.Plot.Add.FillY(scatter, baseline);
-            fillY.FillColor = new Color(49, 151, 36);
+            fillY.FillColor = RenderColor;
             fillY.LineStyle.IsVisible = false;
 
             // 数据会自动自动缩放至最合适的视角
-            ScottPlotView.Plot.Axes.Margins(0.05f, 0.05f);
+            ScottPlotView.Plot.Axes.Margins(0.02f, 0.02f);
             ScottPlotView.Refresh();
         }
 
@@ -189,19 +190,19 @@ namespace CSharpDemo.Views
             // 传感器1
             FirstTdView.Plot.Clear();
             var firstPlot = FirstTdView.Plot.Add.SignalXY(firstSensor.Item1, firstSensor.Item2);
-            firstPlot.LineColor = new Color(49, 151, 36);
+            firstPlot.LineColor = RenderColor;
             FirstTdView.Plot.XLabel("Time (s)");
             FirstTdView.Plot.YLabel("Amplitude");
-            FirstTdView.Plot.Axes.Margins(0.05f, 0.05f);
+            FirstTdView.Plot.Axes.Margins(0.02f, 0.1f);
             FirstTdView.Refresh();
 
             // 传感器2
             SecondTdView.Plot.Clear();
             var secondPlot = SecondTdView.Plot.Add.SignalXY(secondSensor.Item1, secondSensor.Item2);
-            secondPlot.LineColor = new Color(49, 151, 36);
+            secondPlot.LineColor = RenderColor;
             SecondTdView.Plot.XLabel("Time (s)");
             SecondTdView.Plot.YLabel("Amplitude");
-            SecondTdView.Plot.Axes.Margins(0.05f, 0.05f);
+            SecondTdView.Plot.Axes.Margins(0.02f, 0.1f);
             SecondTdView.Refresh();
         }
 
@@ -223,8 +224,8 @@ namespace CSharpDemo.Views
                 {
                     Position = firstSensor.Item1[i],
                     Value = firstSensor.Item2[i],
-                    FillColor = new Color(49, 151, 36, 180),
-                    LineColor = new Color(49, 151, 36),
+                    FillColor = RenderColor,
+                    LineColor = RenderColor,
                     LineWidth = 1
                 });
             }
@@ -232,7 +233,7 @@ namespace CSharpDemo.Views
             FirstFdView.Plot.Add.Bars(firstBars);
             FirstFdView.Plot.XLabel("Frequency (Hz)");
             FirstFdView.Plot.YLabel("Magnitude");
-            FirstFdView.Plot.Axes.Margins(0.05f, 0.05f);
+            FirstFdView.Plot.Axes.Margins(0.02f, 0.1f);
             FirstFdView.Refresh();
 
             // 传感器2
@@ -244,8 +245,8 @@ namespace CSharpDemo.Views
                 {
                     Position = secondSensor.Item1[i],
                     Value = secondSensor.Item2[i],
-                    FillColor = new Color(49, 151, 36, 180),
-                    LineColor = new Color(49, 151, 36),
+                    FillColor = RenderColor,
+                    LineColor = RenderColor,
                     LineWidth = 1
                 });
             }
@@ -253,7 +254,7 @@ namespace CSharpDemo.Views
             SecondFdView.Plot.Add.Bars(secondBars);
             SecondFdView.Plot.XLabel("Frequency (Hz)");
             SecondFdView.Plot.YLabel("Magnitude");
-            SecondFdView.Plot.Axes.Margins(0.05f, 0.05f);
+            SecondFdView.Plot.Axes.Margins(0.02f, 0.1f);
             SecondFdView.Refresh();
         }
 
@@ -293,7 +294,7 @@ namespace CSharpDemo.Views
             );
             FirstMelView.Plot.XLabel("Time (s)");
             FirstMelView.Plot.YLabel("Mel Frequency (Hz)");
-            FirstMelView.Plot.Axes.Margins(0.05f, 0.05f);
+            FirstMelView.Plot.Axes.Margins(0.01f, 0.01f);
             FirstMelView.Refresh();
 
             SecondMelView.Plot.Clear();
@@ -319,7 +320,7 @@ namespace CSharpDemo.Views
             );
             SecondMelView.Plot.XLabel("Time (s)");
             SecondMelView.Plot.YLabel("Mel Frequency (Hz)");
-            SecondMelView.Plot.Axes.Margins(0.05f, 0.05f);
+            SecondMelView.Plot.Axes.Margins(0.01f, 0.01f);
             SecondMelView.Refresh();
         }
     }
