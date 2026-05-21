@@ -63,16 +63,12 @@ namespace CSharpDemo.Utils
             }
         }
 
-        public void DiscardBuffer()
-        {
-            _serialPort.DiscardInBuffer();
-            _serialPort.DiscardOutBuffer();
-        }
-
         public void Write(byte[] buffer)
         {
-            if (!_serialPort.IsOpen) _serialPort.Open();
-            _serialPort.Write(buffer, 0, buffer.Length);
+            if (IsOpen)
+            {
+                _serialPort.Write(buffer, 0, buffer.Length);
+            }
         }
 
         /// <summary>
@@ -115,14 +111,14 @@ namespace CSharpDemo.Utils
             if (header[0] != FrameConst.Sync1 || header[1] != FrameConst.Sync2)
             {
                 Console.WriteLine(@"串口数据头部校验失败");
-                _serialPort.DiscardInBuffer();
+                DiscardBuffer();
                 return false;
             }
 
             var length = (header[2] << 8) | header[3];
             if (length < FrameConst.MinFrameLength)
             {
-                _serialPort.DiscardInBuffer();
+                DiscardBuffer();
                 return false;
             }
 
@@ -138,6 +134,12 @@ namespace CSharpDemo.Utils
             return true;
         }
 
+        private void DiscardBuffer()
+        {
+            _serialPort.DiscardInBuffer();
+            _serialPort.DiscardOutBuffer();
+        }
+        
         private bool WaitForBytes(int count)
         {
             var timeout = DateTime.Now.AddMilliseconds(200);
