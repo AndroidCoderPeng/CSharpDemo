@@ -2,7 +2,7 @@
 
 namespace CSharpDemo.Utils
 {
-    public static class CrcCodeHub
+    public static class CrcCode
     {
         #region CRC-16校验的高位字节表
 
@@ -74,7 +74,7 @@ namespace CSharpDemo.Utils
             return crc16;
         }
 
-        public static bool CheckCrc16Code(byte[] bytes)
+        public static bool CheckCrc16(byte[] bytes)
         {
             if (bytes == null || bytes.Length < 2)
                 return false;

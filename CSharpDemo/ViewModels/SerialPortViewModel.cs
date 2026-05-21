@@ -4,12 +4,10 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
-using CSharpDemo.Model;
 using CSharpDemo.Utils;
 using Prism.Commands;
 using Prism.Mvvm;
 using MessageBox = System.Windows.MessageBox;
-using Tag = CSharpDemo.Tags.Tag;
 
 namespace CSharpDemo.ViewModels
 {
@@ -120,7 +118,6 @@ namespace CSharpDemo.ViewModels
         private string _dataBits = "8";
         private string _parity = "None";
         private string _stopBit = "1";
-        private readonly CorrelatorData _dataModel = new CorrelatorData();
 
         #endregion
 
@@ -145,17 +142,9 @@ namespace CSharpDemo.ViewModels
             ClearMessageCommand = new DelegateCommand(delegate { ResponseCollection.Clear(); });
             SendMessageCommand = new DelegateCommand(SendMessage);
 
-            _portManager.DataReceivedEvent += delegate((int, string, List<Tag>) args)
+            _portManager.DataReceivedEvent += delegate(byte[] bytes)
             {
-                switch (args.Item1)
-                {
-                    case 0: // 设备状态、电量
-
-                        break;
-                    case 1: // 加速度计
-                        HandleCorrelatorData(args.Item2, args.Item3);
-                        break;
-                }
+                
             };
         }
 
@@ -236,39 +225,6 @@ namespace CSharpDemo.ViewModels
             }
 
             _portManager.Write(cmd);
-        }
-
-        private void HandleCorrelatorData(string devCode, List<Tag> tags)
-        {
-            //处理接到的噪声数据
-            var noiseTag = tags.GetUploadNoiseTag();
-            if (noiseTag != null)
-            {
-                var num = noiseTag.Len / 3;
-                var realData = new double[num];
-                for (var i = 0; i < num; i++)
-                {
-                    var dStr = new byte[3];
-                    Array.Copy(noiseTag.DataValue, i * 3, dStr, 0, 3);
-
-                    realData[i] = dStr.HexToDouble();
-                }
-
-                if (devCode.Equals(RuntimeCache.Dev1))
-                {
-                    //接收到数据之后时间重新赋值
-                    _dataModel.RedDevCode = RuntimeCache.Dev1;
-                    _dataModel.ReceiveRedSensorDataTime = DateTime.Now;
-                    _dataModel.RedDeviceData = realData;
-                }
-                else
-                {
-                    //接收到数据之后时间重新赋值
-                    _dataModel.BlueDevCode = RuntimeCache.Dev2;
-                    _dataModel.ReceiveBlueSensorDataTime = DateTime.Now;
-                    _dataModel.BlueDeviceData = realData;
-                }
-            }
         }
     }
 }

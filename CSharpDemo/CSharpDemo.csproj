@@ -207,7 +207,7 @@
     <Compile Include="Model\CorrelatorData.cs" />
     <Compile Include="Model\ParamConfig.cs" />
     <Compile Include="Service\AppDataServiceImpl.cs" />
-    <Compile Include="Utils\CrcCodeHub.cs" />
+    <Compile Include="Utils\CrcCode.cs" />
     <Compile Include="Utils\RuntimeCache.cs" />
       <Compile Include="Utils\SensorData.cs" />
     <Compile Include="ViewModels\AlgorithmTestViewModel.cs" />
@@ -222,16 +222,8 @@
       <DependentUpon>SerialPortView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\IAppDataService.cs" />
-    <Compile Include="Tags\CellTag.cs" />
-    <Compile Include="Tags\NormalTag.cs" />
-    <Compile Include="Tags\SensorExceptionTag.cs" />
-    <Compile Include="Tags\Tag.cs" />
-    <Compile Include="Tags\TagOid.cs" />
-    <Compile Include="Tags\TimeTag.cs" />
-    <Compile Include="Tags\UploadTag.cs" />
     <Compile Include="Utils\MethodExtensions.cs" />
     <Compile Include="Utils\SerialPortManager.cs" />
-    <Compile Include="Utils\TagFactory.cs" />
     <Compile Include="ViewModels\SerialPortViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="App.xaml.cs">
