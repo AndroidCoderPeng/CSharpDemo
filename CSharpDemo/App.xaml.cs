@@ -19,7 +19,7 @@ namespace CSharpDemo
             mainWindow.Loaded += delegate
             {
                 var regionManager = Container.Resolve<IRegionManager>();
-                regionManager.RequestNavigate("ContentRegion", "AudioCaptureView");
+                regionManager.RequestNavigate("ContentRegion", "AlgorithmTestView");
             };
             return mainWindow;
         }

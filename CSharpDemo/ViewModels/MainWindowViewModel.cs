@@ -42,13 +42,13 @@ namespace CSharpDemo.ViewModels
             switch (index)
             {
                 case 0:
-                    region.RequestNavigate("AudioCaptureView");
+                    region.RequestNavigate("AlgorithmTestView");
                     break;
                 case 1:
-                    region.RequestNavigate("AudioAnalyzerView");
+                    region.RequestNavigate("AudioCaptureView");
                     break;
                 case 2:
-                    region.RequestNavigate("AlgorithmTestView");
+                    region.RequestNavigate("AudioAnalyzerView");
                     break;
                 case 3:
                     region.RequestNavigate("SerialPortView");
