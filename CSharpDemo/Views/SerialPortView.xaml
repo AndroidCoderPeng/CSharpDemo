@@ -112,7 +112,8 @@
                         Background="{DynamicResource ThirdBgBrush}"
                         Foreground="{DynamicResource ForegroundBrush}"
                         IsEnabled="{Binding ComboBoxEnabled}"
-                        ItemsSource="{Binding BaudRateList}">
+                        ItemsSource="{Binding BaudRateList}"
+                        SelectedIndex="8">
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="SelectionChanged">
                                 <b:InvokeCommandAction Command="{Binding BaudRateItemSelectedCommand}" CommandParameter="{Binding ElementName=BaudRateComboBox, Path=SelectedItem}" />
@@ -135,7 +136,8 @@
                         Background="{DynamicResource ThirdBgBrush}"
                         Foreground="{DynamicResource ForegroundBrush}"
                         IsEnabled="{Binding ComboBoxEnabled}"
-                        ItemsSource="{Binding DataBitList}">
+                        ItemsSource="{Binding DataBitList}"
+                        SelectedIndex="3">
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="SelectionChanged">
                                 <b:InvokeCommandAction Command="{Binding DataBitItemSelectedCommand}" CommandParameter="{Binding ElementName=DataBitComboBox, Path=SelectedItem}" />
@@ -159,7 +161,8 @@
                         Background="{DynamicResource ThirdBgBrush}"
                         Foreground="{DynamicResource ForegroundBrush}"
                         IsEnabled="{Binding ComboBoxEnabled}"
-                        ItemsSource="{Binding ParityList}">
+                        ItemsSource="{Binding ParityList}"
+                        SelectedIndex="0">
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="SelectionChanged">
                                 <b:InvokeCommandAction Command="{Binding CheckModeItemSelectedCommand}" CommandParameter="{Binding ElementName=ParityComboBox, Path=SelectedItem}" />
@@ -182,7 +185,8 @@
                         Background="{DynamicResource ThirdBgBrush}"
                         Foreground="{DynamicResource ForegroundBrush}"
                         IsEnabled="{Binding ComboBoxEnabled}"
-                        ItemsSource="{Binding StopBitList}">
+                        ItemsSource="{Binding StopBitList}"
+                        SelectedIndex="0">
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="SelectionChanged">
                                 <b:InvokeCommandAction Command="{Binding StopBitItemSelectedCommand}" CommandParameter="{Binding ElementName=StopBitComboBox, Path=SelectedItem}" />
