@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -209,8 +210,20 @@ namespace CSharpDemo.Views
 
             // 传感器1
             FirstFdView.Plot.Clear();
-            var firstPlot = FirstFdView.Plot.Add.SignalXY(firstSensor.Item1, firstSensor.Item2);
-            firstPlot.LineColor = new Color(49, 151, 36);
+            var firstBars = new List<Bar>();
+            for (var i = 0; i < firstSensor.Item1.Length; i++)
+            {
+                firstBars.Add(new Bar
+                {
+                    Position = firstSensor.Item1[i],
+                    Value = firstSensor.Item2[i],
+                    FillColor = new Color(49, 151, 36, 180),
+                    LineColor = new Color(49, 151, 36),
+                    LineWidth = 1
+                });
+            }
+
+            FirstFdView.Plot.Add.Bars(firstBars);
             FirstFdView.Plot.XLabel("Frequency (Hz)");
             FirstFdView.Plot.YLabel("Magnitude");
             FirstFdView.Plot.Axes.Margins(0.05f, 0.05f);
@@ -218,8 +231,20 @@ namespace CSharpDemo.Views
 
             // 传感器2
             SecondFdView.Plot.Clear();
-            var secondPlot = SecondFdView.Plot.Add.SignalXY(secondSensor.Item1, secondSensor.Item2);
-            secondPlot.LineColor = new Color(49, 151, 36);
+            var secondBars = new List<Bar>();
+            for (var i = 0; i < secondSensor.Item1.Length; i++)
+            {
+                secondBars.Add(new Bar
+                {
+                    Position = secondSensor.Item1[i],
+                    Value = secondSensor.Item2[i],
+                    FillColor = new Color(49, 151, 36, 180),
+                    LineColor = new Color(49, 151, 36),
+                    LineWidth = 1
+                });
+            }
+
+            SecondFdView.Plot.Add.Bars(secondBars);
             SecondFdView.Plot.XLabel("Frequency (Hz)");
             SecondFdView.Plot.YLabel("Magnitude");
             SecondFdView.Plot.Axes.Margins(0.05f, 0.05f);
