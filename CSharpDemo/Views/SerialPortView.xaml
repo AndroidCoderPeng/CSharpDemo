@@ -21,9 +21,8 @@
         <Grid Grid.Column="0" Margin="15,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="4*" />
+                <RowDefinition />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <TextBlock
@@ -59,197 +58,185 @@
                 FontSize="16"
                 Foreground="{DynamicResource ForegroundBrush}"
                 Text="{Binding UserInputHex}" />
-
-            <ListView
-                Grid.Row="3"
-                Grid.Column="0"
-                Margin="0,0,0,15"
-                Background="{DynamicResource ThirdBgBrush}"
-                BorderBrush="{DynamicResource BackgroundBrush}"
-                ItemsSource="{Binding LogCollection}"
-                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding}" TextWrapping="Wrap" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
         </Grid>
 
-        <StackPanel
-            Grid.Column="1"
-            Margin="0,0,15,0"
-            Orientation="Vertical">
-            <TextBlock
-                Margin="0,10"
-                FontSize="18"
-                Foreground="{DynamicResource ForegroundBrush}"
-                Text="参数设置" />
+        <Grid Grid.Column="1" Margin="0,0,15,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <DockPanel LastChildFill="True">
+            <StackPanel Grid.Row="0" Orientation="Vertical">
                 <TextBlock
-                    Width="80"
-                    VerticalAlignment="Center"
-                    FontSize="16"
+                    Margin="0,10"
+                    FontSize="18"
                     Foreground="{DynamicResource ForegroundBrush}"
-                    Text="端口：" />
+                    Text="参数设置" />
 
-                <hc:ComboBox
-                    x:Name="PortNameComboBox"
-                    Height="30"
-                    Background="{DynamicResource ThirdBgBrush}"
-                    Foreground="{DynamicResource ForegroundBrush}"
-                    IsEnabled="{Binding ComboBoxEnabled}"
-                    ItemsSource="{Binding PortArray}">
-                    <b:Interaction.Triggers>
-                        <b:EventTrigger EventName="SelectionChanged">
-                            <b:InvokeCommandAction Command="{Binding PortNameItemSelectedCommand}"
-                                                   CommandParameter="{Binding ElementName=PortNameComboBox, Path=SelectedItem}" />
-                        </b:EventTrigger>
-                    </b:Interaction.Triggers>
-                </hc:ComboBox>
-            </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock
+                        Width="80"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        Foreground="{DynamicResource ForegroundBrush}"
+                        Text="端口：" />
 
-            <DockPanel LastChildFill="True">
-                <TextBlock
-                    Width="80"
-                    Margin="0,15"
-                    VerticalAlignment="Center"
-                    FontSize="16"
-                    Foreground="{DynamicResource ForegroundBrush}"
-                    Text="波特率：" />
+                    <hc:ComboBox
+                        x:Name="PortNameComboBox"
+                        Height="30"
+                        Background="{DynamicResource ThirdBgBrush}"
+                        Foreground="{DynamicResource ForegroundBrush}"
+                        IsEnabled="{Binding ComboBoxEnabled}"
+                        ItemsSource="{Binding PortArray}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding PortNameItemSelectedCommand}" CommandParameter="{Binding ElementName=PortNameComboBox, Path=SelectedItem}" />
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </hc:ComboBox>
+                </DockPanel>
 
-                <hc:ComboBox
-                    x:Name="BaudRateComboBox"
-                    Height="30"
-                    Background="{DynamicResource ThirdBgBrush}"
-                    Foreground="{DynamicResource ForegroundBrush}"
-                    IsEnabled="{Binding ComboBoxEnabled}"
-                    ItemsSource="{Binding BaudRateList}">
-                    <b:Interaction.Triggers>
-                        <b:EventTrigger EventName="SelectionChanged">
-                            <b:InvokeCommandAction Command="{Binding BaudRateItemSelectedCommand}"
-                                                   CommandParameter="{Binding ElementName=BaudRateComboBox, Path=SelectedItem}" />
-                        </b:EventTrigger>
-                    </b:Interaction.Triggers>
-                </hc:ComboBox>
-            </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock
+                        Width="80"
+                        Margin="0,15"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        Foreground="{DynamicResource ForegroundBrush}"
+                        Text="波特率：" />
 
-            <DockPanel LastChildFill="True">
-                <TextBlock
-                    Width="80"
-                    VerticalAlignment="Center"
-                    FontSize="16"
-                    Foreground="{DynamicResource ForegroundBrush}"
-                    Text="数据位：" />
+                    <hc:ComboBox
+                        x:Name="BaudRateComboBox"
+                        Height="30"
+                        Background="{DynamicResource ThirdBgBrush}"
+                        Foreground="{DynamicResource ForegroundBrush}"
+                        IsEnabled="{Binding ComboBoxEnabled}"
+                        ItemsSource="{Binding BaudRateList}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding BaudRateItemSelectedCommand}" CommandParameter="{Binding ElementName=BaudRateComboBox, Path=SelectedItem}" />
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </hc:ComboBox>
+                </DockPanel>
 
-                <hc:ComboBox
-                    x:Name="DataBitComboBox"
-                    Height="30"
-                    Background="{DynamicResource ThirdBgBrush}"
-                    Foreground="{DynamicResource ForegroundBrush}"
-                    IsEnabled="{Binding ComboBoxEnabled}"
-                    ItemsSource="{Binding DataBitList}">
-                    <b:Interaction.Triggers>
-                        <b:EventTrigger EventName="SelectionChanged">
-                            <b:InvokeCommandAction Command="{Binding DataBitItemSelectedCommand}"
-                                                   CommandParameter="{Binding ElementName=DataBitComboBox, Path=SelectedItem}" />
-                        </b:EventTrigger>
-                    </b:Interaction.Triggers>
-                </hc:ComboBox>
-            </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock
+                        Width="80"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        Foreground="{DynamicResource ForegroundBrush}"
+                        Text="数据位：" />
 
-            <DockPanel LastChildFill="True">
-                <TextBlock
-                    Width="80"
-                    Margin="0,15"
-                    VerticalAlignment="Center"
-                    FontSize="16"
-                    Foreground="{DynamicResource ForegroundBrush}"
-                    Text="校验位：" />
+                    <hc:ComboBox
+                        x:Name="DataBitComboBox"
+                        Height="30"
+                        Background="{DynamicResource ThirdBgBrush}"
+                        Foreground="{DynamicResource ForegroundBrush}"
+                        IsEnabled="{Binding ComboBoxEnabled}"
+                        ItemsSource="{Binding DataBitList}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding DataBitItemSelectedCommand}" CommandParameter="{Binding ElementName=DataBitComboBox, Path=SelectedItem}" />
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </hc:ComboBox>
+                </DockPanel>
 
-                <hc:ComboBox
-                    x:Name="ParityComboBox"
-                    Height="30"
-                    Background="{DynamicResource ThirdBgBrush}"
-                    Foreground="{DynamicResource ForegroundBrush}"
-                    IsEnabled="{Binding ComboBoxEnabled}"
-                    ItemsSource="{Binding ParityList}">
-                    <b:Interaction.Triggers>
-                        <b:EventTrigger EventName="SelectionChanged">
-                            <b:InvokeCommandAction Command="{Binding CheckModeItemSelectedCommand}"
-                                                   CommandParameter="{Binding ElementName=ParityComboBox, Path=SelectedItem}" />
-                        </b:EventTrigger>
-                    </b:Interaction.Triggers>
-                </hc:ComboBox>
-            </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock
+                        Width="80"
+                        Margin="0,15"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        Foreground="{DynamicResource ForegroundBrush}"
+                        Text="校验位：" />
 
-            <DockPanel LastChildFill="True">
-                <TextBlock
-                    Width="80"
-                    VerticalAlignment="Center"
-                    FontSize="16"
-                    Foreground="{DynamicResource ForegroundBrush}"
-                    Text="停止位：" />
+                    <hc:ComboBox
+                        x:Name="ParityComboBox"
+                        Height="30"
+                        Background="{DynamicResource ThirdBgBrush}"
+                        Foreground="{DynamicResource ForegroundBrush}"
+                        IsEnabled="{Binding ComboBoxEnabled}"
+                        ItemsSource="{Binding ParityList}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding CheckModeItemSelectedCommand}" CommandParameter="{Binding ElementName=ParityComboBox, Path=SelectedItem}" />
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </hc:ComboBox>
+                </DockPanel>
 
-                <hc:ComboBox
-                    x:Name="StopBitComboBox"
-                    Height="30"
-                    Background="{DynamicResource ThirdBgBrush}"
-                    Foreground="{DynamicResource ForegroundBrush}"
-                    IsEnabled="{Binding ComboBoxEnabled}"
-                    ItemsSource="{Binding StopBitList}">
-                    <b:Interaction.Triggers>
-                        <b:EventTrigger EventName="SelectionChanged">
-                            <b:InvokeCommandAction Command="{Binding StopBitItemSelectedCommand}"
-                                                   CommandParameter="{Binding ElementName=StopBitComboBox, Path=SelectedItem}" />
-                        </b:EventTrigger>
-                    </b:Interaction.Triggers>
-                </hc:ComboBox>
-            </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock
+                        Width="80"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        Foreground="{DynamicResource ForegroundBrush}"
+                        Text="停止位：" />
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Width="80"
-                    Margin="0,15"
-                    VerticalAlignment="Center"
-                    FontSize="16"
-                    Foreground="{DynamicResource ForegroundBrush}"
-                    Text="串口状态：" />
+                    <hc:ComboBox
+                        x:Name="StopBitComboBox"
+                        Height="30"
+                        Background="{DynamicResource ThirdBgBrush}"
+                        Foreground="{DynamicResource ForegroundBrush}"
+                        IsEnabled="{Binding ComboBoxEnabled}"
+                        ItemsSource="{Binding StopBitList}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding StopBitItemSelectedCommand}" CommandParameter="{Binding ElementName=StopBitComboBox, Path=SelectedItem}" />
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </hc:ComboBox>
+                </DockPanel>
 
-                <Ellipse
-                    Width="20"
-                    Height="20"
-                    Fill="{Binding StateColorBrush}" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Width="80"
+                        Margin="0,15"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        Foreground="{DynamicResource ForegroundBrush}"
+                        Text="串口状态：" />
+
+                    <Ellipse
+                        Width="20"
+                        Height="20"
+                        Fill="{Binding StateColorBrush}" />
+                </StackPanel>
             </StackPanel>
 
-            <Button
-                Width="185"
-                Height="35"
-                Command="{Binding OpenSerialPortCommand}"
-                Content="{Binding ButtonContent}"
-                FontSize="16"
-                Style="{StaticResource ButtonPrimary}" />
+            <StackPanel
+                Grid.Row="2"
+                Margin="0,0,0,15"
+                Orientation="Vertical">
+                <Button
+                    Width="185"
+                    Height="35"
+                    Command="{Binding OpenSerialPortCommand}"
+                    Content="{Binding ButtonContent}"
+                    FontSize="16"
+                    Style="{StaticResource ButtonPrimary}" />
 
-            <Button
-                Width="185"
-                Height="35"
-                Margin="0,15"
-                Command="{Binding SendMessageCommand}"
-                Content="发送数据"
-                FontSize="16"
-                Style="{StaticResource ButtonSuccess}" />
+                <Button
+                    Width="185"
+                    Height="35"
+                    Margin="0,15"
+                    HorizontalAlignment="Center"
+                    Command="{Binding ClearMessageCommand}"
+                    Content="清空记录"
+                    FontSize="16"
+                    Style="{StaticResource ButtonWarning}" />
 
-            <Button
-                Width="185"
-                Height="35"
-                HorizontalAlignment="Center"
-                Command="{Binding ClearMessageCommand}"
-                Content="清空记录"
-                FontSize="16"
-                Style="{StaticResource ButtonWarning}" />
-        </StackPanel>
+                <Button
+                    Width="185"
+                    Height="35"
+                    Command="{Binding SendMessageCommand}"
+                    Content="发送数据"
+                    FontSize="16"
+                    Style="{StaticResource ButtonSuccess}" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

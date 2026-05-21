@@ -39,7 +39,7 @@
 
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="SelectionChanged">
-                        <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding ElementName=MenuListBox,Path=SelectedIndex}" />
+                        <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding ElementName=MenuListBox, Path=SelectedIndex}" />
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
 

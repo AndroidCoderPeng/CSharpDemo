@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using CSharpDemo.Model;
 using CSharpDemo.Utils;
@@ -23,14 +23,6 @@ namespace CSharpDemo.ViewModels
         {
             get => _responseCollection;
             set => SetProperty(ref _responseCollection, value);
-        }
-
-        private ObservableCollection<string> _logCollection = new ObservableCollection<string>();
-
-        public ObservableCollection<string> LogCollection
-        {
-            get => _logCollection;
-            set => SetProperty(ref _logCollection, value);
         }
 
         private string _userInputHex = "A3-20-00-13-00-00-00-00-00-00-01-FF-FF-0A-82-01-30-00-00-01-00-01-00-7D-87";
@@ -150,13 +142,7 @@ namespace CSharpDemo.ViewModels
             StopBitItemSelectedCommand = new DelegateCommand<string>(item => { _stopBit = item; });
 
             OpenSerialPortCommand = new DelegateCommand(OpenSerialPort);
-
-            ClearMessageCommand = new DelegateCommand(delegate
-            {
-                ResponseCollection.Clear();
-                LogCollection.Clear();
-            });
-
+            ClearMessageCommand = new DelegateCommand(delegate { ResponseCollection.Clear(); });
             SendMessageCommand = new DelegateCommand(SendMessage);
 
             _portManager.DataReceivedEvent += delegate((int, string, List<Tag>) args)
@@ -215,34 +201,38 @@ namespace CSharpDemo.ViewModels
                 return;
             }
 
+            // 清理输入并统一分隔符
+            var cleanedHex = _userInputHex.Trim().Replace("-", " ");
             string[] bytes;
-            if (_userInputHex.Contains(" "))
+
+            // 统一处理空格分隔或连续字符的情况
+            if (cleanedHex.Contains(" "))
             {
-                bytes = _userInputHex.Split(' ');
-            }
-            else if (_userInputHex.Contains("-"))
-            {
-                bytes = _userInputHex.Split('-');
+                // 过滤空字符串并分割
+                bytes = cleanedHex.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
-                //每两个字符作为一个Hex
-                var dataValue = _userInputHex.ToList();
-                var temp = new List<string>();
-                for (var i = 0; i < dataValue.Count; i += 2)
+                // 每两个字符作为一个Hex字节
+                if (cleanedHex.Length % 2 != 0)
                 {
-                    var builder = new StringBuilder();
-                    var hex = builder.Append(dataValue[i]).Append(dataValue[i + 1]);
-                    temp.Add(hex.ToString());
+                    MessageBox.Show("十六进制字符串长度必须为偶数", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
                 }
 
-                bytes = temp.ToArray();
+                bytes = Enumerable.Range(0, cleanedHex.Length / 2).Select(i =>
+                    cleanedHex.Substring(i * 2, 2)
+                ).ToArray();
             }
 
             var cmd = new byte[bytes.Length];
             for (var i = 0; i < bytes.Length; i++)
             {
-                cmd[i] = Convert.ToByte(bytes[i], 16);
+                if (!byte.TryParse(bytes[i], NumberStyles.HexNumber, null, out cmd[i]))
+                {
+                    MessageBox.Show($"无效的十六进制值: {bytes[i]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
             }
 
             _portManager.Write(cmd);
@@ -250,7 +240,6 @@ namespace CSharpDemo.ViewModels
 
         private void HandleCorrelatorData(string devCode, List<Tag> tags)
         {
-            LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}开始处理数据");
             //处理接到的噪声数据
             var noiseTag = tags.GetUploadNoiseTag();
             if (noiseTag != null)
@@ -271,7 +260,6 @@ namespace CSharpDemo.ViewModels
                     _dataModel.RedDevCode = RuntimeCache.Dev1;
                     _dataModel.ReceiveRedSensorDataTime = DateTime.Now;
                     _dataModel.RedDeviceData = realData;
-                    LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}Dev1数据处理完成");
                 }
                 else
                 {
@@ -279,7 +267,6 @@ namespace CSharpDemo.ViewModels
                     _dataModel.BlueDevCode = RuntimeCache.Dev2;
                     _dataModel.ReceiveBlueSensorDataTime = DateTime.Now;
                     _dataModel.BlueDeviceData = realData;
-                    LogCollection.Add($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}Dev2数据处理完成");
                 }
             }
         }
