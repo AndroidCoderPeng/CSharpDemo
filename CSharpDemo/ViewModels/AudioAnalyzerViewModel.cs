@@ -159,7 +159,13 @@ namespace CSharpDemo.ViewModels
 
             var ratio = position.Value.TotalSeconds / TotalDuration.TotalSeconds;
             _waveStream.Position = (long)(ratio * _waveStream.Length);
+
             _wavePlayer.Play();
+
+            if (!_progressTimer.IsEnabled)
+            {
+                _progressTimer.Start();
+            }
         }
 
         private void StopAndCleanup()
