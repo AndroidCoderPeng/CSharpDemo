@@ -40,11 +40,20 @@
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding}" TextWrapping="Wrap" />
-                        </StackPanel>
+                        <TextBlock
+                            Padding="5,8"
+                            FontSize="14"
+                            Foreground="{DynamicResource ForegroundBrush}"
+                            Text="{Binding}"
+                            TextWrapping="Wrap" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Margin" Value="0,0,0,1" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
             </ListBox>
 
             <Grid

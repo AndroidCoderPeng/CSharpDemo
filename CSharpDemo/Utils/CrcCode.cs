@@ -76,8 +76,7 @@ namespace CSharpDemo.Utils
 
         public static bool CheckCrc16(byte[] bytes)
         {
-            if (bytes == null || bytes.Length < 2)
-                return false;
+            if (bytes == null || bytes.Length < 2) return false;
 
             // 计算除最后两个字节外所有字节的CRC16值
             var dataWithoutCrc = new byte[bytes.Length - 2];
@@ -88,9 +87,9 @@ namespace CSharpDemo.Utils
             // 提取数据中的CRC值（最后两个字节，高位在前）
             var receivedCrc = (uint)((bytes[bytes.Length - 2] << 8) | bytes[bytes.Length - 1]);
 
-            // var calculatedCrcHex = Convert.ToString(calculatedCrc, 16).ToUpper();
-            // var receivedCrcHex = Convert.ToString(receivedCrc, 16).ToUpper();
-            // Console.WriteLine($@"计算CRC: {calculatedCrcHex}, 报文CRC: {receivedCrcHex}");
+            var calculatedCrcHex = Convert.ToString(calculatedCrc, 16).ToUpper();
+            var receivedCrcHex = Convert.ToString(receivedCrc, 16).ToUpper();
+            Console.WriteLine($@"计算CRC: {calculatedCrcHex}, 报文CRC: {receivedCrcHex}");
 
             // 比较计算得出的CRC与接收到的CRC
             return calculatedCrc == receivedCrc;

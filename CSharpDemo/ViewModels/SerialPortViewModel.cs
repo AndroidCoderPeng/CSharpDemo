@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using CSharpDemo.Model;
 using CSharpDemo.Service;
@@ -126,6 +125,7 @@ namespace CSharpDemo.ViewModels
         private string _dataBits = "8";
         private string _parity = "None";
         private string _stopBit = "1";
+        private const int SampleRate = 7500;
 
         #endregion
 
@@ -225,15 +225,21 @@ namespace CSharpDemo.ViewModels
         {
             try
             {
-                if (data.Length > 256)
+                if (data.Length > 64)
                 {
-                    var logBytes = new byte[256];
-                    Array.Copy(data, 1, logBytes, 0, 256);
+                    var logBytes = new byte[64];
+                    Array.Copy(data, 1, logBytes, 0, 64);
                     Console.WriteLine($@"报文回复 <=== {BitConverter.ToString(logBytes)}, 原始数据长度: {data.Length}, 其余省略...");
                 }
                 else
                 {
                     Console.WriteLine($@"报文回复 <=== {BitConverter.ToString(data)}");
+                }
+
+                if (!CrcCode.CheckCrc16(data))
+                {
+                    ResponseCollection.Add($"[{DateTime.Now:HH:mm:ss.fff}] CRC校验失败");
+                    return;
                 }
 
                 Application.Current.Dispatcher.Invoke(() =>
@@ -255,41 +261,30 @@ namespace CSharpDemo.ViewModels
                     try
                     {
                         var packets = _frameParser.ParseFrame<List<BasePacket>>(packetBytes);
-                        ResponseCollection.Add($"[{DateTime.Now:HH:mm:ss.fff}] 解析结果: Tag数量 => {packets.Count}");
-                        switch (data.Length)
+                        var oids = packets.Select(packet => packet.Oid).ToList();
+                        ResponseCollection.Add($"解析结果: {packets.Count}个Packet, Oid依次是: {string.Join(", ", oids)}");
+
+                        if (oids.Contains(BasePacket.StatusOid))
                         {
-                            case 32: //设备状态、电量
-                                var cellPacket = packets.Find(x => x.Oid.Equals(BasePacket.CellOid));
-                                var cellHex = BitConverter.ToString(cellPacket.DataValue).Replace("-", "");
-                                var cell = Convert.ToInt32(cellHex, 16).ToString();
+                            var cellPacket = packets.Find(x => x.Oid.Equals(BasePacket.CellOid));
+                            var cellHex = BitConverter.ToString(cellPacket.DataValue).Replace("-", "");
+                            var cell = Convert.ToInt32(cellHex, 16).ToString();
 
-                                var statePacket = packets.Find(x => x.Oid.Equals(BasePacket.ExceptionOid));
-                                var state = statePacket.DataValue[0] == 1 ? "正常" : "异常";
+                            var statePacket = packets.Find(x => x.Oid.Equals(BasePacket.StatusOid));
+                            var state = statePacket.DataValue[0] == 1 ? "正常" : "异常";
 
-                                ResponseCollection.Add(
-                                    $"[{DateTime.Now:HH:mm:ss.fff}] 设备ID: {deviceCode}, 电量: {cell}%, 状态: {state}");
-                                break;
-                            case 11293: //数据采集
-                                var timePacket = packets.Find(x => x.Oid.Equals(BasePacket.TimeOid));
-                                var timeHex = BitConverter.ToString(timePacket.DataValue).Replace("-", "");
-                                var temp = new List<string>();
-                                for (var i = 0; i < timeHex.Length; i += 2)
-                                {
-                                    temp.Add(timeHex.Substring(i, 2));
-                                }
-
-                                var timeBuilder = new StringBuilder();
-                                var year = $"{Convert.ToInt32(temp[0], 16) + 2000}";
-                                var month = Convert.ToInt32(temp[1], 16).AppendLeftZero();
-                                var day = Convert.ToInt32(temp[2], 16).AppendLeftZero();
-                                var hour = Convert.ToInt32(temp[3], 16).AppendLeftZero();
-                                var minute = Convert.ToInt32(temp[4], 16).AppendLeftZero();
-                                var seconds = Convert.ToInt32(temp[5], 16).AppendLeftZero();
-                                timeBuilder.Append(year).Append(month).Append(day).Append(hour).Append(minute)
-                                    .Append(seconds);
-                                var time = timeBuilder.ToString();
-                                Console.WriteLine(time);
-                                break;
+                            ResponseCollection.Add($"设备ID: {deviceCode}, 电量: {cell}%, 状态: {state}");
+                        }
+                        else if (oids.Contains(BasePacket.NoiseOid))
+                        {
+                            // 会收到两条数据（因为有两个传感器）
+                            var noisePacket = packets.Find(x => x.Oid.Equals(BasePacket.NoiseOid));
+                            
+                            // 直接拿数据计算
+                        }
+                        else
+                        {
+                            ResponseCollection.Add($"[{DateTime.Now:HH:mm:ss.fff}] 未知类型数据包");
                         }
                     }
                     catch (Exception ex)
