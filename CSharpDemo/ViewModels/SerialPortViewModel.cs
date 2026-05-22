@@ -224,7 +224,17 @@ namespace CSharpDemo.ViewModels
         {
             try
             {
-                Console.WriteLine($@"报文回复 <=== {BitConverter.ToString(data)}");
+                if (data.Length > 256)
+                {
+                    var logBytes = new byte[256];
+                    Array.Copy(data, 1, logBytes, 0, 256);
+                    Console.WriteLine($@"报文回复 <=== {BitConverter.ToString(logBytes)}, 原始数据长度: {data.Length}, 其余省略...");
+                }
+                else
+                {
+                    Console.WriteLine($@"报文回复 <=== {BitConverter.ToString(data)}");
+                }
+
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     var versionByte = new byte[1];
@@ -233,7 +243,6 @@ namespace CSharpDemo.ViewModels
                     var high = short.Parse(value) / 10;
                     var low = short.Parse(value) % 10;
                     var version = $"{high}.{low}";
-                    Console.WriteLine($@"[{DateTime.Now:HH:mm:ss.fff}] 版本: {version}");
 
                     var deviceCodeBytes = new byte[6];
                     Array.Copy(data, 4, deviceCodeBytes, 0, 6);
@@ -252,10 +261,18 @@ namespace CSharpDemo.ViewModels
                                 var cellPacket = packets.Find(x => x.Oid.Equals(BasePacket.CellOid));
                                 var hex = BitConverter.ToString(cellPacket.DataValue).Replace("-", "");
                                 var cell = Convert.ToInt32(hex, 16).ToString();
+
+                                var statePacket = packets.Find(x => x.Oid.Equals(BasePacket.ExceptionOid));
+                                var state = statePacket.DataValue[0] == 1 ? "正常" : "异常";
+
                                 ResponseCollection.Add(
-                                    $"[{DateTime.Now:HH:mm:ss.fff}] 设备ID: {deviceCode}, 电量: {cell}%");
+                                    $"[{DateTime.Now:HH:mm:ss.fff}] 设备ID: {deviceCode}, 电量: {cell}%, 状态: {state}");
                                 break;
                             case 11293: //数据采集
+                                foreach (var packet in packets)
+                                {
+                                    Console.WriteLine(packet.Oid);
+                                }
 
                                 break;
                         }
