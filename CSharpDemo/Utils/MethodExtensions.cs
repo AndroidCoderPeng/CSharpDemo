@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using MathWorks.MATLAB.NET.Arrays;
 
 namespace CSharpDemo.Utils
@@ -42,6 +44,37 @@ namespace CSharpDemo.Utils
             }
 
             return outArray;
+        }
+
+        public static string ConvertToHexString(this string src)
+        {
+            if (src.Length == 4)
+            {
+                return src;
+            }
+
+            var temp = "";
+            for (var i = 0; i < 4 - src.Length; i++)
+            {
+                temp += "0";
+            }
+
+            return temp + src;
+        }
+
+        public static byte ConvertToByte(this string str)
+        {
+            return byte.Parse(str, NumberStyles.HexNumber);
+        }
+
+        /// <summary>
+        /// 字节数组转String
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        public static string ConvertToString(this byte[] bytes)
+        {
+            return bytes.Aggregate("", (current, t) => current + t.ToString("X2"));
         }
     }
 }

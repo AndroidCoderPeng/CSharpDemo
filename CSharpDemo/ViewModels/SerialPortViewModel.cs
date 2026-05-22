@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
+using CSharpDemo.Model;
+using CSharpDemo.Service;
 using CSharpDemo.Utils;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -11,7 +13,7 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace CSharpDemo.ViewModels
 {
-    public class SerialPortViewModel : BindableBase
+    public class SerialPortViewModel : BindableBase, IDisposable
     {
         #region VM
 
@@ -23,7 +25,7 @@ namespace CSharpDemo.ViewModels
             set => SetProperty(ref _responseCollection, value);
         }
 
-        private string _userInputHex = "A3-20-00-13-00-00-00-00-00-00-01-FF-FF-0A-82-01-30-00-00-01-00-01-00-7D-87";
+        private string _userInputHex;
 
         public string UserInputHex
         {
@@ -99,6 +101,7 @@ namespace CSharpDemo.ViewModels
 
         #region DelegateCommand
 
+        public DelegateCommand<object> ItemSelectedCommand { get; }
         public DelegateCommand<string> PortNameItemSelectedCommand { get; }
         public DelegateCommand<string> BaudRateItemSelectedCommand { get; }
         public DelegateCommand<string> DataBitItemSelectedCommand { get; }
@@ -112,8 +115,12 @@ namespace CSharpDemo.ViewModels
 
         #region 变量
 
-        private readonly SerialPortManager _portManager = new SerialPortManager();
-        private string _portName = "COM5";
+        private readonly IAppDataService _dataService;
+        private readonly ISerialPortService _serialPortService;
+        private readonly IFrameParserStrategy _frameParser;
+        private SerialPortManager _portManager;
+        private IDisposable _subscription;
+        private string _portName = "";
         private string _baudRate = "230400";
         private string _dataBits = "8";
         private string _parity = "None";
@@ -121,9 +128,13 @@ namespace CSharpDemo.ViewModels
 
         #endregion
 
-        public SerialPortViewModel()
+        public SerialPortViewModel(IAppDataService dataService, ISerialPortService serialPortService)
         {
-            PortArray = _portManager.GetPorts();
+            _dataService = dataService;
+            _serialPortService = serialPortService;
+            _frameParser = new CorrelatorFrameParser();
+
+            PortArray = SerialPortManager.GetAvailablePorts();
             BaudRateList = new List<string>
             {
                 "9600", "14400", "19200", "38400", "56000", "57600", "115200", "128000", "230400"
@@ -132,6 +143,7 @@ namespace CSharpDemo.ViewModels
             ParityList = new List<string> { "None", "Odd", "Even", "Mark", "Space" };
             StopBitList = new List<string> { "1", "2" };
 
+            ItemSelectedCommand = new DelegateCommand<object>(CommandItemSelected);
             PortNameItemSelectedCommand = new DelegateCommand<string>(item => { _portName = item; });
             BaudRateItemSelectedCommand = new DelegateCommand<string>(item => { _baudRate = item; });
             DataBitItemSelectedCommand = new DelegateCommand<string>(item => { _dataBits = item; });
@@ -141,18 +153,35 @@ namespace CSharpDemo.ViewModels
             OpenSerialPortCommand = new DelegateCommand(OpenSerialPort);
             ClearMessageCommand = new DelegateCommand(delegate { ResponseCollection.Clear(); });
             SendMessageCommand = new DelegateCommand(SendMessage);
+        }
 
-            _portManager.DataReceivedEvent += delegate(byte[] bytes)
+        private void CommandItemSelected(object item)
+        {
+            if (item == null) return;
+            switch (item)
             {
-                
-            };
+                case 0:
+                    UserInputHex = "";
+                    break;
+                case 1:
+                    UserInputHex = _dataService.GetStatusCollectCmd(0x01);
+                    break;
+                case 2:
+                    UserInputHex = _dataService.GetStatusCollectCmd(0x02);
+                    break;
+                case 3:
+                    UserInputHex = _dataService.GetCorrelatorWakeUpCmd();
+                    break;
+            }
         }
 
         private void OpenSerialPort()
         {
-            if (_portManager.IsOpen)
+            if (_portManager != null && _portManager.IsOpen)
             {
                 _portManager.Close();
+                _subscription?.Dispose();
+                _subscription = null;
 
                 StateColorBrush = "LightGray";
                 ButtonContent = "打开串口";
@@ -160,20 +189,92 @@ namespace CSharpDemo.ViewModels
             }
             else
             {
-                if (!_portManager.GetPorts().Any())
+                if (string.IsNullOrEmpty(_portName))
+                {
+                    MessageBox.Show("请先选择串口", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                var ports = SerialPortManager.GetAvailablePorts();
+                if (!ports.Any())
                 {
                     MessageBox.Show("没有可用的串口", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
+                _portManager = _serialPortService.GetOrCreateManager(_portName, _frameParser);
                 if (_portManager.SetConfiguration(_portName, _baudRate, _parity, _dataBits, _stopBit))
                 {
                     _portManager.Open();
+                    _subscription?.Dispose();
+                    _subscription = _serialPortService.Subscribe(_portName, OnDataReceived, OnError);
+
                     StateColorBrush = "LimeGreen";
                     ButtonContent = "关闭串口";
                     ComboBoxEnabled = false;
                 }
+                else
+                {
+                    MessageBox.Show("串口打开失败", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
+        }
+
+        private void OnDataReceived(byte[] data)
+        {
+            try
+            {
+                Console.WriteLine($@"报文回复 <=== {BitConverter.ToString(data)}");
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var versionByte = new byte[1];
+                    Array.Copy(data, 1, versionByte, 0, 1);
+                    var value = BitConverter.ToString(versionByte);
+                    var high = short.Parse(value) / 10;
+                    var low = short.Parse(value) % 10;
+                    var version = $"{high}.{low}";
+                    Console.WriteLine($@"[{DateTime.Now:HH:mm:ss.fff}] 版本: {version}");
+
+                    var deviceCodeBytes = new byte[6];
+                    Array.Copy(data, 4, deviceCodeBytes, 0, 6);
+                    var deviceCode = BitConverter.ToString(deviceCodeBytes).Replace("-", "");
+
+                    // 传感器报文内容
+                    var packetBytes = new byte[data.Length - 18];
+                    Array.Copy(data, 16, packetBytes, 0, data.Length - 18);
+                    try
+                    {
+                        var packets = _frameParser.ParseFrame<List<BasePacket>>(packetBytes);
+                        ResponseCollection.Add($"[{DateTime.Now:HH:mm:ss.fff}] 解析结果: Tag数量 => {packets.Count}");
+                        switch (data.Length)
+                        {
+                            case 32: //设备状态、电量
+                                var cellPacket = packets.Find(x => x.Oid.Equals(BasePacket.CellOid));
+                                var hex = BitConverter.ToString(cellPacket.DataValue).Replace("-", "");
+                                var cell = Convert.ToInt32(hex, 16).ToString();
+                                ResponseCollection.Add(
+                                    $"[{DateTime.Now:HH:mm:ss.fff}] 设备ID: {deviceCode}, 电量: {cell}%");
+                                break;
+                            case 11293: //数据采集
+
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ResponseCollection.Add($"[{DateTime.Now:HH:mm:ss.fff}] 解析异常: {ex.Message}");
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                ResponseCollection.Add($"[{DateTime.Now:HH:mm:ss.fff}] 解析异常: {ex.Message}");
+            }
+        }
+
+        private void OnError(string error)
+        {
+            ResponseCollection.Add($"[{DateTime.Now:HH:mm:ss.fff}] 错误: {error}");
         }
 
         private void SendMessage()
@@ -225,6 +326,12 @@ namespace CSharpDemo.ViewModels
             }
 
             _portManager.Write(cmd);
+            Console.WriteLine($@"指令下发 ===> {_userInputHex}");
+        }
+
+        public void Dispose()
+        {
+            _portManager?.Dispose();
         }
     }
 }

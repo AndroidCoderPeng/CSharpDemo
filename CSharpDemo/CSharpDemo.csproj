@@ -206,8 +206,13 @@
     <Compile Include="Events\CorrelatorResultEvent.cs" />
     <Compile Include="Model\CorrelatorData.cs" />
     <Compile Include="Model\ParamConfig.cs" />
+    <Compile Include="Model\BasePacket.cs" />
     <Compile Include="Service\AppDataServiceImpl.cs" />
+    <Compile Include="Service\ISerialPortService.cs" />
+    <Compile Include="Service\SerialPortServiceImpl.cs" />
+    <Compile Include="Utils\CorrelatorFrameParser.cs" />
     <Compile Include="Utils\CrcCode.cs" />
+    <Compile Include="Utils\IFrameParserStrategy.cs" />
     <Compile Include="Utils\RuntimeCache.cs" />
       <Compile Include="Utils\SensorData.cs" />
     <Compile Include="ViewModels\AlgorithmTestViewModel.cs" />

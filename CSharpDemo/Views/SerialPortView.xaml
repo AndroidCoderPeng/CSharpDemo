@@ -32,32 +32,57 @@
                 Foreground="{DynamicResource ForegroundBrush}"
                 Text="数据收发区" />
 
-            <ListView
+            <ListBox
                 Grid.Row="1"
                 Background="{DynamicResource ThirdBgBrush}"
                 BorderBrush="{DynamicResource BackgroundBrush}"
                 ItemsSource="{Binding ResponseCollection}"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListView.ItemTemplate>
+                <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
                             <TextBlock Text="{Binding}" TextWrapping="Wrap" />
                         </StackPanel>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
-            <hc:TextBox
+            <Grid
                 Grid.Row="2"
                 Height="35"
-                Margin="0,15"
-                VerticalContentAlignment="Center"
-                hc:InfoElement.Placeholder="请要发送的数据"
-                hc:InfoElement.ShowClearButton="True"
-                Background="{DynamicResource ThirdBgBrush}"
-                FontSize="16"
-                Foreground="{DynamicResource ForegroundBrush}"
-                Text="{Binding UserInputHex}" />
+                Margin="0,15">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="150" />
+                </Grid.ColumnDefinitions>
+
+                <hc:TextBox
+                    Grid.Column="0"
+                    VerticalContentAlignment="Center"
+                    hc:InfoElement.Placeholder="请输入或者选择要发送的数据"
+                    hc:InfoElement.ShowClearButton="True"
+                    Background="{DynamicResource ThirdBgBrush}"
+                    FontSize="16"
+                    Foreground="{DynamicResource ForegroundBrush}"
+                    Text="{Binding UserInputHex}" />
+
+                <hc:ComboBox
+                    x:Name="CommandComboBox"
+                    Grid.Column="1"
+                    Margin="15,0,0,0"
+                    SelectedIndex="0">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="SelectionChanged">
+                            <b:InvokeCommandAction Command="{Binding ItemSelectedCommand}" CommandParameter="{Binding ElementName=CommandComboBox, Path=SelectedIndex}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                    <ComboBoxItem Content="请选择" />
+                    <ComboBoxItem Content="唤醒红色传感器" />
+                    <ComboBoxItem Content="唤醒蓝色传感器" />
+                    <ComboBoxItem Content="采集数据" />
+                </hc:ComboBox>
+            </Grid>
         </Grid>
 
         <Grid Grid.Column="1" Margin="0,0,15,0">

@@ -32,6 +32,9 @@ namespace CSharpDemo
         {
             //Data
             containerRegistry.Register<IAppDataService, AppDataServiceImpl>();
+            
+            // 注册串口服务
+            containerRegistry.RegisterSingleton<ISerialPortService, SerialPortServiceImpl>();
 
             //Navigation
             containerRegistry.RegisterForNavigation<AlgorithmTestView, AlgorithmTestViewModel>();
