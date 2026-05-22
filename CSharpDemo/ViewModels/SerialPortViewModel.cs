@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using CSharpDemo.Model;
 using CSharpDemo.Service;
@@ -259,8 +260,8 @@ namespace CSharpDemo.ViewModels
                         {
                             case 32: //设备状态、电量
                                 var cellPacket = packets.Find(x => x.Oid.Equals(BasePacket.CellOid));
-                                var hex = BitConverter.ToString(cellPacket.DataValue).Replace("-", "");
-                                var cell = Convert.ToInt32(hex, 16).ToString();
+                                var cellHex = BitConverter.ToString(cellPacket.DataValue).Replace("-", "");
+                                var cell = Convert.ToInt32(cellHex, 16).ToString();
 
                                 var statePacket = packets.Find(x => x.Oid.Equals(BasePacket.ExceptionOid));
                                 var state = statePacket.DataValue[0] == 1 ? "正常" : "异常";
@@ -269,11 +270,25 @@ namespace CSharpDemo.ViewModels
                                     $"[{DateTime.Now:HH:mm:ss.fff}] 设备ID: {deviceCode}, 电量: {cell}%, 状态: {state}");
                                 break;
                             case 11293: //数据采集
-                                foreach (var packet in packets)
+                                var timePacket = packets.Find(x => x.Oid.Equals(BasePacket.TimeOid));
+                                var timeHex = BitConverter.ToString(timePacket.DataValue).Replace("-", "");
+                                var temp = new List<string>();
+                                for (var i = 0; i < timeHex.Length; i += 2)
                                 {
-                                    Console.WriteLine(packet.Oid);
+                                    temp.Add(timeHex.Substring(i, 2));
                                 }
 
+                                var timeBuilder = new StringBuilder();
+                                var year = $"{Convert.ToInt32(temp[0], 16) + 2000}";
+                                var month = Convert.ToInt32(temp[1], 16).AppendLeftZero();
+                                var day = Convert.ToInt32(temp[2], 16).AppendLeftZero();
+                                var hour = Convert.ToInt32(temp[3], 16).AppendLeftZero();
+                                var minute = Convert.ToInt32(temp[4], 16).AppendLeftZero();
+                                var seconds = Convert.ToInt32(temp[5], 16).AppendLeftZero();
+                                timeBuilder.Append(year).Append(month).Append(day).Append(hour).Append(minute)
+                                    .Append(seconds);
+                                var time = timeBuilder.ToString();
+                                Console.WriteLine(time);
                                 break;
                         }
                     }

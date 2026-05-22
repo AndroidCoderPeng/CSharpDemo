@@ -2,8 +2,8 @@
 {
     public class BasePacket
     {
-        public const string CellOid = "60000020";
         public const string TimeOid = "10000051";
+        public const string CellOid = "60000020";
         public const string ExceptionOid = "60000009";
         
         public string Oid { get; set; }

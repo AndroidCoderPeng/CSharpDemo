@@ -10,7 +10,7 @@ namespace CSharpDemo.Utils
         private readonly object _lockObject = new object();
         private bool _isDisposed;
 
-        public event Action<byte[]> RawDataReceivedEvent;
+        public event Action<byte[]> DataReceivedEvent;
         public event Action<string> ErrorEvent;
 
         public SerialPortManager(IFrameParserStrategy parserStrategy = null)
@@ -130,7 +130,7 @@ namespace CSharpDemo.Utils
 
                 if (!_parser.ValidateFrame(frame)) return;
 
-                RawDataReceivedEvent?.Invoke(frame);
+                DataReceivedEvent?.Invoke(frame);
             }
             catch (Exception ex)
             {
@@ -150,7 +150,7 @@ namespace CSharpDemo.Utils
             }
 
             _serialPort.DataReceived -= SerialPort_DataReceived;
-            RawDataReceivedEvent = null;
+            DataReceivedEvent = null;
             ErrorEvent = null;
             _serialPort.Dispose();
         }

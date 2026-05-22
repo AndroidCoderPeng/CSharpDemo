@@ -9,12 +9,6 @@ namespace CSharpDemo.Utils
 {
     public static class MethodExtensions
     {
-        public static string AppendLeftZero(this int i)
-        {
-            //数据固定长度2
-            return i.ToString("G").PadLeft(2, '0');
-        }
-
         public static List<string> ReadFromFile(this string filePath)
         {
             var list = new List<string>();
@@ -75,6 +69,12 @@ namespace CSharpDemo.Utils
         public static string ConvertToString(this byte[] bytes)
         {
             return bytes.Aggregate("", (current, t) => current + t.ToString("X2"));
+        }
+        
+        public static string AppendLeftZero(this int i)
+        {
+            //数据固定长度2
+            return i.ToString("G").PadLeft(2, '0');
         }
     }
 }

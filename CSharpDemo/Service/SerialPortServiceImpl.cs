@@ -59,7 +59,7 @@ namespace CSharpDemo.Service
                 var manager = new SerialPortManager(parser);
 
                 // 绑定数据接收事件，分发给所有订阅者
-                manager.RawDataReceivedEvent += (data) => DispatchData(key, data);
+                manager.DataReceivedEvent += (data) => DispatchData(key, data);
                 manager.ErrorEvent += (error) => DispatchError(key, error);
 
                 // 初始化订阅者列表
